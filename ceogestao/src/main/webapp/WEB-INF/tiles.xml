@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="base.definition"
+                template="/WEB-INF/view/layout.jsp">
+        <put-attribute name="title" value="Teste" />
+        <put-attribute name="body" value="" />
+    </definition>
+ 
+    <definition name="pessoas" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Pessoas" />
+        <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
+    </definition>
+    
+    <definition name="formPessoa" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Pessoas" />
+        <put-attribute name="body" value="/WEB-INF/view/formPessoa.jsp" />
+    </definition>
+    
+    <definition name="cursos" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Cursos" />
+        <put-attribute name="body" value="/WEB-INF/view/cursos.jsp" />
+    </definition>
+    
+    <definition name="formCurso" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Cursos" />
+        <put-attribute name="body" value="/WEB-INF/view/formCurso.jsp" />
+    </definition>
+    
+    <definition name="turmas" extends="base.definition">
+        <put-attribute name="title" value="Controle de Turmas" />
+        <put-attribute name="body" value="/WEB-INF/view/turmas.jsp" />
+    </definition>
+    
+     <definition name="formTurma" extends="base.definition">
+        <put-attribute name="title" value="Controle de Turmas" />
+        <put-attribute name="body" value="/WEB-INF/view/formTurma.jsp" />
+    </definition>
+ 
+</tiles-definitions>

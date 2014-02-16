@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-build and deploy on tomcat</actionName>
+            <displayName>build and deploy on tomcat</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>package</goal>
+                <goal>tomcat7:redeploy</goal>
+            </goals>
+        </action>
+    </actions>
