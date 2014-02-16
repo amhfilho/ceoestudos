@@ -17,6 +17,7 @@
     <mvc:annotation-driven conversion-service="conversionService"/>
     <context:component-scan base-package="br.com.ceoestudos.ceogestao" />
     <mvc:resources mapping="/resources/**" location="/resources/" />
+    <mvc:default-servlet-handler/>
     <bean id="localeResolver"
           class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
         <property name="defaultLocale" value="pt" />

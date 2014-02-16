@@ -18,6 +18,8 @@
                 <h4 class="modal-title" id="myModalLabel">Selecione um aluno</h4>
             </div>
             <div class="modal-body">
+                <input type="search" id="procurarAluno" size="50" placeholder="Procure pelo nome do aluno"/>
+                <button class="btn btn-default btn-xs" type="button">Procurar</button>
                 <form:form class="form" role="form" method="POST" action="adicionarAluno.html"  
                            modelAttribute="aluno">
 
