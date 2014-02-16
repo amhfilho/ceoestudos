@@ -1,8 +1,10 @@
 package br.com.ceoestudos.ceogestao.controller;
 
 import br.com.ceoestudos.ceogestao.dao.CursoDAO;
+import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
 import br.com.ceoestudos.ceogestao.model.Curso;
+import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.SituacaoTurma;
 import br.com.ceoestudos.ceogestao.model.Turma;
 import br.com.ceoestudos.ceogestao.util.Util;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,9 @@ public class TurmaController {
 
     @Autowired
     private CursoDAO cursoDAO;
+    
+    @Autowired
+    private PessoaDAO pessoaDAO;
     
     private Logger LOG = Logger.getLogger(getClass());
 
@@ -113,6 +119,13 @@ public class TurmaController {
             map.put(st.name(), st.toString());
         }
         return map;
+    }
+    
+    @RequestMapping("procurarAluno")
+    public void procurarAluno(String nome, HttpServletResponse response){
+        LOG.debug("procurarAluno: "+nome);
+        List<Pessoa> alunos = pessoaDAO.listarPorNome(nome);
+        response.setStatus(200);
     }
 
 }

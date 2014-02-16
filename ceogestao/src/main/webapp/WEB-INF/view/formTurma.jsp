@@ -9,17 +9,24 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <script>
-    $(function(){
- 
-    $("#procurarAluno").click(function(){
- 
-        var a = $("input[name=procurarAlunoText]").val();
-         
-        alert('Campo procurarAlunoText:'+ a );
-         
+    $(function() {
+
+        $("#procurarAlunoBtn").click(function() {
+
+            var a = $("input[name=procurarAlunoText]").val();
+            if (a !== "") {
+                alert('Campo a:' + a);
+                $.post("procurarAluno.html", {'nome': a}, function(resposta) {
+                    // selecionando o elemento html através da 
+                    // ID e alterando o HTML dele 
+                    //$("#tarefa_" + id).html("Finalizado");
+                    alert(resposta);
+                });
+            }
+        });
     });
-});
 </script>
+
 
 <!-- Modal -->
 
@@ -34,8 +41,8 @@
 
                 <form:form class="form" role="form" method="POST" action="adicionarAluno.html"  
                            modelAttribute="aluno">
-                    <input type="search" name="procurarAlunoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do aluno"/>
-                    <button class="btn btn-default btn-xs" type="button" id="procurarAluno">Procurar</button>
+                    <input type="text" name="procurarAlunoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do aluno"/>
+                    <button class="btn btn-default btn-xs" type="button" id="procurarAlunoBtn" >Procurar</button>
                 </form:form>
             </div>
             <div class="modal-footer">
