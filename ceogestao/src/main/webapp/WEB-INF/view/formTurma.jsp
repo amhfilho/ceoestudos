@@ -8,6 +8,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
+<script>
+    $(function(){
+ 
+    $("#procurarAluno").click(function(){
+ 
+        var a = $("input[name=procurarAlunoText]").val();
+         
+        alert('Campo procurarAlunoText:'+ a );
+         
+    });
+});
+</script>
+
 <!-- Modal -->
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -18,11 +31,11 @@
                 <h4 class="modal-title" id="myModalLabel">Selecione um aluno</h4>
             </div>
             <div class="modal-body">
-                <input type="search" id="procurarAluno" size="50" placeholder="Procure pelo nome do aluno"/>
-                <button class="btn btn-default btn-xs" type="button">Procurar</button>
+
                 <form:form class="form" role="form" method="POST" action="adicionarAluno.html"  
                            modelAttribute="aluno">
-
+                    <input type="search" name="procurarAlunoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do aluno"/>
+                    <button class="btn btn-default btn-xs" type="button" id="procurarAluno">Procurar</button>
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -90,7 +103,7 @@
     </div>
     <div class="form-group">
         <label for="listaAlunos" >Alunos matriculados</label>
-        
+
         <table class="table table-condensed" id="listaAlunos">
             <c:if test="${empty turma.alunos}">
                 <tr><td colspan="2">Nenhum aluno matriculado</td></tr>
@@ -102,7 +115,7 @@
                     </tr>
                 </c:forEach>
             </c:if>
-            
+
             <tr>
                 <td colspan="2">
                     <!-- Button trigger modal -->
