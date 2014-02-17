@@ -23,6 +23,7 @@ public class Util {
     }
     
     public String arrayToString(String[] array){
+        if(array==null) return null;
         String retorno ="";
         for(String str:array){
             retorno+=str+",";
@@ -31,6 +32,7 @@ public class Util {
     }
     
     public String toString(Set objectSet){
+        if(objectSet==null) return null;
         String retorno = "";
         for(Object obj: objectSet){
             retorno+=obj.toString()+"\n";

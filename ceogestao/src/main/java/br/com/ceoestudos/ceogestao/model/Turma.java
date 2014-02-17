@@ -3,9 +3,11 @@ package br.com.ceoestudos.ceogestao.model;
 import br.com.ceoestudos.ceogestao.util.Util;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,7 +57,7 @@ public class Turma implements Serializable {
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    private Pessoa professor;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinTable(name = "TURMA_ALUNO",
             joinColumns = @JoinColumn(name = "TURMA_ID"),
             inverseJoinColumns = @JoinColumn(name = "ALUNO_ID"))
@@ -63,6 +65,19 @@ public class Turma implements Serializable {
     
     @Size(min=1,message="Deve haver ao menos um dia da semana associada à turma")
     private String[] diasDaSemana;
+    
+    public void adicionarAluno(Pessoa aluno){
+        if(getAlunos()==null){
+            setAlunos(new HashSet<Pessoa>());
+        }
+        getAlunos().add(aluno);
+    }
+    
+    public void removerAluno(Pessoa aluno){
+        if(getAlunos()!=null){
+            getAlunos().remove(aluno);
+        }
+    }
 
     @Override
     public String toString() {

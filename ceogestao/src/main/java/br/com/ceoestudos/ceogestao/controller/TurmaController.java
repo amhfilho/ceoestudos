@@ -9,6 +9,7 @@ import br.com.ceoestudos.ceogestao.model.SituacaoTurma;
 import br.com.ceoestudos.ceogestao.model.Turma;
 import br.com.ceoestudos.ceogestao.util.Util;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,15 @@ public class TurmaController {
     @Transactional
     @RequestMapping("excluirTurma")
     public String excluirTurma(@RequestParam String id, Model model) {
+        try{
+            Long longId = new Long(id);
+            turmaDAO.excluir(longId);
+            model.addAttribute("SUCCESS_MESSAGE","Turma excluída com sucesso");
+            
+        } catch (RuntimeException e){
+            LOG.error(new Util().toString(e));
+            model.addAttribute("ERROR_MESSAGE","Erro ao excluir a turma");
+        }
         return "redirect:turmas.html";
     }
 
@@ -74,14 +84,18 @@ public class TurmaController {
         return mapCursos;
     }
 
-    @Transactional
+    
     @RequestMapping(value = "salvarTurma", method = RequestMethod.POST)
     public String salvarTurma(@Valid Turma turma, BindingResult result, Model model) {
-        LOG.info(turma);
+        LOG.info("salvarTurma: "+turma);
         if (!result.hasErrors()) {
             try {
-                turmaDAO.adicionar(turma);
-                
+                if(turma.getId()==null){
+                    turmaDAO.adicionar(turma);
+                }
+                else {
+                    turmaDAO.atualizar(turma);
+                }
                 model.addAttribute("SUCCESS_MESSAGE", "Turma gravada com sucesso");
                 
             } catch (RuntimeException e){
@@ -122,10 +136,30 @@ public class TurmaController {
     }
     
     @RequestMapping("procurarAluno")
-    public void procurarAluno(String nome, HttpServletResponse response){
+    public String procurarAluno(String nome, HttpServletResponse response, Model model){
         LOG.debug("procurarAluno: "+nome);
         List<Pessoa> alunos = pessoaDAO.listarPorNome(nome);
+        model.addAttribute("listaAlunosBusca", alunos);
         response.setStatus(200);
+        return "formTurmaListaAlunos";
+    }
+    
+    @RequestMapping(value = "adicionarAluno", method = RequestMethod.POST)
+    public String adicionarAluno(@ModelAttribute Turma turma, @RequestParam String alunoId, Model model){
+        Long idAluno = new Long(alunoId);
+        Pessoa aluno = pessoaDAO.getById(idAluno);
+        LOG.debug("Encontrado aluno: "+aluno);
+        turma.adicionarAluno(aluno);
+        try {
+            turmaDAO.atualizar(turma);
+            model.addAttribute("SUCCESS_MESSAGE", "Aluno adicionado com sucesso");
+        } catch (RuntimeException e ){
+            LOG.error(new Util().toString(e));
+            model.addAttribute("ERROR_MESSAGE", "Erro ao adicionar o aluno: "+e.getMessage());
+        }
+        model.addAttribute("turma",turma);
+        
+        return "formTurma";
     }
 
 }

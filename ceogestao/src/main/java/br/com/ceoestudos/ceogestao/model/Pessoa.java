@@ -3,7 +3,9 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,7 +51,7 @@ public class Pessoa implements Serializable {
     private String complemento;
     private Sexo sexo;
     
-    @ManyToMany(mappedBy = "alunos")
+    @ManyToMany(mappedBy = "alunos", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<Turma> turmas;
 
     public List<Turma> getTurmas() {

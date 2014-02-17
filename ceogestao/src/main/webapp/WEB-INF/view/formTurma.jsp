@@ -15,12 +15,12 @@
 
             var a = $("input[name=procurarAlunoText]").val();
             if (a !== "") {
-                alert('Campo a:' + a);
+
                 $.post("procurarAluno.html", {'nome': a}, function(resposta) {
                     // selecionando o elemento html através da 
                     // ID e alterando o HTML dele 
-                    //$("#tarefa_" + id).html("Finalizado");
-                    alert(resposta);
+                    $("#tabelaBuscaAlunos").html(resposta);
+
                 });
             }
         });
@@ -28,35 +28,35 @@
 </script>
 
 
-<!-- Modal -->
+<form:form class="form" role="form" method="POST" action="salvarTurma.html" id="turmaForm" 
+           modelAttribute="turma" name="turmaForm">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Selecione um aluno</h4>
+                </div>
+                <div class="modal-body">
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Selecione um aluno</h4>
-            </div>
-            <div class="modal-body">
-
-                <form:form class="form" role="form" method="POST" action="adicionarAluno.html"  
-                           modelAttribute="aluno">
                     <input type="text" name="procurarAlunoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do aluno"/>
                     <button class="btn btn-default btn-xs" type="button" id="procurarAlunoBtn" >Procurar</button>
-                </form:form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                    <br>
+                    <table class="table table-condensed" id="tabelaBuscaAlunos">
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-
-<form:form class="form" role="form" method="POST" action="salvarTurma.html"  
-           modelAttribute="turma">
     <form:errors path="*">
         <div class="alert alert-danger"><form:errors path="*"/></div>
     </form:errors>
@@ -111,7 +111,7 @@
     <div class="form-group">
         <label for="listaAlunos" >Alunos matriculados</label>
 
-        <table class="table table-condensed" id="listaAlunos">
+        <table class="table table-condensed" id="listaAlunos" style="font-size: 11px">
             <c:if test="${empty turma.alunos}">
                 <tr><td colspan="2">Nenhum aluno matriculado</td></tr>
             </c:if>
@@ -126,9 +126,14 @@
             <tr>
                 <td colspan="2">
                     <!-- Button trigger modal -->
-                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">
-                        Adicionar
-                    </button>
+                    <c:if test="${empty turma.id}">
+                        É preciso salvar a turma primeiro para incluir alunos
+                    </c:if>
+                    <c:if test="${not empty turma.id}">
+                        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">
+                            Adicionar
+                        </button>
+                    </c:if>
                 </td>
             </tr>
         </table>
@@ -140,9 +145,10 @@
             <button type="submit" class="btn btn-primary">Salvar</button>
             <button type="button" class="btn btn-default" onclick="location.href = 'turmas.html'">Voltar</button>
             <button type="button" class="btn btn-default" 
-                    onclick="if (confirm('Deseja realmente excluir a turma? ')) {
+                                onclick="if (confirm('Deseja realmente excluir a turma? ')) {
                                 location.href = 'excluirTurma.html?id=${turma.id}';
-                            }">
+                   
+                                        }">
                 <span class="glyphicon glyphicon-trash"></span>  Excluir
             </button>
         </div>
