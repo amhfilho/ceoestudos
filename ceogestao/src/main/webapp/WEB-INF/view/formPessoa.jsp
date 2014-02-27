@@ -8,29 +8,32 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-<script>
 
-    $('#dataNascimento').datepicker();
-
-</script>
-
-
-
-<form:errors path="pessoa.cpf">
-    <div class="alert alert-danger"><form:errors path="pessoa.cpf"/></div>
-</form:errors>
-<form:errors path="pessoa.nome">
-    <div class="alert alert-danger"><form:errors path="pessoa.nome"/></div>
-</form:errors>
-<form:errors path="pessoa.dataNascimento">
-    <div class="alert alert-danger"><form:errors path="pessoa.dataNascimento"/></div>
-</form:errors>
-
-<small>Campos obrigatórios são marcados com <strong>*</strong></small>
 <form:form class="form-horizontal" role="form" method="POST" action="salvarPessoa.html"  
            modelAttribute="pessoa">
+    <form:errors path="*">
+        <div class="alert alert-danger"><form:errors path="*"/></div>
+    </form:errors>
+<small>Campos obrigatórios são marcados com <strong>*</strong></small>
+<br>
     <form:hidden path="identificador" id="identificador" name="identificador" />
-    
+    <div class="row">
+        <label for="nome" class="col-sm-2 control-label">Nome*</label>
+        <div class="col-sm-10">
+            <form:input cssClass="form-control input-sm" id="nome" placeholder="Nome completo" path="nome" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+                <label>
+                    <form:checkbox id="checkboxProfessor" path="professor" /> Professor
+                </label>
+            </div>
+        </div>
+    </div>
+
+
     <div class="form-group">
         <label for="cpf" class="col-sm-2 control-label">CPF*</label>
         <div class="col-sm-10">
@@ -46,13 +49,6 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label for="nome" class="col-sm-2 control-label">Nome*</label>
-        <div class="col-sm-10">
-            <form:input cssClass="form-control input-sm" id="nome" placeholder="Nome completo" path="nome" />
-        </div>
-    </div>
-
 
     <div class="form-group">
         <label for="email" class="col-sm-2 control-label">Email*</label>
@@ -63,16 +59,27 @@
     <script type="text/javascript">
 
         $(document).ready(function(e) {
-            $("#dataNascimento").datepicker({
-                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                dateFormat: 'dd/mm/yy',
-                nextText: 'Próximo',
-                prevText: 'Anterior'
+            $('#dataNascimento').datetimepicker({
+                lang: 'pt',
+                i18n: {
+                    pt: {
+                        months: [
+                            'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                            'Maio', 'Junho', 'Julho', 'Agosto',
+                            'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                        ],
+                        dayOfWeek: [
+                            "Dom", "Seg", "Ter", "Qua",
+                            "Qui", "Sex", "Sab"
+                        ]
+                    }
+                },
+                timepicker: false,
+                allowBlank: true,
+                format: 'd/m/Y'
             });
+
+
         });
 
     </script> 
@@ -174,47 +181,47 @@
                 <option value="SP" <c:if test="${pessoa.estado == 'SP'}"> selected</c:if> >São Paulo</option>
                 <option value="TO" <c:if test="${pessoa.estado == 'TO'}"> selected</c:if> >Tocantins</option>
 
-            </select>
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="telefoneResidencial" class="col-sm-2 control-label">Tel. Residencial</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="telefoneResidencial" placeholder="Telefone com DDD" 
-                   name="telefoneResidencial">
+        <div class="form-group">
+            <label for="telefoneResidencial" class="col-sm-2 control-label">Tel. Residencial</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input-sm" id="telefoneResidencial" placeholder="Telefone com DDD" 
+                       name="telefoneResidencial">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="telefoneCelular" class="col-sm-2 control-label">Tel. Celular</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="telefoneCelular" placeholder="Telefone com DDD" 
-                   name="telefoneCelular">
+        <div class="form-group">
+            <label for="telefoneCelular" class="col-sm-2 control-label">Tel. Celular</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input-sm" id="telefoneCelular" placeholder="Telefone com DDD" 
+                       name="telefoneCelular">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="telefoneComercial" class="col-sm-2 control-label">Tel. Comercial</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="telefoneComercial" placeholder="Telefone com DDD" 
-                   name="telefoneComercial">
+        <div class="form-group">
+            <label for="telefoneComercial" class="col-sm-2 control-label">Tel. Comercial</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input-sm" id="telefoneComercial" placeholder="Telefone com DDD" 
+                       name="telefoneComercial">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="cro" class="col-sm-2 control-label">CRO</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="cro" placeholder="CRO" 
-                   name="cro">
+        <div class="form-group">
+            <label for="cro" class="col-sm-2 control-label">CRO</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input-sm" id="cro" placeholder="CRO" 
+                       name="cro">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="ufCro" class="col-sm-2 control-label">U.F. do CRO</label>
-        <div class="col-sm-10">
-            <select class="form-control input-sm" name="ufCro" id="ufCro">
-                <option value="AC" <c:if test="${pessoa.ufCro == 'AC'}"> selected</c:if> >Acre</option>
+        <div class="form-group">
+            <label for="ufCro" class="col-sm-2 control-label">U.F. do CRO</label>
+            <div class="col-sm-10">
+                <select class="form-control input-sm" name="ufCro" id="ufCro">
+                    <option value="AC" <c:if test="${pessoa.ufCro == 'AC'}"> selected</c:if> >Acre</option>
                 <option value="AL" <c:if test="${pessoa.ufCro == 'AC'}"> selected</c:if> >Alagoas</option>
                 <option value="AM" <c:if test="${pessoa.ufCro == 'AM'}"> selected</c:if> >Amazonas</option>
                 <option value="AP" <c:if test="${pessoa.ufCro == 'AP'}"> selected</c:if> >Amapá</option>
@@ -241,16 +248,18 @@
                 <option value="SE" <c:if test="${pessoa.ufCro == 'SE'}"> selected</c:if> >Sergipe</option>
                 <option value="SP" <c:if test="${pessoa.ufCro == 'SP'}"> selected</c:if> >São Paulo</option>
                 <option value="TO" <c:if test="${pessoa.ufCro == 'TO'}"> selected</c:if> >Tocantins</option>
-            </select>
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <button type="button" class="btn btn-default" onclick="location.href='pessoas.html'">Voltar</button>
-            <button type="button" class="btn btn-default" 
-                    onclick="if(confirm('Deseja realmente excluir a pessoa? ')) { location.href='excluirPessoa.html?id=${pessoa.identificador}'; }">
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="button" class="btn btn-default" onclick="location.href = 'pessoas.html'">Voltar</button>
+                <button type="button" class="btn btn-default" 
+                        onclick="if (confirm('Deseja realmente excluir a pessoa? ')) {
+                                    location.href = 'excluirPessoa.html?id=${pessoa.identificador}';
+                                }">
                 <span class="glyphicon glyphicon-trash"></span>  Excluir
             </button>
         </div>

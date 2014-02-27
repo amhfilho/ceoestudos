@@ -27,6 +27,7 @@
         <property name="formatters">
             <set>
                 <ref bean="cursoFormatter"/>
+                <ref bean="pessoaFormatter"/>
             </set>
         </property>
         

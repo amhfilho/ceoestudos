@@ -43,6 +43,24 @@
         <put-attribute name="body" value="/WEB-INF/view/formTurmaListaAlunos.jsp" />
     </definition>
     
+    <definition name="procedimentos" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Procedimentos" />
+        <put-attribute name="body" value="/WEB-INF/view/procedimentos.jsp" />
+    </definition>
     
+    <definition name="formProcedimento" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Procedimentos" />
+        <put-attribute name="body" value="/WEB-INF/view/formProcedimento.jsp" />
+    </definition>
+    
+    <definition name="controleLaboratorio" extends="base.definition">
+        <put-attribute name="title" value="Controle de Laboratório" />
+        <put-attribute name="body" value="/WEB-INF/view/controleLaboratorio.jsp" />
+    </definition>
+        
+    <definition name="formServicoLaboratorio" extends="base.definition">
+        <put-attribute name="title" value="Controle de Laboratório" />
+        <put-attribute name="body" value="/WEB-INF/view/formServicoLaboratorio.jsp" />
+    </definition>
  
 </tiles-definitions>

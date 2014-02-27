@@ -20,25 +20,34 @@
         <thead>
             <th>Curso</th>
             <th>Inicio</th>
-            <th>Fim</th>
+            <th>Dias da semana</th>
             <th>Alunos matriculados</th>
             <th>Situação</th>
             <th></th>
         </thead>
         <c:forEach items="${turmas}" var="turma">
             <tr>
-                <td><a href="editarTurma.html?id=${turma.id}">Atualizar</a></td>
-                <td>${turma.diasDaSemana}</td>
-                <td>${turma.situacao}</td>
-                <td>${turma.situacao}</td>
-                <td>${turma.situacao}</td>
-                <td></td>
+                
+                <td>${turma.curso.nome}</td>
+                <td><fmt:formatDate dateStyle="medium" value="${turma.dataInicio}"/> </td>
+                <td>${turma.diasDaSemanaFormatados}</td>
+                <td>${fn:length(turma.alunos)}</td>
+                <td>${turma.situacao.nome}</td>
+                <td><a href="editarTurma.html?id=${turma.id}"><span class="glyphicon glyphicon-pencil"></span> Detalhes</a></td>
+                
             </tr>
         </c:forEach>
 </table>
 </c:if>
-<form:form method="POST" action="novaTurma.html">
-    <button type="submit" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus"></span>  Nova Turma
-    </button>
-</form:form>
+
+<c:if test="${empty todosOsCursos}">
+    <small>É preciso ter ao menos um curso cadastrado para criar turmas. <a href="cursos.html">Ir para o cadastro de cursos</a></small>
+</c:if>
+
+<c:if test="${not empty todosOsCursos}">
+    <form:form method="POST" action="novaTurma.html">
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span>  Nova Turma
+        </button>
+    </form:form>
+</c:if>

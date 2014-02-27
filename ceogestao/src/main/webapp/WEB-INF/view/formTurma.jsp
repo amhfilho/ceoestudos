@@ -25,7 +25,113 @@
             }
         });
     });
+
+    function salvarTurma() {
+        if(document.turmaForm.dataInicio.value ==="" | document.turmaForm.dataFim.value === "" | 
+                document.turmaForm.horaInicio === "" | document.turmaForm.horaFim === ""){
+            
+            alert('As datas e os horários da turma devem ser preenchidos');
+            return;
+        }
+        
+//        if(document.formTurma.radioEmAndamento.checked ==="checked") {
+//            
+//            //verificar se data de inicio é igual ou anteriorà data de hoje
+//            var dataInicio
+//            
+//        }
+
+        var id = document.getElementById("id").value;
+
+        if (id === null | id === "") {
+            document.turmaForm.action = "adicionarTurma.html";
+        } else {
+            document.turmaForm.action = "atualizarTurma.html";
+        }
+        document.turmaForm.submit();
+    }
+
+    function excluirAluno(id) {
+        document.turmaForm.action = "excluirAluno.html";
+        document.getElementById("excluirAlunoId").value = id;
+        document.turmaForm.submit();
+    }
+
+    $(document).ready(function(e) {
+        $('#dataInicio').datetimepicker({
+            lang: 'pt',
+            onShow: function(ct) {
+                this.setOptions({
+                    maxDate: $('#dataFim').val() ? $('#dataFim').val() : false
+                })
+            },
+            i18n: {
+                pt: {
+                    months: [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                        'Maio', 'Junho', 'Julho', 'Agosto',
+                        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ],
+                    dayOfWeek: [
+                        "Dom", "Seg", "Ter", "Qua",
+                        "Qui", "Sex", "Sab"
+                    ]
+                }
+            },
+            timepicker: false,
+            allowBlank: true,
+            format: 'd/m/Y'
+        });
+        $('#dataFim').datetimepicker({
+            lang: 'pt',
+            onShow: function(ct) {
+                this.setOptions({
+                    minDate: $('#dataInicio').val() ? $('#dataInicio').val() : false
+                })
+            },
+            i18n: {
+                pt: {
+                    months: [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                        'Maio', 'Junho', 'Julho', 'Agosto',
+                        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ],
+                    dayOfWeek: [
+                        "Dom", "Seg", "Ter", "Qua",
+                        "Qui", "Sex", "Sab"
+                    ]
+                }
+            },
+            timepicker: false,
+            allowBlank: true,
+            format: 'd/m/Y'
+        });
+
+        $('#horaInicio').datetimepicker({
+            datepicker: false,
+            onShow: function(ct) {
+                this.setOptions({
+                    maxTime: $('#horaFim').val() ? $('#horaFim').val() : false
+                })
+            },
+            format: 'H:i'
+        });
+        
+        $('#horaFim').datetimepicker({
+            datepicker: false,
+            onShow: function(ct) {
+                this.setOptions({
+                    minTime: $('#horaInicio').val() ? $('#horaInicio').val() : false
+                })
+            },
+            format: 'H:i'
+        });
+    });
+
+
+
 </script>
+
 
 
 <form:form class="form" role="form" method="POST" action="salvarTurma.html" id="turmaForm" 
@@ -43,14 +149,14 @@
                     <input type="text" name="procurarAlunoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do aluno"/>
                     <button class="btn btn-default btn-xs" type="button" id="procurarAlunoBtn" >Procurar</button>
                     <br>
-                    <table class="table table-condensed" id="tabelaBuscaAlunos">
+                    <table class="table table-striped" id="tabelaBuscaAlunos" style="width: 100%">
 
                     </table>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    
+
                 </div>
             </div>
         </div>
@@ -58,7 +164,9 @@
 
 
     <form:errors path="*">
-        <div class="alert alert-danger"><form:errors path="*"/></div>
+        <div class="alert alert-danger">
+            <strong>Problemas!</strong><br>
+            <form:errors path="*"/></div>
     </form:errors>
     <form:hidden path="id" id="id" name="id" />
     <div class="form-group">
@@ -67,32 +175,75 @@
     </div>
 
     <div class="form-group">
-        <label for="situacao" >Situação</label>
-        <form:select path="situacao" items="${situacoesTurma}" cssClass="form-control input-sm" id="situacao"/>
+        <label>Datas e horários</label>
+        <table class="table">
+            <tr>
+                <td>Data de início:</td>
+                <td><form:input path="dataInicio" cssClass="form-control input-sm" id="dataInicio"/></td>
+                <td>Horário de início:</td>
+                <td><form:input path="horaInicio" cssClass="form-control input-sm" id="horaInicio"/></td>
+            </tr>
+            <tr>
+                <td>Data de término:</td>
+                <td><form:input path="dataFim" cssClass="form-control input-sm" id="dataFim" /></td>
+                <td>Horário de término:</td>
+                <td><form:input path="horaFim" cssClass="form-control input-sm" id="horaFim"/></td>
+            </tr>
+        </table>
     </div>
+
+
+
+    <div class="form-group">
+        <label for="situacao" >Situação: </label>
+        <label class="radio-inline">
+            <form:radiobutton id="radioNaoConfirmada" path="situacao"  value="NAO_CONFIRMADA"/> Não Confirmada
+        </label>
+        <label class="radio-inline">
+            <form:radiobutton id="radioConfirmada" path="situacao" value="CONFIRMADA"/> Confirmada
+        </label>
+        <label class="radio-inline">
+            <form:radiobutton id="radioEmAndamento" path="situacao" value="EM_ANDAMENTO"/> Em andamento
+        </label>
+        <label class="radio-inline">
+            <form:radiobutton id="radioCancelada" path="situacao" value="CANCELADA"/> Cancelada
+        </label>
+    </div>
+
+
 
 
     <div class="form-group">
         <label for="diasDaSemana" >Dias da Semana: </label>
         <label class="checkbox-inline">
-            <form:checkbox id="checkboxSeg" path="diasDaSemana" value="seg" /> Seg
+            <form:checkbox id="checkboxSeg" path="diasDaSemana" value="SEG" /> Seg
         </label>
         <label class="checkbox-inline">
-            <form:checkbox id="checkboxTer" path="diasDaSemana" value="ter" /> Ter
+            <form:checkbox id="checkboxTer" path="diasDaSemana" value="TER" /> Ter
         </label>
         <label class="checkbox-inline">
-            <form:checkbox id="checkboxQua" path="diasDaSemana" value="qua" /> Qua
+            <form:checkbox id="checkboxQua" path="diasDaSemana" value="QUA" /> Qua
         </label>
         <label class="checkbox-inline">
-            <form:checkbox id="checkboxQui" path="diasDaSemana" value="qui" /> Qui
+            <form:checkbox id="checkboxQui" path="diasDaSemana" value="QUI" /> Qui
         </label>
         <label class="checkbox-inline">
-            <form:checkbox id="checkboxSex" path="diasDaSemana" value="sex" /> Sex
+            <form:checkbox id="checkboxSex" path="diasDaSemana" value="SEX" /> Sex
         </label>
         <label class="checkbox-inline">
-            <form:checkbox id="checkboxSab" path="diasDaSemana" value="sab" /> Sáb
+            <form:checkbox id="checkboxSab" path="diasDaSemana" value="SÁB" /> Sáb
         </label>
     </div>
+        
+     <div class="form-group">
+        <label for="selectProfessor" >Professor</label>
+        <c:if test="${not empty professores}">
+            <form:select path="professor" id="selectProfessor" items="${professores}" cssClass="form-control input-sm" />
+        </c:if>
+        <c:if test="${empty professores}">
+            <p class="form-control-static">Não há professores cadastrados no sistema.</p>
+        </c:if>
+    </div>   
 
     <div class="form-group">
         <label for="sala" >Sala</label>
@@ -111,16 +262,18 @@
     <div class="form-group">
         <label for="listaAlunos" >Alunos matriculados</label>
 
-        <table class="table table-condensed" id="listaAlunos" style="font-size: 11px">
+        <table class="table table-condensed" id="listaAlunos" style="font-size: 12px">
             <c:if test="${empty turma.alunos}">
                 <tr><td colspan="2">Nenhum aluno matriculado</td></tr>
             </c:if>
             <c:if test="${not empty turma.alunos}">
                 <c:forEach items="${turma.alunos}" var="aluno">
                     <tr>
-                        <td>${aluno.nome}</td><td>Excluir</td>
+                        <td>${aluno.nome}</td>
+                        <td><a href="#" onclick="excluirAluno(${aluno.identificador})">Excluir</a></td>
                     </tr>
                 </c:forEach>
+                <input type="hidden" id="excluirAlunoId" name="excluirAlunoId" value=""/>
             </c:if>
 
             <tr>
@@ -131,7 +284,7 @@
                     </c:if>
                     <c:if test="${not empty turma.id}">
                         <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">
-                            Adicionar
+                            Matricular aluno
                         </button>
                     </c:if>
                 </td>
@@ -142,15 +295,17 @@
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="button" class="btn btn-primary" onclick="salvarTurma()">Salvar</button>
             <button type="button" class="btn btn-default" onclick="location.href = 'turmas.html'">Voltar</button>
-            <button type="button" class="btn btn-default" 
-                                onclick="if (confirm('Deseja realmente excluir a turma? ')) {
-                                location.href = 'excluirTurma.html?id=${turma.id}';
-                   
-                                        }">
-                <span class="glyphicon glyphicon-trash"></span>  Excluir
-            </button>
+            <c:if test="${not empty turma.id}">
+                <button type="button" class="btn btn-default" 
+                        onclick="if (confirm('Deseja realmente excluir a turma? ')) {
+                                    location.href = 'excluirTurma.html?id=${turma.id}';
+
+                                }">
+                    <span class="glyphicon glyphicon-trash"></span>  Excluir
+                </button>
+            </c:if>
         </div>
     </div>
 

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.ceoestudos.ceogestao.controller;
 
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
@@ -95,12 +90,14 @@ public class PessoaController {
     @Transactional
     @RequestMapping("excluirPessoa")
     public String excluirPessoa(@RequestParam String id, Model model) {
-        try {
-            Long identificador = new Long(id);
+        Long identificador = new Long(id);
+        try {    
             pessoaDAO.excluir(identificador);
+            
         } catch (RuntimeException e) {
             LOGGER.error(e);
             model.addAttribute("ERROR_MESSAGE", e.getMessage());
+            model.addAttribute("pessoa",pessoaDAO.getById(identificador));
             return "formPessoa";
         }
         return "redirect:pessoas.html";

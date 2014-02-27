@@ -6,10 +6,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@taglib tagdir="/WEB-INF/tags" prefix="ceo" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
     <head>
         <title>CEO Estudos - Sistema de Gestão</title>
@@ -19,13 +17,13 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom styles for this template -->
         <link href="${pageContext.request.contextPath}/resources/css/navbar-fixed-top.css" rel="stylesheet">
-
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui-1.10.4.custom.css" />
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>  
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.datetimepicker.css"/>
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.4.custom.js"></script>
-        <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.4.custom.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.4.custom.min.js"></script>      
+        <script src="${pageContext.request.contextPath}/resources/js/jquery.datetimepicker.js"></script>
 
     </head>
     <body>
@@ -54,19 +52,20 @@
                             <ul class="dropdown-menu">
                                 <li><a href="pessoas.html">Pessoas</a></li>
                                 <li><a href="cursos.html">Cursos</a></li>
-                                <li><a href="#">Procedimentos</a></li>
+                                <li><a href="procedimentos.html">Procedimentos</a></li>
                                 <li class="divider"></li>
                                 <li class="dropdown-header">Nav header</li>
-                                <li><a href="#">Separated link</a></li>
+                                <li><a href="controleLaboratorio.html">Controle de Laboratório</a></li>
                                 <li><a href="#">One more separated link</a></li>
                             </ul>
                         </li>
                     </ul>
+                    <!--
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">Default</a></li>
                         <li><a href="#">Static top</a></li>
                         <li class="active"><a href="#">Fixed top</a></li>
-                    </ul>
+                    </ul>-->
                 </div><!--/.nav-collapse -->
             </div>
         </div>
@@ -102,6 +101,7 @@
         <!-- Placed at the end of the document so the pages load faster -->
 
         <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+
 
     </body>
 </html>

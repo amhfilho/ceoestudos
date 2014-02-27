@@ -15,9 +15,18 @@
         document.turmaForm.submit();
     }
 </script>
+
+    <c:if test="${empty listaAlunosBusca}">
+        <td colspan="2">Nenhum aluno encontrado</td>
+    </c:if>
     <c:forEach items="${listaAlunosBusca}" var="aluno">
         <tr>
-            <td>${aluno.nome}</td><td><a href="#" onclick="adicionarAluno(${aluno.identificador})">Adicionar</a></td>
+            <td>${aluno.nome}</td>
+            <td style="text-align: right">
+                <button type="button" class="btn btn-success btn-xs" onclick="adicionarAluno(${aluno.identificador})">
+                    Matricular
+                </button>
+            </td>
         
         </tr>
     </c:forEach>

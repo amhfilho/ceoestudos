@@ -10,15 +10,24 @@
 
 
 
-<form:form class="form-inline" role="form" action="pessoas.html">
-    <div class="form-group">
-        <label class="sr-only" for="pesquisa">Pesquisar</label>
-        <input type="search" name="pesquisa" 
-               class="form-control" id="pesquisa" placeholder="Pesquise por nome" size="80">
+<form:form role="form" action="pessoas.html">
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" name="pesquisa" id="pesquisa"
+                       placeholder="Pesquisar por nome">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-search"></span> Pesquisar
+                    </button>
+                </span>
+            </div>
+        </div>
     </div>
 
-    <button type="submit" class="btn btn-default">Pesquisar</button>
 </form:form>
+
 <p></p>
 <c:if test="${empty pessoas}">
     <div class="alert alert-warning alert-dismissable">
@@ -35,40 +44,38 @@
     <table class="table table-striped" style="font-size: 11px">
         <tr>
         <thead>
-        
+
         <th>Nome</th>
         <th>RG</th>
         <th>CPF</th>
         <th>Endereço</th>
-        <th>Numero</th>
+
         <th>Cidade</th>
-        <th>CEP</th>
-        <th>Estado</th>
+
         <th>Telefone Celular</th>
         <th>Telefone Residencial</th>
         <th>Telefone Comercial</th>
         <th>E-mail</th>
         <th>CRO</th>
-        <th>Atualizar</th>
+        <th></th>
     </thead>
 </tr>
 <c:forEach items="${pessoas}" var="pessoa">
     <tr>
-        
+
         <td>${pessoa.nome}</td>
         <td>${pessoa.rg}</td>
         <td>${pessoa.cpf}</td>
-        <td>${pessoa.endereco}</td>
-        <td>${pessoa.numero}</td>
-        <td>${pessoa.cidade}</td>
-        <td>${pessoa.cep}</td>
-        <td>${pessoa.estado}</td>
+        <td>${pessoa.endereco},${pessoa.numero}</td>
+
+        <td>${pessoa.cidade} - ${pessoa.estado}</td>
+
         <td>${pessoa.telefoneCelular}</td>
         <td>${pessoa.telefoneResidencial}</td>
         <td>${pessoa.telefoneComercial}</td>
         <td>${pessoa.email}</td>
         <td>${pessoa.cro} - ${pessoa.ufCro}</td>
-        <td><a href="editarPessoa.html?id=${pessoa.identificador}"><span class="glyphicon glyphicon-pencil"></span>  Modificar</a></td>
+        <td><a href="editarPessoa.html?id=${pessoa.identificador}"><span class="glyphicon glyphicon-pencil"></span>  Detalhes</a></td>
     </tr>
 </c:forEach>
 </table>

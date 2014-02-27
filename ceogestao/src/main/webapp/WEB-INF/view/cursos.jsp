@@ -41,7 +41,7 @@
             <td>${curso.turmasConfirmadas}</td>
             <td>${curso.turmasCanceladas}</td>
             <td>
-                <a href="editarCurso.html?id=${curso.id}"><span class="glyphicon glyphicon-pencil"></span>  Modificar</a>
+                <a href="editarCurso.html?id=${curso.id}"><span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
             </td>
         </tr>
     </c:forEach>

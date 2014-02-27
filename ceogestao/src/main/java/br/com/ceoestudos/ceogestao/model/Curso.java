@@ -7,8 +7,7 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,38 +48,38 @@ public class Curso implements Serializable {
     private Set<Turma> turmas;
 
     public int getTurmasNaoConfirmadas(){
-        //return getTurmasPorSituacao(SituacaoTurma.NAO_CONFIRMADA).size();
-        return 0;
+        return getTurmasPorSituacao(SituacaoTurma.NAO_CONFIRMADA).size();
+        
     }
     
     public int getTurmasCanceladas(){
-        //return getTurmasPorSituacao(SituacaoTurma.CANCELADA).size();
-        return 0;
+        return getTurmasPorSituacao(SituacaoTurma.CANCELADA).size();
+        
     }
     
     public int getTurmasConfirmadas(){
-        return 0;//getTurmasPorSituacao(SituacaoTurma.CONFIRMADA).size();
+        return getTurmasPorSituacao(SituacaoTurma.CONFIRMADA).size();
     }
     
     public int getTurmasEmAndamento(){
-        return 0;//getTurmasPorSituacao(SituacaoTurma.EM_ANDAMENTO).size();
+        return getTurmasPorSituacao(SituacaoTurma.EM_ANDAMENTO).size();
     }
     
-//    /**
-//     * Filtro de turmas por situacao
-//     * @param situacao
-//     * @return 
-//     */
-//    public List<Turma> getTurmasPorSituacao(SituacaoTurma situacao){
-//        List<Turma> turmasPorSituacao = new ArrayList<Turma>();
-//        for(Turma turma:turmas){
-//            if(turma.getSituacao()!=null && turma.getSituacao().equals(situacao)){
-//                turmasPorSituacao.add(turma);
-//            }
-//        }
-//        return turmasPorSituacao;
-//    }
-//    
+    /**
+     * Filtro de turmas por situacao
+     * @param situacao
+     * @return 
+     */
+    public Set<Turma> getTurmasPorSituacao(SituacaoTurma situacao){
+        Set<Turma> turmasPorSituacao = new HashSet<Turma>();
+        for(Turma turma:turmas){
+            if(turma.getSituacao()!=null && turma.getSituacao().equals(situacao)){
+                turmasPorSituacao.add(turma);
+            }
+        }
+        return turmasPorSituacao;
+    }
+    
     public Set<Turma> getTurmas() {
         return turmas;
     }

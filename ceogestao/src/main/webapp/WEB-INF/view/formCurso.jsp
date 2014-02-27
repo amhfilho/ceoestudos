@@ -21,6 +21,7 @@
 </form:errors>
 
 <small>Campos obrigatórios são marcados com <strong>*</strong></small>
+<br>
 <form:form class="form-horizontal" role="form" method="POST" action="salvarCurso.html"  
            modelAttribute="curso">
     <form:hidden path="id" id="id" name="id" />
@@ -40,7 +41,7 @@
     </div>
 
     <div class="form-group">
-        <label for="cargaHoraria" class="col-sm-2 control-label">Carga horária</label>
+        <label for="cargaHoraria" class="col-sm-2 control-label">Carga horária*</label>
         <div class="col-sm-10">
             <form:input path="cargaHoraria" cssClass="form-control input-sm" id="cargaHoraria" placeholder="Apenas números" />
         </div>
@@ -71,12 +72,15 @@
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-primary">Salvar</button>
             <button type="button" class="btn btn-default" onclick="location.href = 'cursos.html'">Voltar</button>
-            <button type="button" class="btn btn-default" 
-                    onclick="if (confirm('Deseja realmente excluir o curso? ')) {
+            <c:if test="${not empty curso.id}">
+                <button type="button" class="btn btn-default" 
+                        onclick="if (confirm('Deseja realmente excluir o curso? ')) {
                                 location.href = 'excluirCurso.html?id=${curso.id}';
                             }">
-                <span class="glyphicon glyphicon-trash"></span>  Excluir
-            </button>
+
+                    <span class="glyphicon glyphicon-trash"></span>  Excluir
+                </button>
+            </c:if>
         </div>
     </div>
 

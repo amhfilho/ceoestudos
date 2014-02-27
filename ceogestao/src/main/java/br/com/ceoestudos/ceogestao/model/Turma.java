@@ -1,11 +1,10 @@
 package br.com.ceoestudos.ceogestao.model;
 
-import br.com.ceoestudos.ceogestao.util.Util;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,6 +19,11 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
+import org.joda.time.Minutes;
+import org.joda.time.Weeks;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -32,20 +36,31 @@ public class Turma implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull(message="Deve haver um curso associado a esta turma")
+    @NotNull(message = "Deve haver um curso associado a esta turma")
     @ManyToOne
     private Curso curso;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataInicio;
-    
-    /**
-     * Duração da aula em minutos
-     */
-    @Min(value=1, message="O valor mínimo de duração da aula é 1 minuto")
-    private Integer minutosAula;
 
-    @Min(value=0, message="O Quorum mínimo não pode ter um valor negativo")
+    @Temporal(TemporalType.DATE)
+    @NotNull(message = "Data de inicio deve ser informada")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dataInicio;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @NotNull(message = "Data de término deve ser informada")
+    private Date dataFim;
+
+    @Temporal(TemporalType.TIME)
+    @DateTimeFormat(pattern = "HH:mm")
+    @NotNull(message = "Hora de inicio deve ser informada")
+    private Date horaInicio;
+
+    @Temporal(TemporalType.TIME)
+    @DateTimeFormat(pattern = "HH:mm")
+    @NotNull(message = "Data de término deve ser informada")
+    private Date horaFim;
+
+    @Min(value = 0, message = "O Quorum mínimo não pode ter um valor negativo")
     private Integer quorumMinimo;
 
     private String sala;
@@ -56,37 +71,94 @@ public class Turma implements Serializable {
 
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    private Pessoa professor;
-
-    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "TURMA_ALUNO",
             joinColumns = @JoinColumn(name = "TURMA_ID"),
             inverseJoinColumns = @JoinColumn(name = "ALUNO_ID"))
     private Set<Pessoa> alunos;
-    
-    @Size(min=1,message="Deve haver ao menos um dia da semana associada à turma")
+
+    @ManyToOne
+    private Pessoa professor;
+
+    @Size(min = 1, message = "Deve haver ao menos um dia da semana associada à turma")
     private String[] diasDaSemana;
-    
-    public void adicionarAluno(Pessoa aluno){
-        if(getAlunos()==null){
+
+    @Override
+    public String toString() {
+        return "Turma{" + "id=" + id + ", curso=" + curso + ", dataInicio=" + dataInicio + ", dataFim=" + dataFim + ", horaInicio=" + horaInicio + ", horaFim=" + horaFim + ", quorumMinimo=" + quorumMinimo + ", sala=" + sala + ", observacoes=" + observacoes + ", situacao=" + situacao + '}';
+    }
+
+    public String getDiasDaSemanaFormatados() {
+        String retorno = "";
+        if (diasDaSemana != null) {
+            for (String dia : diasDaSemana) {
+                retorno += dia + ",";
+            }
+            retorno = retorno.substring(0, retorno.length() - 1);
+        }
+        return retorno;
+    }
+
+    public void adicionarAluno(Pessoa aluno) {
+        if (getAlunos() == null) {
             setAlunos(new HashSet<Pessoa>());
         }
         getAlunos().add(aluno);
     }
-    
-    public void removerAluno(Pessoa aluno){
-        if(getAlunos()!=null){
+
+    public void removerAluno(Pessoa aluno) {
+        if (getAlunos() != null) {
             getAlunos().remove(aluno);
         }
     }
 
-    @Override
-    public String toString() {
-        Util util = new Util();
-        return "Turma{" + "id=" + id + ", curso=" + curso + ", dataInicio=" + dataInicio + ", minutosAula=" + minutosAula 
-                + ", quorumMinimo=" + quorumMinimo + ", sala=" + sala + ", observacoes=" + observacoes + ", situacao=" 
-                + situacao + ", alunos=" + util.toString(alunos) + ", diasDaSemana=" + util.arrayToString(diasDaSemana) + '}';
+    public Calendar getCalendarInicioAulas() {
+        return criarCalendarComDataEHorario(dataInicio, horaInicio);
     }
-   
+
+    public Calendar getCalendarFimAulas() {
+        return criarCalendarComDataEHorario(dataFim, horaFim);
+    }
+
+    public int getMinutosAula() {
+        DateTime dateTimeInicio = new DateTime(getCalendarInicioAulas());
+        int horaTermino = getCalendarFimAulas().get(Calendar.HOUR_OF_DAY);
+        int minutoTermino = getCalendarFimAulas().get(Calendar.MINUTE);
+        DateTime dateTimeFim = new DateTime(getCalendarInicioAulas())
+                .withHourOfDay(horaTermino)
+                .withMinuteOfHour(minutoTermino);
+        return Minutes.minutesBetween(dateTimeInicio, dateTimeFim).getMinutes();
+    }
+    
+    public int getNumeroDeAulasTurma(){
+        int aulasPorSemana = getDiasDaSemana().length;
+        DateTime dateTimeInicio = new DateTime(getCalendarInicioAulas());
+        DateTime dateTimeFim = new DateTime(getCalendarFimAulas());
+        int semanas =  Weeks.weeksBetween(dateTimeInicio, dateTimeFim).getWeeks();
+        return semanas * aulasPorSemana;
+    }
+
+    public double getCargaHorariaTurma() {
+        Calendar inicio = getCalendarInicioAulas();
+        Calendar fim = getCalendarFimAulas();
+        //inicio.
+        return 0;
+    }
+
+    private Calendar criarCalendarComDataEHorario(Date data, Date horario) {
+        //Criando um objeto Calendar com data de inicio
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(data);
+        //Criando um objeto Calendar com o horário de inicio
+        Calendar horaCal = Calendar.getInstance();
+        horaCal.setTime(horario);
+        //Setando as informações de horário no objeto inicio
+        int horas = horaCal.get(Calendar.HOUR_OF_DAY);
+        int minutos = horaCal.get(Calendar.MINUTE);
+        calendar.set(Calendar.HOUR_OF_DAY, horas);
+        calendar.set(Calendar.MINUTE, minutos);
+        return calendar;
+    }
 
     @Override
     public int hashCode() {
@@ -118,14 +190,6 @@ public class Turma implements Serializable {
         this.dataInicio = dataInicio;
     }
 
-    public Integer getMinutosAula() {
-        return minutosAula;
-    }
-
-    public void setMinutosAula(Integer minutosAula) {
-        this.minutosAula = minutosAula;
-    }
-     
     public Long getId() {
         return id;
     }
@@ -140,7 +204,7 @@ public class Turma implements Serializable {
 
     public void setCurso(Curso curso) {
         this.curso = curso;
-   }
+    }
 
     public Integer getQuorumMinimo() {
         return quorumMinimo;
@@ -181,7 +245,6 @@ public class Turma implements Serializable {
 //    public void setProfessor(Pessoa professor) {
 //        this.professor = professor;
 //    }
-
     public Set<Pessoa> getAlunos() {
         return alunos;
     }
@@ -198,5 +261,36 @@ public class Turma implements Serializable {
         this.diasDaSemana = diasDaSemana;
     }
 
-    
+    public Date getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(Date dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public Date getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(Date horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public Date getHoraFim() {
+        return horaFim;
+    }
+
+    public void setHoraFim(Date horaFim) {
+        this.horaFim = horaFim;
+    }
+
+    public Pessoa getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Pessoa professor) {
+        this.professor = professor;
+    }
+
 }

@@ -41,6 +41,22 @@ public class PessoaDAO {
                  .getResultList();
     }
     
+    public List<Pessoa> listarProfessores(){
+        return em.createQuery("select p from Pessoa p where p.professor = TRUE").getResultList();
+    }
+    
+    public List<Pessoa> listarAlunos(){
+        return em.createQuery("select p from Pessoa p where p.professor = FALSE").getResultList();
+    }
+    
+    public List<Pessoa> listarAlunosPorNome(String pesquisa){
+        String query = "select p from Pessoa p where p.professor = FALSE and p.nome like :pesquisa";
+        return em.createQuery(query)
+                 .setParameter("pesquisa", "%"+pesquisa+"%")
+                 .getResultList();
+        
+    }
+    
     public void adicionar(Pessoa pessoa){
         if(cpfEncontrado(pessoa.getCpf())){
             throw new RuntimeException("Erro ao adicionar uma pessoa. CPF: "+pessoa.getCpf()+" já existente.");
@@ -58,6 +74,9 @@ public class PessoaDAO {
     
     public void excluir(Long id){
         Pessoa pessoa = getById(id);
+        if(pessoa.getTurmas()!=null && pessoa.getTurmas().size() > 0){
+            throw new RuntimeException("Não é possível excluir a pessoa pois a mesma faz parte de uma turma. ");
+        }
         pessoa= em.merge(pessoa);
         em.remove(pessoa);
     }

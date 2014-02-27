@@ -3,9 +3,7 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -29,6 +28,7 @@ public class Pessoa implements Serializable {
     private Long identificador;
     @NotNull(message="Nome é obrigatório")
     private String nome;
+    @Email(message = "Formato de e-mail inválido")
     private String email;
     private String endereco;
     private String numero;
@@ -50,8 +50,9 @@ public class Pessoa implements Serializable {
     private String ufCro;
     private String complemento;
     private Sexo sexo;
+    private boolean professor;
     
-    @ManyToMany(mappedBy = "alunos", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "alunos")
     private List<Turma> turmas;
 
     public List<Turma> getTurmas() {
@@ -330,6 +331,14 @@ public class Pessoa implements Serializable {
 
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
+    }
+
+    public boolean isProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(boolean professor) {
+        this.professor = professor;
     }
 
 }
