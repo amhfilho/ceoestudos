@@ -3,13 +3,13 @@
 
         $("#procurarProcedimentoBtn").click(function() {
 
-            var a = $("input[name=procurarPessoaText]").val();
+            var a = $("input[name=procurarProcedimentoText]").val();
             if (a !== "") {
 
                 $.get("procedimentos.html", {pesquisa: a,resultado: "procedimentoModalResultado"}, function(resposta) {
                     // selecionando o elemento html através da 
                     // ID e alterando o HTML dele 
-                    $("#tabelaBuscaPessoa").html(resposta);
+                    $("#tabelaBuscaProcedimento").html(resposta);
 
                 });
             }
@@ -17,19 +17,19 @@
     });
 </script>
 <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="procedimentoModal" tabindex="-1" role="dialog" aria-labelledby="procedimentoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Selecione uma procedimento</h4>
+                    <h4 class="modal-title" id="procedimentoModalLabel">Selecione um procedimento</h4>
                 </div>
                 <div class="modal-body">
 
-                    <input type="text" name="procurarPessoaText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome"/>
-                    <button class="btn btn-default btn-xs" type="button" id="procurarPessoaBtn" >Procurar</button>
+                    <input type="text" name="procurarProcedimentoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do procedimento"/>
+                    <button class="btn btn-default btn-xs" type="button" id="procurarProcedimentoBtn" >Procurar</button>
                     <br>
-                    <table class="table table-striped" id="tabelaBuscaPessoa" >
+                    <table class="table table-striped" id="tabelaBuscaProcedimento" >
 
                     </table>
 

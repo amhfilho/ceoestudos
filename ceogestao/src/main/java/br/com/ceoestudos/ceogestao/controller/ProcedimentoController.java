@@ -28,11 +28,14 @@ public class ProcedimentoController {
     private ProcedimentoDAO procedimentoDAO;
 
     @RequestMapping("procedimentos")
-    public String listarProcedimentosPorNomeETipo(Model model, String pesquisa, String filtroTipo) {
+    public String listarProcedimentosPorNomeETipo(Model model, String pesquisa, String filtroTipo, String resultado) {
         List<Procedimento> lista = procedimentoDAO.listar(pesquisa, filtroTipo);
         model.addAttribute("procedimentos", lista);
         model.addAttribute("filtroTipo", filtroTipo);
         model.addAttribute("pesquisa", pesquisa);
+        if(resultado!=null && !resultado.equals("")){
+            return resultado;
+        }
         return "procedimentos";
     }
 

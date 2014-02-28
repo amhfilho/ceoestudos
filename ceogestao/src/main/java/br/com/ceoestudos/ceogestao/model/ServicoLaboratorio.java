@@ -26,11 +26,11 @@ public class ServicoLaboratorio implements Serializable {
     private String laboratorio;
 
     @ManyToOne
-    @NotNull(message = "Deve haver uma pessoa associada a este serviço")
+    //@NotNull(message = "Deve haver uma pessoa associada a este serviço")
     private Pessoa nome;
 
     @ManyToOne
-    @NotNull(message = "Deve haver um profissional associado a este serviço")
+    //@NotNull(message = "Deve haver um profissional associado a este serviço")
     private Pessoa profissional;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -43,7 +43,7 @@ public class ServicoLaboratorio implements Serializable {
     private Date entrega;
 
     @ManyToOne
-    @NotNull(message = "Deve haver um procedimento associado a este serviço")
+    //@NotNull(message = "Deve haver um procedimento associado a este serviço")
     private Procedimento procedimento;
 
     @Override

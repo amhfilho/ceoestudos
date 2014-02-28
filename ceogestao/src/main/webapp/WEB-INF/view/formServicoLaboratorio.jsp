@@ -15,6 +15,13 @@
         document.getElementById(nomeFieldName).value = nome;
         $('#myModal').modal('hide');
     }
+    function adicionarProcedimento(id, nome) {
+        var idFieldName = document.getElementById("idFieldName").value;
+        var nomeFieldName = document.getElementById("nomeFieldName").value;
+        document.getElementById(idFieldName).value = id;
+        document.getElementById(nomeFieldName).value = nome;
+        $('#procedimentoModal').modal('hide');
+    }
     function configurarModalPessoa(idFieldName, nomeFieldName) {
         document.getElementById("idFieldName").value = idFieldName;
         document.getElementById("nomeFieldName").value = nomeFieldName;
@@ -23,7 +30,7 @@
     function configurarModalProcedimento(idFieldName, nomeFieldName) {
         document.getElementById("idFieldName").value = idFieldName;
         document.getElementById("nomeFieldName").value = nomeFieldName;
-        $('#myModal').modal('show');
+        $('#procedimentoModal').modal('show');
     }
     $(document).ready(function(e) {
         $('#envio').datetimepicker({
@@ -54,13 +61,14 @@
            modelAttribute="servicoLaboratorio" name="servicoForm">
 
     <jsp:include page="pessoaModal.jsp" />
+    <jsp:include page="procedimentoModal.jsp"/>
     <form:errors path="*">
         <div class="alert alert-danger"><form:errors path="*"/></div>
     </form:errors>
 
     <form:hidden path="id" id="id" />
-    <input type="hidden" name="idFieldName" id="idPessoaFieldName"/>
-    <input type="hidden" name="nomeFieldName" id="nomePessoaFieldName"/>
+    <input type="hidden" name="idFieldName" id="idFieldName"/>
+    <input type="hidden" name="nomeFieldName" id="nomeFieldName"/>
 
     <div class="form-group">
         <div class="row">
@@ -110,7 +118,7 @@
             <form:input path="entrega" cssClass="form-control" id="entrega"/>
         </div>
     </div>
-        
+
     <div class="form-group">
         <div class="row">
             <label for="nomeProcedimento" class="col-sm-2 control-label">Procedimento*</label>
@@ -120,15 +128,30 @@
                            id="nomeProcedimento" disabled>
                     <input type="hidden" id="idProcedimento" name="idProcedimento" value="" />
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal"
-                                onclick="configurarModalPessoa('idProfissional', 'nomeProfissional')">
+                        <button class="btn btn-default" type="button" onclick="configurarModalProcedimento('idProcedimento', 'nomeProcedimento')">
                             Adicionar
                         </button>
                     </span>
                 </div><!-- /input-group -->
             </div><!-- /.col-lg-6 -->
         </div>
-    </div>    
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="button" class="btn btn-default" onclick="location.href = 'controleLaboratorio.html'">Voltar</button>
+            <c:if test="${not empty servicoLaboratorio.id}">
+                <button type="button" class="btn btn-default" 
+                        onclick="if (confirm('Deseja realmente excluir o serviço ? ')) {
+                                    location.href = '#';
+                                }">
+
+                    <span class="glyphicon glyphicon-trash"></span>  Excluir
+                </button>
+            </c:if>
+        </div>
+    </div>
 
 </form:form>
 
