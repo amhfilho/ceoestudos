@@ -34,10 +34,13 @@ public class PessoaController {
     private PessoaDAO pessoaDAO;
 
     @RequestMapping(value = "pessoas")
-    public String pesquisarPessoas(Model model, String pesquisa) {
+    public String pesquisarPessoas(Model model, String pesquisa, String resultado) {
         LOGGER.debug("String de Pesquisa: " + pesquisa);
         List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa);
         model.addAttribute("pessoas", lista);
+        if(resultado!=null && !resultado.equals("")){
+            return resultado;
+        }
         return "pessoas";
     }
 

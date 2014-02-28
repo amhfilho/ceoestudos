@@ -136,6 +136,7 @@
 
 <form:form class="form" role="form" method="POST" action="salvarTurma.html" id="turmaForm" 
            modelAttribute="turma" name="turmaForm">
+    
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
