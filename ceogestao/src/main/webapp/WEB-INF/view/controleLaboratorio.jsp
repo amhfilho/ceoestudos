@@ -29,15 +29,15 @@
     </thead>
     <c:forEach items="${servicosLaboratorio}" var="s">
         <tr>
-            <td>${s.pessoa.nome}</td>
-            <td>${s.envio}</td>
-            <td>${s.entrega}</td>
+            <td>${s.paciente.nome}</td>
+            <td><fmt:formatDate dateStyle="medium" value="${s.envio}"/></td>
+            <td><fmt:formatDate dateStyle="medium" value="${s.entrega}"/></td>
             <td>${s.profissional.nome}</td>
             <td>${s.procedimento.nome}</td>
             <td>${s.laboratorio}</td>
             
             <td>
-                <button type="button" class="btn btn-default btn-xs" onclick="document.location = '#'">
+                <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarServicoLaboratorio.html?id=${s.id}'">
                     <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
                 </button>
             </td>

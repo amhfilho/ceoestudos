@@ -80,6 +80,7 @@
 
                     <span class="glyphicon glyphicon-trash"></span>  Excluir
                 </button>
+                            <button type="button" class="btn btn-default" onclick="location.href = 'novoCurso.html'">Novo</button>
             </c:if>
         </div>
     </div>

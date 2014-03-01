@@ -27,13 +27,13 @@
     });
 
     function salvarTurma() {
-        if(document.turmaForm.dataInicio.value ==="" | document.turmaForm.dataFim.value === "" | 
-                document.turmaForm.horaInicio === "" | document.turmaForm.horaFim === ""){
-            
+        if (document.turmaForm.dataInicio.value === "" | document.turmaForm.dataFim.value === "" |
+                document.turmaForm.horaInicio === "" | document.turmaForm.horaFim === "") {
+
             alert('As datas e os horários da turma devem ser preenchidos');
             return;
         }
-        
+
 //        if(document.formTurma.radioEmAndamento.checked ==="checked") {
 //            
 //            //verificar se data de inicio é igual ou anteriorà data de hoje
@@ -116,7 +116,7 @@
             },
             format: 'H:i'
         });
-        
+
         $('#horaFim').datetimepicker({
             datepicker: false,
             onShow: function(ct) {
@@ -128,15 +128,13 @@
         });
     });
 
-
-
 </script>
 
 
 
 <form:form class="form" role="form" method="POST" action="salvarTurma.html" id="turmaForm" 
            modelAttribute="turma" name="turmaForm">
-    
+
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -150,7 +148,7 @@
                     <input type="text" name="procurarAlunoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do aluno"/>
                     <button class="btn btn-default btn-xs" type="button" id="procurarAlunoBtn" >Procurar</button>
                     <br>
-                    <table class="table table-striped" id="tabelaBuscaAlunos" style="width: 100%">
+                    <table class="table table-bordered" id="tabelaBuscaAlunos" style="width: 100%">
 
                     </table>
 
@@ -168,8 +166,8 @@
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
             <form:errors path="*"/></div>
-    </form:errors>
-    <form:hidden path="id" id="id" name="id" />
+        </form:errors>
+        <form:hidden path="id" id="id" name="id" />
     <div class="form-group">
         <label for="curso" >Curso</label>
         <form:select path="curso" items="${mapCursos}" cssClass="form-control input-sm" id="curso"/>
@@ -235,8 +233,8 @@
             <form:checkbox id="checkboxSab" path="diasDaSemana" value="SÁB" /> Sáb
         </label>
     </div>
-        
-     <div class="form-group">
+
+    <div class="form-group">
         <label for="selectProfessor" >Professor</label>
         <c:if test="${not empty professores}">
             <form:select path="professor" id="selectProfessor" items="${professores}" cssClass="form-control input-sm" />
@@ -306,6 +304,7 @@
                                 }">
                     <span class="glyphicon glyphicon-trash"></span>  Excluir
                 </button>
+                <button type="button" class="btn btn-default" onclick="location.href = 'novaTurma.html'">Novo</button>
             </c:if>
         </div>
     </div>

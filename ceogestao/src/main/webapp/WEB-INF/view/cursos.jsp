@@ -16,7 +16,7 @@
 </c:if>
 <fmt:setLocale value="pt_BR"/>
 <c:if test="${not empty cursos}">
-    <table class="table table-striped" style="font-size: 11px">
+    <table class="table table-striped" >
         <tr>
         <thead>
         <th>Código</th>
@@ -41,7 +41,9 @@
             <td>${curso.turmasConfirmadas}</td>
             <td>${curso.turmasCanceladas}</td>
             <td>
-                <a href="editarCurso.html?id=${curso.id}"><span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarCurso.html?id=${curso.id}'">
+                    <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                </button>
             </td>
         </tr>
     </c:forEach>

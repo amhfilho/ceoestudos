@@ -38,7 +38,7 @@ public class PessoaController {
         LOGGER.debug("String de Pesquisa: " + pesquisa);
         List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa);
         model.addAttribute("pessoas", lista);
-        if(resultado!=null && !resultado.equals("")){
+        if (resultado != null && !resultado.equals("")) {
             return resultado;
         }
         return "pessoas";
@@ -53,24 +53,23 @@ public class PessoaController {
     @Transactional
     @RequestMapping(value = "salvarPessoa", method = RequestMethod.POST)
     public String salvarPessoa(@Valid Pessoa pessoa, BindingResult result, Model model) {
-        try {
-            if (result.hasErrors()) {
-                LOGGER.info("Erro de validação do formulário");
-                model.addAttribute("pessoa", pessoa);
-                return "formPessoa";
-            }
 
-            System.out.println("salvarPessoa:\n" + pessoa);
-            if (pessoa.getIdentificador() == null || pessoa.getIdentificador() == 0) {
-                pessoaDAO.adicionar(pessoa);
-            } else {
-                pessoaDAO.atualizar(pessoa);
-            }
-            model.addAttribute("SUCCESS_MESSAGE", "Pessoa gravada com sucesso!");
+        if (!result.hasErrors()) {
+            try {
+                if(pessoa.getCro()==null){
+                    pessoa.setUfCro(null);
+                }
+                if (pessoa.getIdentificador() == null || pessoa.getIdentificador() == 0) {
+                    pessoaDAO.adicionar(pessoa);
+                } else {
+                    pessoaDAO.atualizar(pessoa);
+                }
+                model.addAttribute("SUCCESS_MESSAGE", "Pessoa gravada com sucesso!");
 
-        } catch (RuntimeException e) {
-            model.addAttribute("ERROR_MESSAGE", e.getMessage());
-            LOGGER.error(e);
+            } catch (RuntimeException e) {
+                model.addAttribute("ERROR_MESSAGE", e.getMessage());
+                LOGGER.error(e);
+            }
         }
         model.addAttribute("pessoa", pessoa);
         return "formPessoa";
@@ -94,13 +93,13 @@ public class PessoaController {
     @RequestMapping("excluirPessoa")
     public String excluirPessoa(@RequestParam String id, Model model) {
         Long identificador = new Long(id);
-        try {    
+        try {
             pessoaDAO.excluir(identificador);
-            
+
         } catch (RuntimeException e) {
             LOGGER.error(e);
             model.addAttribute("ERROR_MESSAGE", e.getMessage());
-            model.addAttribute("pessoa",pessoaDAO.getById(identificador));
+            model.addAttribute("pessoa", pessoaDAO.getById(identificador));
             return "formPessoa";
         }
         return "redirect:pessoas.html";

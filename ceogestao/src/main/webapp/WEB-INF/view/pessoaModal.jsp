@@ -29,7 +29,7 @@
                     <input type="text" name="procurarPessoaText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome"/>
                     <button class="btn btn-default btn-xs" type="button" id="procurarPessoaBtn" >Procurar</button>
                     <br>
-                    <table class="table table-striped" id="tabelaBuscaPessoa" >
+                    <table class="table table-bordered" id="tabelaBuscaPessoa" >
 
                     </table>
 

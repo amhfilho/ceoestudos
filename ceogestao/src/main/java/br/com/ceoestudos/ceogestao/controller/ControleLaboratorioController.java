@@ -3,7 +3,10 @@ package br.com.ceoestudos.ceogestao.controller;
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.ProcedimentoDAO;
 import br.com.ceoestudos.ceogestao.dao.ServicoLaboratorioDAO;
+import br.com.ceoestudos.ceogestao.model.Pessoa;
+import br.com.ceoestudos.ceogestao.model.Procedimento;
 import br.com.ceoestudos.ceogestao.model.ServicoLaboratorio;
+import br.com.ceoestudos.ceogestao.util.Util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.validation.Valid;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -50,25 +54,59 @@ public class ControleLaboratorioController {
     }
     
     @RequestMapping(value = "salvarServicoLaboratorio", method = RequestMethod.POST)
-    public String salvarServicoLaboratorio(Model model, 
-            @Valid ServicoLaboratorio servico, BindingResult result, 
-            Long idPaciente, Long idProfissional,Long idProcedimento){
+    public String salvarServicoLaboratorio(Model model, @Valid ServicoLaboratorio servico, BindingResult result){
         if(!result.hasErrors()){
             try {
-                servico.setNome(pessoaDAO.getById(idPaciente));
-                servico.setProfissional(pessoaDAO.getById(idProfissional));
-                servico.setProcedimento(procedimentoDAO.getById(idProcedimento));
-                
+                String success = "";
                 if(servico.getId()==null){
                     sDAO.adicionar(servico);
+                    success = "Serviço de Laboratório criado com sucesso";
                 } else {
                     sDAO.atualizar(servico);
+                    success = "Serviço de Laboratório atualizado com sucesso";
                 }
-            } catch (RuntimeException e){
+                model.addAttribute("servicoLaboratorio",servico);
+                model.addAttribute("SUCCESS_MESSAGE",success);
                 
+            } catch (RuntimeException e){
+                LOG.error(new Util().toString(e));
+                model.addAttribute("ERROR_MESSAGE","Erro ao salvar o serviço de laboratório: " + e.getMessage());
             }
         }
         return "formServicoLaboratorio";
+    }
+    
+    @RequestMapping("editarServicoLaboratorio")
+    public String editarServicoLaboratorio(Model model, @RequestParam Long id){
+        try {
+            ServicoLaboratorio servico = sDAO.getById(id);
+            model.addAttribute("servicoLaboratorio",servico);
+            return "formServicoLaboratorio";
+            
+        } catch (RuntimeException e){
+            LOG.error(new Util().toString(e));
+            model.addAttribute("ERROR_MESSAGE", "Erro ao exibir os detalhes do serviço: "+e.getMessage());
+            return "controleLaboratorio";
+        }
+        
+    }
+    
+    @RequestMapping("excluirServicoLaboratorio")
+    public String excluirServicoLaboratorio(Model model, @RequestParam Long id){
+        ServicoLaboratorio servico = null ;
+        try {
+            servico = sDAO.getById(id);
+            sDAO.excluir(servico);
+            model.addAttribute("SUCCESS_MESSAGE", "Serviço excluído com sucesso");
+            return "redirect:controleLaboratorio.html";
+            
+        } catch (RuntimeException e){
+            LOG.error(new Util().toString(e));
+            model.addAttribute("ERROR_MESSAGE", "Erro ao excluir o serviço: "+e.getMessage());
+            model.addAttribute("servicoLaboratorio",servico);
+            return "formServicoLaboratorio";
+        }
+        
     }
     
     
@@ -77,6 +115,9 @@ public class ControleLaboratorioController {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateFormat.setLenient(false);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+        binder.registerCustomEditor(Pessoa.class, "paciente", new PessoaPropertyEditor(pessoaDAO));
+        binder.registerCustomEditor(Pessoa.class, "profissional", new PessoaPropertyEditor(pessoaDAO));
+        binder.registerCustomEditor(Procedimento.class, "procedimento", new ProcedimentoPropertyEditor(procedimentoDAO));
     }
 }

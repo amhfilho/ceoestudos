@@ -26,26 +26,19 @@
         <script src="${pageContext.request.contextPath}/resources/js/jquery.datetimepicker.js"></script>
 
     </head>
-    <body>
+    <body style="padding-top: 100px;">
 
         <!-- Fixed navbar -->
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
                     <a class="navbar-brand" href="#">
-                        <img class="img-rounded" src="${pageContext.request.contextPath}/resources/images/CEO_DR2.png" />
-                    </a>
+                        <img class="img-rounded" src="${pageContext.request.contextPath}/resources/images/CEO_DR1.png" />
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="turmas.html">Turmas</a></li>
-                        <li><a href="#about">Inscrições do Site</a></li>
+                        <li><a href="controleLaboratorio.html">Controle de Laboratório</a></li>
                         <li><a href="#contact">Financeiro</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastro <b class="caret"></b></a>

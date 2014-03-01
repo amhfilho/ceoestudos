@@ -8,14 +8,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
+<script type="text/javascript">
+    function enableUfCro() {
+        var cro = document.getElementById("cro").value;
+        document.getElementById("ufCro").disabled = cro === "";
+    }
+
+</script>
 
 <form:form class="form-horizontal" role="form" method="POST" action="salvarPessoa.html"  
-           modelAttribute="pessoa">
+           modelAttribute="pessoa" >
     <form:errors path="*">
         <div class="alert alert-danger"><form:errors path="*"/></div>
     </form:errors>
-<small>Campos obrigatórios são marcados com <strong>*</strong></small>
-<br>
+    <small>Campos obrigatórios são marcados com <strong>*</strong></small>
+    <br>
     <form:hidden path="identificador" id="identificador" name="identificador" />
     <div class="row">
         <label for="nome" class="col-sm-2 control-label">Nome*</label>
@@ -57,42 +64,43 @@
         </div>
     </div>
     <script type="text/javascript">
-
-        $(document).ready(function(e) {
-            $('#dataNascimento').datetimepicker({
-                lang: 'pt',
-                i18n: {
-                    pt: {
-                        months: [
-                            'Janeiro', 'Fevereiro', 'Março', 'Abril',
-                            'Maio', 'Junho', 'Julho', 'Agosto',
-                            'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-                        ],
-                        dayOfWeek: [
-                            "Dom", "Seg", "Ter", "Qua",
-                            "Qui", "Sex", "Sab"
-                        ]
-                    }
-                },
-                timepicker: false,
-                allowBlank: true,
-                format: 'd/m/Y'
-            });
-
-
-        });
-
+        /*
+         $(document).ready(function(e) {
+         $('#dataNascimento').datetimepicker({
+         lang: 'pt',
+         i18n: {
+         pt: {
+         months: [
+         'Janeiro', 'Fevereiro', 'Março', 'Abril',
+         'Maio', 'Junho', 'Julho', 'Agosto',
+         'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+         ],
+         dayOfWeek: [
+         "Dom", "Seg", "Ter", "Qua",
+         "Qui", "Sex", "Sab"
+         ]
+         }
+         },
+         timepicker: false,
+         allowBlank: true,
+         format: 'd/m/Y'
+         });
+         
+         
+         });
+         */
     </script> 
     <div class="form-group">
         <label for="dataNascimento" class="col-sm-2 control-label">Data de Nascimento</label>
-        <div class="col-sm-10">
-            <form:input cssClass="form-control input-sm" id="dataNascimento" placeholder="Ex: 21/01/2004" path="dataNascimento" />
+        <div class="col-sm-2">
+            <form:input cssClass="form-control input-sm" id="dataNascimento" placeholder="Ex: 21/01/2004" path="dataNascimento" />    
         </div>
+        <span class="help-block">Data deve estar no formato dia/mês/ano com 4 dígitos</span>
     </div>         
 
     <div class="form-group">
         <label for="sexo" class="col-sm-2 control-label">Sexo</label>
-        <div class="col-sm-10">
+        <div class="col-sm-2">
             <select class="form-control input-sm" name="sexo" id="sexo">
                 <option value="MASCULINO">Masculino</option>
                 <option value="FEMININO">Feminino</option>
@@ -151,7 +159,7 @@
 
     <div class="form-group">
         <label for="estado" class="col-sm-2 control-label">Estado</label>
-        <div class="col-sm-10">
+        <div class="col-sm-2">
             <select class="form-control input-sm" name="estado" id="estado">
                 <option value="AC" <c:if test="${pessoa.estado == 'AC'}"> selected</c:if> >Acre</option>
                 <option value="AL" <c:if test="${pessoa.estado == 'AC'}"> selected</c:if> >Alagoas</option>
@@ -211,16 +219,15 @@
 
         <div class="form-group">
             <label for="cro" class="col-sm-2 control-label">CRO</label>
-            <div class="col-sm-10">
+            <div class="col-sm-2">
                 <input type="text" class="form-control input-sm" id="cro" placeholder="CRO" 
-                       name="cro">
+                       name="cro" onchange="enableUfCro();" onkeypress="this.onchange();" 
+                       onpaste="this.onchange();" oninput="this.onchange();">
             </div>
-        </div>
-
-        <div class="form-group">
             <label for="ufCro" class="col-sm-2 control-label">U.F. do CRO</label>
-            <div class="col-sm-10">
-                <select class="form-control input-sm" name="ufCro" id="ufCro">
+            <div class="col-sm-2">
+                <select class="form-control input-sm" name="ufCro" id="ufCro" disabled="true">
+                    <option value="" selected >Selecione</option>
                     <option value="AC" <c:if test="${pessoa.ufCro == 'AC'}"> selected</c:if> >Acre</option>
                 <option value="AL" <c:if test="${pessoa.ufCro == 'AC'}"> selected</c:if> >Alagoas</option>
                 <option value="AM" <c:if test="${pessoa.ufCro == 'AM'}"> selected</c:if> >Amazonas</option>
@@ -252,16 +259,23 @@
             </div>
         </div>
 
+
+
+
+
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">Salvar</button>
                 <button type="button" class="btn btn-default" onclick="location.href = 'pessoas.html'">Voltar</button>
+            <c:if test="${not empty pessoa.identificador}">
                 <button type="button" class="btn btn-default" 
                         onclick="if (confirm('Deseja realmente excluir a pessoa? ')) {
                                     location.href = 'excluirPessoa.html?id=${pessoa.identificador}';
                                 }">
-                <span class="glyphicon glyphicon-trash"></span>  Excluir
-            </button>
+                    <span class="glyphicon glyphicon-trash"></span>  Excluir
+                </button>
+                <button type="button" class="btn btn-default" onclick="location.href = 'novaPessoa.html'">Novo</button>
+            </c:if>
         </div>
     </div>
 

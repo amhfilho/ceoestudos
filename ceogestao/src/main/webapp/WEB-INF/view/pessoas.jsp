@@ -50,13 +50,13 @@
         <th>CPF</th>
         <th>Endereço</th>
 
-        <th>Cidade</th>
+        <th>Cidade - Estado</th>
 
         <th>Telefone Celular</th>
         <th>Telefone Residencial</th>
         <th>Telefone Comercial</th>
         <th>E-mail</th>
-        <th>CRO</th>
+        
         <th></th>
     </thead>
 </tr>
@@ -74,8 +74,12 @@
         <td>${pessoa.telefoneResidencial}</td>
         <td>${pessoa.telefoneComercial}</td>
         <td>${pessoa.email}</td>
-        <td>${pessoa.cro} - ${pessoa.ufCro}</td>
-        <td><a href="editarPessoa.html?id=${pessoa.identificador}"><span class="glyphicon glyphicon-pencil"></span>  Detalhes</a></td>
+        
+        <td>
+            <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
+                    <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+            </button>
+        </td>
     </tr>
 </c:forEach>
 </table>

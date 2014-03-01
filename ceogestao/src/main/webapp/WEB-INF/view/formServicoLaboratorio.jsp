@@ -71,15 +71,23 @@
     <input type="hidden" name="nomeFieldName" id="nomeFieldName"/>
 
     <div class="form-group">
+        <label for="laboratorio" class="col-sm-2 control-label">Laboratório</label>
+        <div class="col-lg-2">
+            <form:input path="laboratorio" cssClass="form-control" id="laboratorio"/>
+        </div>
+    </div>
+    
+    <div class="form-group">
         <div class="row">
             <label for="nomePaciente" class="col-sm-2 control-label">Paciente*</label>
             <div class="col-lg-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Clique em Adicionar para inserir um paciente" id="nomePaciente" disabled>
-                    <input type="hidden" id="idPaciente" name="idPaciente" value=""/>
+                    <input type="text" class="form-control" placeholder="Clique em Adicionar para inserir um paciente" 
+                           id="nomePaciente" value="${servicoLaboratorio.paciente.nome}" disabled>
+                    <form:hidden id="paciente" path="paciente" />
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" 
-                                onclick="configurarModalPessoa('idPaciente', 'nomePaciente')">
+                                onclick="configurarModalPessoa('paciente', 'nomePaciente')">
                             Adicionar
                         </button>
                     </span>
@@ -92,11 +100,12 @@
             <label for="nomeProfissional" class="col-sm-2 control-label">Dr.(a)*</label>
             <div class="col-lg-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Clique em Adicionar para inserir um profissional" id="nomeProfissional" disabled>
-                    <input type="hidden" id="idProfissional" name="idProfissional" value="" />
+                    <input type="text" class="form-control" placeholder="Clique em Adicionar para inserir um profissional" 
+                           id="nomeProfissional" value="${servicoLaboratorio.profissional.nome}" disabled>
+                    <form:hidden id="profissional" path="profissional" />
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal"
-                                onclick="configurarModalPessoa('idProfissional', 'nomeProfissional')">
+                        <button class="btn btn-default" type="button" 
+                                onclick="configurarModalPessoa('profissional', 'nomeProfissional')">
                             Adicionar
                         </button>
                     </span>
@@ -106,7 +115,7 @@
     </div>
 
     <div class="form-group">
-        <label for="envio" class="col-sm-2 control-label">Data de envio</label>
+        <label for="envio" class="col-sm-2 control-label">Data de envio*</label>
         <div class="col-lg-2">
             <form:input path="envio" cssClass="form-control" id="envio"/>
         </div>
@@ -125,10 +134,10 @@
             <div class="col-lg-6">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Clique em Adicionar para inserir um procedimento" 
-                           id="nomeProcedimento" disabled>
-                    <input type="hidden" id="idProcedimento" name="idProcedimento" value="" />
+                           id="nomeProcedimento" value="${servicoLaboratorio.procedimento.nome}" disabled>
+                    <form:hidden id="procedimento" path="procedimento" />
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" onclick="configurarModalProcedimento('idProcedimento', 'nomeProcedimento')">
+                        <button class="btn btn-default" type="button" onclick="configurarModalProcedimento('procedimento', 'nomeProcedimento')">
                             Adicionar
                         </button>
                     </span>
@@ -144,12 +153,14 @@
             <c:if test="${not empty servicoLaboratorio.id}">
                 <button type="button" class="btn btn-default" 
                         onclick="if (confirm('Deseja realmente excluir o serviço ? ')) {
-                                    location.href = '#';
+                                    location.href = 'excluirServicoLaboratorio.html?id=${servicoLaboratorio.id}';
                                 }">
 
                     <span class="glyphicon glyphicon-trash"></span>  Excluir
                 </button>
+                <button type="button" class="btn btn-default" onclick="location.href = 'novoServicoLaboratorio.html'">Novo</button>
             </c:if>
+            
         </div>
     </div>
 

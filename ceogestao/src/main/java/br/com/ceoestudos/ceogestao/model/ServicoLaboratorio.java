@@ -26,11 +26,11 @@ public class ServicoLaboratorio implements Serializable {
     private String laboratorio;
 
     @ManyToOne
-    //@NotNull(message = "Deve haver uma pessoa associada a este serviço")
-    private Pessoa nome;
+    @NotNull(message = "Deve haver um paciente associado a este serviço")
+    private Pessoa paciente;
 
     @ManyToOne
-    //@NotNull(message = "Deve haver um profissional associado a este serviço")
+    @NotNull(message = "Deve haver um profissional associado a este serviço")
     private Pessoa profissional;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -43,7 +43,7 @@ public class ServicoLaboratorio implements Serializable {
     private Date entrega;
 
     @ManyToOne
-    //@NotNull(message = "Deve haver um procedimento associado a este serviço")
+    @NotNull(message = "Deve haver um procedimento associado a este serviço")
     private Procedimento procedimento;
 
     @Override
@@ -70,7 +70,7 @@ public class ServicoLaboratorio implements Serializable {
 
     @Override
     public String toString() {
-        return "ServicoLaboratorio{" + "id=" + id + ", laboratorio=" + laboratorio + ", nome=" + nome + ", profissional=" + profissional + ", envio=" + envio + ", entrega=" + entrega + ", procedimento=" + procedimento + '}';
+        return "ServicoLaboratorio{" + "id=" + id + ", laboratorio=" + laboratorio + ", nome=" + paciente + ", profissional=" + profissional + ", envio=" + envio + ", entrega=" + entrega + ", procedimento=" + procedimento + '}';
     }
 
     public Long getId() {
@@ -89,12 +89,12 @@ public class ServicoLaboratorio implements Serializable {
         this.laboratorio = laboratorio;
     }
 
-    public Pessoa getNome() {
-        return nome;
+    public Pessoa getPaciente() {
+        return paciente;
     }
 
-    public void setNome(Pessoa nome) {
-        this.nome = nome;
+    public void setPaciente(Pessoa paciente) {
+        this.paciente = paciente;
     }
 
     public Date getEnvio() {

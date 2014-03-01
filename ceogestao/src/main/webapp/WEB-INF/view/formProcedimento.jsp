@@ -31,12 +31,12 @@
         <div class="col-lg-4">
             <form:select items="${tiposProcedimentos}" path="tipo" cssClass="form-control input-sm" id="tipo"/>
         </div>
-        
+
         <div class="col-lg-4">
             <input type="text" class="form-control input-sm" id="textTipo" name="textTipo" placeholder="Insira um novo tipo"/>
         </div>
     </div>
-    
+
 
     <div class="form-group">
         <label for="preco" class="col-sm-2 control-label">Valor</label>
@@ -64,6 +64,7 @@
 
                     <span class="glyphicon glyphicon-trash"></span>  Excluir
                 </button>
+                <button type="button" class="btn btn-default" onclick="location.href = 'novoProcedimento.html'">Novo</button>
             </c:if>
         </div>
     </div>

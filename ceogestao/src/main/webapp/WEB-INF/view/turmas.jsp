@@ -16,7 +16,7 @@
 </c:if>
 
 <c:if test="${not empty turmas}">
-    <table class="table table-striped" style="font-size: 11px">
+    <table class="table table-striped" >
         <thead>
             <th>Curso</th>
             <th>Inicio</th>
@@ -33,8 +33,11 @@
                 <td>${turma.diasDaSemanaFormatados}</td>
                 <td>${fn:length(turma.alunos)}</td>
                 <td>${turma.situacao.nome}</td>
-                <td><a href="editarTurma.html?id=${turma.id}"><span class="glyphicon glyphicon-pencil"></span> Detalhes</a></td>
-                
+                <td>
+                    <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarTurma.html?id=${turma.id}'">
+                        <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                    </button>
+                </td>
             </tr>
         </c:forEach>
 </table>
