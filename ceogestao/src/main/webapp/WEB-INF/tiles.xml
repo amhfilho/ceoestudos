@@ -70,5 +70,10 @@
     <definition name="procedimentoModalResultado" template="/WEB-INF/view/emptyLayout.jsp">
         <put-attribute name="body" value="/WEB-INF/view/procedimentoModalResultado.jsp" />
     </definition>
+    
+    <definition name="formTratamento" extends="base.definition">
+        <put-attribute name="title" value="Tratamento" />
+        <put-attribute name="body" value="/WEB-INF/view/formTratamento.jsp" />
+    </definition>
  
 </tiles-definitions>
