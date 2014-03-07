@@ -1,6 +1,7 @@
 package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,7 +20,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.joda.time.Weeks;
@@ -85,7 +85,9 @@ public class Turma implements Serializable {
 
     @Override
     public String toString() {
-        return "Turma{" + "id=" + id + ", curso=" + curso + ", dataInicio=" + dataInicio + ", dataFim=" + dataFim + ", horaInicio=" + horaInicio + ", horaFim=" + horaFim + ", quorumMinimo=" + quorumMinimo + ", sala=" + sala + ", observacoes=" + observacoes + ", situacao=" + situacao + '}';
+        return getCurso().getNome()+
+                " - "  + getDiasDaSemanaFormatados()+
+                " às " + new SimpleDateFormat("HH:mm").format(horaInicio);
     }
 
     public String getDiasDaSemanaFormatados() {

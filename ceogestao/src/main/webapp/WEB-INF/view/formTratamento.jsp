@@ -14,7 +14,7 @@
 //        document.getElementById("nomeFieldName").value = nomeFieldName;
         $('#myModal').modal('show');
     }
-    
+
     function adicionarPessoa(id, nome) {
 //        var idFieldName = document.getElementById("idFieldName").value;
 //        var nomeFieldName = document.getElementById("nomeFieldName").value;
@@ -26,14 +26,21 @@
 
 <jsp:include page="pessoaModal.jsp" />
 
-<form class="form-horizontal" role="form">
+<form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html">
+    <form:errors path="*">
+        <div class="alert alert-danger">
+            <strong>Problemas!</strong><br>
+            <form:errors path="*"/>
+        </div>
+    </form:errors>
+
     <div class="form-group">
         <label for="turma" class="col-sm-2 control-label">Turma</label>
         <div class="col-sm-6">
-            <select class="form-control" id="turma">
-                <option value="">Sem turma associada</option>
-                <option value="1">Curso básico - SEG,QUA - 09:00</option>
-            </select>
+            <form:select path="turma" id="turma" cssClass="form-control">
+                <form:option value="" label="Sem turma associada"/>
+                <form:options items="${todasAsTurmas}"/>
+            </form:select>
         </div>
     </div>
 
@@ -53,7 +60,7 @@
         </div>
     </div>
 
-    
+
     <table class="table">
         <tr>
             <td><img src="${pageContext.request.contextPath}/resources/images/18.jpg"/></td>
@@ -112,4 +119,22 @@
             <td><img src="${pageContext.request.contextPath}/resources/images/38.jpg"/></td>        
         </tr>
     </table>
-</form>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary" >Salvar</button>
+            <button type="button" class="btn btn-default" onclick="location.href = '#'">Voltar</button>
+            <c:if test="${not empty tratamento.id}">
+                <button type="button" class="btn btn-default" 
+                        onclick="if (confirm('Deseja realmente excluir o tratamento? ')) {
+                                    location.href = '#';
+
+                                }">
+                    <span class="glyphicon glyphicon-trash"></span>  Excluir
+                </button>
+                <button type="button" class="btn btn-default" onclick="location.href = 'novoTratamento.html'">Novo</button>
+            </c:if>
+        </div>
+    </div>
+
+</form:form>

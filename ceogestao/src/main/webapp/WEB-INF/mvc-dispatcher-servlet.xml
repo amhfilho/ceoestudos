@@ -28,6 +28,7 @@
             <set>
                 <ref bean="cursoFormatter"/>
                 <ref bean="pessoaFormatter"/>
+                <ref bean="turmaFormatter"/>
             </set>
         </property>
         
