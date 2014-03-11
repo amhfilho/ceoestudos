@@ -1,7 +1,12 @@
 package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +22,19 @@ public class Tratamento implements Serializable {
     private Turma turma;
     
     private String obs;
+    
+    @ElementCollection(targetClass = TratamentoDente.class, fetch = FetchType.EAGER)
+    private Collection<TratamentoDente> dentes;
+    
+    public List<TratamentoDente> getTratamentosPorDente(Integer dente){
+        List<TratamentoDente> lista = new ArrayList<TratamentoDente>();
+        for(TratamentoDente td:dentes){
+            if(td.getDente() == dente){
+                lista.add(td);
+            }
+        }
+        return lista;
+    }
 
     @Override
     public int hashCode() {
@@ -62,6 +80,14 @@ public class Tratamento implements Serializable {
 
     public void setObs(String obs) {
         this.obs = obs;
+    }
+
+    public Collection<TratamentoDente> getDentes() {
+        return dentes;
+    }
+
+    public void setDentes(Collection<TratamentoDente> dentes) {
+        this.dentes = dentes;
     }
     
     

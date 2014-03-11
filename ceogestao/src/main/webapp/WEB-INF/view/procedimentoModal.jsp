@@ -10,7 +10,6 @@
                     // selecionando o elemento html através da 
                     // ID e alterando o HTML dele 
                     $("#tabelaBuscaProcedimento").html(resposta);
-
                 });
             }
         });

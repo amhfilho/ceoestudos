@@ -45,7 +45,7 @@ public class ProcedimentoController {
 
     }
 
-    @RequestMapping(value = "novoProcedimento", method = RequestMethod.POST)
+    @RequestMapping(value = "novoProcedimento")
     public String novoProcedimento(Model model) {
         model.addAttribute("procedimento", new Procedimento());
         return "formProcedimento";
