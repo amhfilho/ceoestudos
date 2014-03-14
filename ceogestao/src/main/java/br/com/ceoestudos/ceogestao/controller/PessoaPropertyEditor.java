@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.ceoestudos.ceogestao.controller;
 
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
@@ -30,6 +25,11 @@ public class PessoaPropertyEditor extends PropertyEditorSupport {
     
     @Override
     public String getAsText(){
-        return ((Pessoa)getValue()).getIdentificador().toString();
+        Pessoa pessoa = (Pessoa)getValue();
+        if(pessoa!=null){
+            return pessoa.getIdentificador().toString();
+        } else {
+            return null;
+        }
     }
 }

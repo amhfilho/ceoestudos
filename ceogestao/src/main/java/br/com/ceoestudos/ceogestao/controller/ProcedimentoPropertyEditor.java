@@ -26,7 +26,12 @@ public class ProcedimentoPropertyEditor extends PropertyEditorSupport {
     
     @Override
     public String getAsText(){
-        return ((Procedimento)getValue()).getId().toString();
+        Procedimento p = (Procedimento)getValue();
+        if(p!=null){
+            return p.getId().toString();
+        } else {
+            return null;
+        }
     }
     
 }
