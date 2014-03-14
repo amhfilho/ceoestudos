@@ -21,12 +21,7 @@
         <td>
             Qtd: <input type='text' id='qtdProcedimento' name="qtdProcedimento"/>
         </td>
-        <td style="text-align: center">
-            <button type="button" class="btn btn-success btn-xs" 
-                    onclick="adicionarProcedimento(${procedimento.id}, '${procedimento.nome}')">
-                Confirmar
-            </button>
-        </td>
+        
 
     </tr>
 </c:forEach>
