@@ -30,21 +30,27 @@
     
     function adicionarProcedimento(id,nome){
         alert(id+","+nome);
+        document.getElementById("idProcedimento").value = id;
+        document.formTratamento.action = "adicionarProcedimento.html";
+        document.formTratamento.submit();
     }
 </script>
 
 <jsp:include page="pessoaModal.jsp" />
 <jsp:include page="procedimentoModal.jsp" />
 
-<form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html">
+<form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html"
+           name="formTratamento">
+    
     <form:errors path="*">
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
             <form:errors path="*"/>
         </div>
     </form:errors>
-        
+
     <input type="hidden" id="idDente" name="idDente"/>
+    <input type="hidden" id="idProcedimento" name="idProcedimento"/>
 
     <div class="form-group">
         <label for="turma" class="col-sm-2 control-label">Turma</label>
