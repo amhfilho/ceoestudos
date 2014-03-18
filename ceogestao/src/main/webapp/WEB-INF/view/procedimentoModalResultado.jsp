@@ -8,20 +8,31 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-    <c:if test="${empty procedimentos}">
-        <td colspan="2">Nenhuma procedimento encontrado</td>
-    </c:if>
-    <c:forEach items="${procedimentos}" var="procedimento">
-        <tr>
-            <td>${procedimento.nome}</td>
-            <td>${procedimento.tipo}</td>
-            <td style="text-align: center">
-                <button type="button" class="btn btn-success btn-xs" 
-                        onclick="adicionarProcedimento(${procedimento.id},'${procedimento.nome}')">
-                    Confirmar
-                </button>
-            </td>
-        
-        </tr>
-    </c:forEach>
-    <input type="hidden" id="procedimentoId" name="procedimentoId" value=""/>
+<c:if test="${empty procedimentos}">
+    <td colspan="2">Nenhuma procedimento encontrado</td>
+</c:if>
+<c:forEach items="${procedimentos}" var="procedimento">
+    <tr>
+        <td><a href="javascript:adicionarProcedimento(${procedimento.id}, '${procedimento.nome}')">${procedimento.nome}</a></td>
+        <td>${procedimento.tipo}</td>
+        <td>
+            <div class="form-group">
+                <label for="qtd" class="col-sm-2">Qtd:</label>
+                <div class="col-sm-4">
+                    <select class="form-control input-sm" id="qtd">
+                        <option selected="true">1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </div>
+            
+
+        </td>
+
+
+    </tr>
+</c:forEach>
+<input type="hidden" id="procedimentoId" name="procedimentoId" value=""/>

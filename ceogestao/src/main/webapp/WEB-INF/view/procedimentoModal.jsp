@@ -28,7 +28,7 @@
                 <input type="text" name="procurarProcedimentoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do procedimento"/>
                 <button class="btn btn-default btn-xs" type="button" id="procurarProcedimentoBtn" >Procurar</button>
                 <div>
-                    <table class="table table-bordered" id="tabelaBuscaProcedimento" >
+                    <table class="table table-condensed" id="tabelaBuscaProcedimento" >
 
                     </table>
                 </div>
