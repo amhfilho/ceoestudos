@@ -9,7 +9,10 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <c:if test="${empty procedimentos}">
-    <td colspan="2">Nenhuma procedimento encontrado</td>
+    <td colspan="3">Nenhuma procedimento encontrado</td>
+</c:if>
+<c:if test="${not empty procedimentos}">
+    <td colspan="3">Escolha a quantidade e clique no nome do procedimento para adicionar</td>
 </c:if>
 <c:forEach items="${procedimentos}" var="procedimento">
     <tr>
@@ -17,7 +20,7 @@
         <td>${procedimento.tipo}</td>
         <td>
             <div class="form-group">
-                <label for="qtd" class="col-sm-2">Qtd:</label>
+                <div class="col-sm-2">Qtd:</div>
                 <div class="col-sm-4">
                     <select class="form-control input-sm" id="qtd">
                         <option selected="true">1</option>
