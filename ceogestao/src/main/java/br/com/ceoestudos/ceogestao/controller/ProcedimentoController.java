@@ -30,6 +30,7 @@ public class ProcedimentoController {
     @RequestMapping("procedimentos")
     public String listarProcedimentosPorNomeETipo(Model model, String pesquisa, String filtroTipo, String resultado) {
         List<Procedimento> lista = procedimentoDAO.listar(pesquisa, filtroTipo);
+        LOG.debug("procedimentos: "+lista.size());
         model.addAttribute("procedimentos", lista);
         model.addAttribute("filtroTipo", filtroTipo);
         model.addAttribute("pesquisa", pesquisa);
