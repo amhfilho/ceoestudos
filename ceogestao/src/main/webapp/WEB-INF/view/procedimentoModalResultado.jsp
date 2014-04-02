@@ -9,19 +9,19 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <c:if test="${empty procedimentos}">
-    <tr><td colspan="3">Nenhuma procedimento encontrado</td></tr>
+    <tr><td colspan="3"><small>Nenhuma procedimento encontrado<small></td></tr>
 </c:if>
 <c:if test="${not empty procedimentos}">
     <tr><td colspan="3"><small>Escolha a quantidade e clique no nome do procedimento para adicionar</small></td></tr>
 </c:if>
 <c:forEach items="${procedimentos}" var="procedimento">
     <tr>
-        <td><a href="javascript:adicionarProcedimento(${procedimento.id}, '${procedimento.nome}')">${procedimento.nome}</a></td>
-        <td>${procedimento.tipo}</td>
+        <td><small><a href="javascript:adicionarProcedimento(${procedimento.id}, '${procedimento.nome}')">${procedimento.nome}</a></small></td>
+        <td><small>${procedimento.tipo}</small></td>
         <td>
             <div class="form-group">             
                 <div class="col-sm-4">
-                    <select class="form-control input-sm" id="qtd">
+                    <select id="qtd">
                         <option selected="true">1</option>
                         <option>2</option>
                         <option>3</option>
