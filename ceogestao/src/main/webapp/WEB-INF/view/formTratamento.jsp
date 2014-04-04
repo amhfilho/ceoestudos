@@ -28,9 +28,12 @@
         document.getElementById("idDente").value = dente;
     }
     
-    function adicionarProcedimento(id,nome){
-        alert(id+","+nome);
+    function adicionarProcedimento(id,nome,qtd_id){
+        qtd = document.getElementById(qtd_id).value;
+        alert(id+","+nome+",qtd:"+qtd);
+        
         document.getElementById("idProcedimento").value = id;
+        document.getElementById("qtdProcedimento").value = qtd;
         document.formTratamento.action = "adicionarProcedimento.html";
         document.formTratamento.submit();
     }
@@ -51,6 +54,8 @@
 
     <input type="hidden" id="idDente" name="idDente"/>
     <input type="hidden" id="idProcedimento" name="idProcedimento"/>
+    <input type="hidden" id="qtdProcedimento" name="qtdProcedimento"/>
+    <form:hidden path="id" />
 
     <div class="form-group">
         <label for="turma" class="col-sm-2 control-label">Turma</label>

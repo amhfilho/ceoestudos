@@ -64,9 +64,17 @@ public class TratamentoController {
         return "formTratamento";
     }
     
-    @RequestMapping(value = "adicionarProcedimento")
-    public String adicionarProcedimento(Model model, Tratamento tratamento, Long idProcedimento){
-        
+    @RequestMapping(value = "adicionarProcedimento", method = RequestMethod.POST)
+    public String adicionarProcedimento(Model model, 
+                                        Tratamento tratamento, 
+                                        Long idProcedimento, 
+                                        Integer qtdProcedimento, 
+                                        Integer idDente){
+        Procedimento procedimento = procedimentoDAO.getById(idProcedimento);
+        LOG.debug(procedimento);
+        LOG.debug(tratamento);
+        LOG.debug(qtdProcedimento);
+        LOG.debug(idDente);
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
     }

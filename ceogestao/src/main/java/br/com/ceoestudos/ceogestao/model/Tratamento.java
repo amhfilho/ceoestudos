@@ -14,22 +14,48 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Tratamento implements Serializable {
-    
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @ManyToOne
     private Turma turma;
     
+    @ManyToOne
+    private Pessoa paciente;
+
     private String obs;
-    
+
     @ElementCollection(targetClass = TratamentoDente.class, fetch = FetchType.EAGER)
     private Collection<TratamentoDente> dentes;
+
+    @Override
+    public String toString() {
+        return "Tratamento{" + "id=" + id + ", turma=" + turma + ", obs=" + obs + ", dentes=" + dentes + '}';
+    }
     
-    public List<TratamentoDente> getTratamentosPorDente(Integer dente){
+    public void addTratamento(Integer dente, int qtd, Procedimento procedimento) {
+        if (dentes == null) {
+            dentes = new ArrayList<TratamentoDente>();
+        }
+        TratamentoDente td = new TratamentoDente(dente, procedimento, qtd);
+        if (dentes.contains(td)) {
+            dentes.remove(td);
+        }
+        dentes.add(td);
+    }
+
+    public void removeTratamento(TratamentoDente t) {
+        if (dentes != null) {
+            dentes.remove(t);
+        }
+    }
+
+    public List<TratamentoDente> getTratamentosPorDente(Integer dente) {
         List<TratamentoDente> lista = new ArrayList<TratamentoDente>();
-        for(TratamentoDente td:dentes){
-            if(td.getDente() == dente){
+        for (TratamentoDente td : dentes) {
+            if (td.getDente() == dente) {
                 lista.add(td);
             }
         }
@@ -89,7 +115,15 @@ public class Tratamento implements Serializable {
     public void setDentes(Collection<TratamentoDente> dentes) {
         this.dentes = dentes;
     }
+
+    public Pessoa getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Pessoa paciente) {
+        this.paciente = paciente;
+    }
     
     
-    
+
 }

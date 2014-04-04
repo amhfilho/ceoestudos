@@ -16,12 +16,12 @@
 </c:if>
 <c:forEach items="${procedimentos}" var="procedimento">
     <tr>
-        <td><small><a href="javascript:adicionarProcedimento(${procedimento.id}, '${procedimento.nome}')">${procedimento.nome}</a></small></td>
+        <td><small><a href="javascript:adicionarProcedimento(${procedimento.id}, '${procedimento.nome}','${procedimento.id}_qtd')">${procedimento.nome}</a></small></td>
         <td><small>${procedimento.tipo}</small></td>
         <td>
             <div class="form-group">             
                 <div class="col-sm-4">
-                    <select id="qtd">
+                    <select id="${procedimento.id}_qtd">
                         <option selected="true">1</option>
                         <option>2</option>
                         <option>3</option>
