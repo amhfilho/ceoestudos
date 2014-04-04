@@ -71,10 +71,12 @@ public class TratamentoController {
                                         Integer qtdProcedimento, 
                                         Integer idDente){
         Procedimento procedimento = procedimentoDAO.getById(idProcedimento);
+        tratamento.addTratamento(idDente, qtdProcedimento, procedimento);
         LOG.debug(procedimento);
         LOG.debug(tratamento);
         LOG.debug(qtdProcedimento);
         LOG.debug(idDente);
+        
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
     }
@@ -82,7 +84,7 @@ public class TratamentoController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-        binder.registerCustomEditor(Pessoa.class, "idPaciente", new PessoaPropertyEditor(pessoaDAO));
+        binder.registerCustomEditor(Pessoa.class, "paciente", new PessoaPropertyEditor(pessoaDAO));
         //binder.registerCustomEditor(Pessoa.class, "profissional", new PessoaPropertyEditor(pessoaDAO));
         //binder.registerCustomEditor(Procedimento.class, "idProcedimento", new ProcedimentoPropertyEditor(procedimentoDAO));
     }

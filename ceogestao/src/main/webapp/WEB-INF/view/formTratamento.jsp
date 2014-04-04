@@ -73,7 +73,7 @@
             <div class="input-group">
                 <input type="text" class="form-control" name="nomePaciente" id="nomePaciente"
                        placeholder="Pesquisar por nome" disabled="true">
-                <input type="hidden" id="idPaciente" name="idPaciente" />
+                <form:hidden id="paciente" path="paciente" />
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" onclick="configurarModalPessoa()">
                         <span class="glyphicon glyphicon-search"></span> 

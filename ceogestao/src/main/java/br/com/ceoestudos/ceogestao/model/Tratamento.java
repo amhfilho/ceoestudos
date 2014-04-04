@@ -32,7 +32,7 @@ public class Tratamento implements Serializable {
 
     @Override
     public String toString() {
-        return "Tratamento{" + "id=" + id + ", turma=" + turma + ", obs=" + obs + ", dentes=" + dentes + '}';
+        return "Tratamento{" + "id=" + id + ", turma=" + turma + ", paciente=" + paciente + ", obs=" + obs + ", dentes=" + printDentes() + '}';
     }
     
     public void addTratamento(Integer dente, int qtd, Procedimento procedimento) {
@@ -82,6 +82,17 @@ public class Tratamento implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    private String printDentes(){
+        String retorno = "";
+        if(dentes!=null){
+            retorno+="\t";
+            for(TratamentoDente td:dentes){
+                retorno+=td.getDente()+","+td.getProcedimento().getNome()+","+td.getQuantidade()+"\n";
+            }
+        }
+        return retorno;
     }
 
     public Long getId() {
