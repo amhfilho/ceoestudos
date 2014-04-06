@@ -16,7 +16,7 @@
 </c:if>
 <c:forEach items="${procedimentos}" var="procedimento">
     <tr>
-        <td><small><a href="javascript:adicionarProcedimento(${procedimento.id}, '${procedimento.nome}','${procedimento.id}_qtd')">${procedimento.nome}</a></small></td>
+        <td><small><a href="javascript:adicionarProcedimento(${procedimento.id},'${procedimento.id}_qtd')">${procedimento.nome}</a></small></td>
         <td><small>${procedimento.tipo}</small></td>
         <td>
             <div class="form-group">             

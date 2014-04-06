@@ -22,20 +22,35 @@
         document.getElementById("nomePaciente").value = nome;
         $('#myModal').modal('hide');
     }
-    
-    function configurarModalProcedimento(dente){
-        $('#procedimentoModal').modal('show');
-        document.getElementById("idDente").value = dente;
+
+    function configurarModalProcedimento(dente) {
+        idPaciente = document.getElementById("idPaciente").value;
+        if (idPaciente === "") {
+            alert('Deve haver um paciente associado a este tratamento');
+        } else {
+            $('#procedimentoModal').modal('show');
+            document.getElementById("idDente").value = dente;
+        }
     }
-    
-    function adicionarProcedimento(id,nome,qtd_id){
+
+    function adicionarProcedimento(id,qtd_id) {
+
         qtd = document.getElementById(qtd_id).value;
-        alert(id+","+nome+",qtd:"+qtd);
-        
         document.getElementById("idProcedimento").value = id;
         document.getElementById("qtdProcedimento").value = qtd;
         document.formTratamento.action = "adicionarProcedimento.html";
         document.formTratamento.submit();
+
+
+    }
+
+    function removerProcedimento(idDente,idProcedimento) {
+        if (confirm('Deseja remover o procedimento?')) {
+            document.formTratamento.action = "removerProcedimento.html";
+            document.getElementById("idDente").value = idDente;
+            document.getElementById("idProcedimento").value = idProcedimento;
+            document.formTratamento.submit();
+        }
     }
 </script>
 
@@ -44,7 +59,7 @@
 
 <form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html"
            name="formTratamento">
-    
+
     <form:errors path="*">
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
@@ -60,8 +75,8 @@
     <div class="form-group">
         <label for="turma" class="col-sm-2 control-label">Turma</label>
         <div class="col-sm-6">
-            <form:select path="turma" id="turma" cssClass="form-control">
-                <form:option value="" label="Sem turma associada"/>
+            <form:select path="turma" id="turma" cssClass="form-control" >
+                <form:option label="Sem turma associada" value=""/>
                 <form:options items="${todasAsTurmas}"/>
             </form:select>
         </div>
@@ -72,8 +87,10 @@
         <div class="col-sm-6">
             <div class="input-group">
                 <input type="text" class="form-control" name="nomePaciente" id="nomePaciente"
-                       placeholder="Pesquisar por nome" disabled="true">
-                <form:hidden id="paciente" path="paciente" />
+                       placeholder="Pesquisar por nome" disabled="true" value="${tratamento.paciente.nome}">
+
+                <form:hidden path="paciente" id="idPaciente"/>
+
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" onclick="configurarModalPessoa()">
                         <span class="glyphicon glyphicon-search"></span> 
@@ -82,9 +99,9 @@
             </div>
         </div>
     </div>
-    <c:if test="${empty tratamento.dentes}">
-        <p>Clique no dente para inserir um procedimento</p>
-    </c:if>
+
+    <p>Clique no dente para inserir um procedimento</p>
+
     <table class="table">
         <tr>
             <td style="text-align: center"><a href="javascript:configurarModalProcedimento('18')"><img src="${pageContext.request.contextPath}/resources/images/18.jpg"/></a></td>
@@ -160,10 +177,60 @@
         </tr>
     </table>
 
+    <c:if test="${fn:length(tratamento.dentes) > 0}">       
+        <table class="table table-condensed table-bordered">
+            
+            <thead>
+                <th>Dente</th>
+                <th>Procedimento</th>
+                <th style="text-align: center">Qtd</th>
+                <th style="text-align: center">Valor</th>
+                <th style="text-align: center">Remover</th>
+            </thead>
+            <c:forEach items="${tratamento.dentes}" var="dente">
+                <tr>
+                    <td>${dente.dente}</td>
+                    <td>${dente.procedimento.nome}</td>
+                    <td style="text-align: center">${dente.quantidade}</td>
+                    <td style="text-align: right">
+                        <fmt:formatNumber value="${dente.valor}" type="number"
+                              minFractionDigits="2" maxFractionDigits="2"/>
+                    </td>
+                    <td style="text-align: center">
+                        <a href="javascript:removerProcedimento(${dente.dente},${dente.procedimento.id})">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </td>
+                </tr>
+            </c:forEach>
+                <tr>
+                    <td colspan="3" style="text-align: right"><strong>Total</strong></td>
+                <td style="text-align: right">
+                    <fmt:formatNumber value="${tratamento.valorBruto}" type="number"
+                              minFractionDigits="2" maxFractionDigits="2"/>
+                    </td>
+                <td></td>
+            </tr>
+        </table>
+    </c:if>
+        
+    <div class="form-group">
+        <label for="valor" class="col-sm-2 control-label">Valor</label>
+        <div class="col-sm-6">
+            <form:input path="valor" id="valor"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="obs" >Observações</label>
+        <form:textarea path="obs" cssClass="form-control input-sm" id="obs"/>
+    </div>
+
+
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-primary" >Salvar</button>
-            <button type="button" class="btn btn-default" onclick="location.href = '#'">Voltar</button>
+            <button type="button" class="btn btn-default" onclick="location.href = 'tratamentos.html'">Voltar</button>
             <c:if test="${not empty tratamento.id}">
                 <button type="button" class="btn btn-default" 
                         onclick="if (confirm('Deseja realmente excluir o tratamento? ')) {

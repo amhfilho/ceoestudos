@@ -2,6 +2,7 @@
 package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
@@ -22,6 +23,10 @@ public class TratamentoDente implements Serializable {
         hash = 29 * hash + (this.dente != null ? this.dente.hashCode() : 0);
         hash = 29 * hash + (this.procedimento != null ? this.procedimento.hashCode() : 0);
         return hash;
+    }
+    
+    public BigDecimal getValor(){
+        return  procedimento.getPreco().multiply(new BigDecimal(quantidade));
     }
 
     @Override

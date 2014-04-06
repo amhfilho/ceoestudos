@@ -1,8 +1,8 @@
 package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -11,6 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import org.springframework.format.annotation.NumberFormat;
 
 @Entity
 public class Tratamento implements Serializable {
@@ -23,19 +27,36 @@ public class Tratamento implements Serializable {
     private Turma turma;
     
     @ManyToOne
+    @NotNull(message = "Deve haver um paciente associado ao tratamento")
     private Pessoa paciente;
 
     private String obs;
 
     @ElementCollection(targetClass = TratamentoDente.class, fetch = FetchType.EAGER)
-    private Collection<TratamentoDente> dentes;
-
+    private List<TratamentoDente> dentes;
+    
+    @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
+    @Digits(integer = 8, fraction = 2)
+    @NumberFormat(style = NumberFormat.Style.NUMBER)
+    private BigDecimal valor = new BigDecimal(0);
+    
     @Override
     public String toString() {
         return "Tratamento{" + "id=" + id + ", turma=" + turma + ", paciente=" + paciente + ", obs=" + obs + ", dentes=" + printDentes() + '}';
     }
     
-    public void addTratamento(Integer dente, int qtd, Procedimento procedimento) {
+    public BigDecimal getValorBruto(){
+        BigDecimal valor = new BigDecimal(0);
+        if(dentes!=null){
+            for(TratamentoDente td:dentes){
+                valor = valor.add(td.getValor());
+            }
+        }
+        
+        return valor;
+    }
+    
+    public void addTratamentoDente(Integer dente, int qtd, Procedimento procedimento) {
         if (dentes == null) {
             dentes = new ArrayList<TratamentoDente>();
         }
@@ -45,7 +66,19 @@ public class Tratamento implements Serializable {
         }
         dentes.add(td);
     }
-
+    
+    public void removeTratamentoDente(Integer dente,Long idProcedimento) {
+        if (dentes != null) {
+            TratamentoDente td = new TratamentoDente();
+            td.setDente(dente);
+            Procedimento p = new Procedimento();
+            p.setId(idProcedimento);
+            td.setProcedimento(p);
+            dentes.remove(td);
+            
+        }
+    }
+    
     public void removeTratamento(TratamentoDente t) {
         if (dentes != null) {
             dentes.remove(t);
@@ -119,11 +152,11 @@ public class Tratamento implements Serializable {
         this.obs = obs;
     }
 
-    public Collection<TratamentoDente> getDentes() {
+    public List<TratamentoDente> getDentes() {
         return dentes;
     }
 
-    public void setDentes(Collection<TratamentoDente> dentes) {
+    public void setDentes(List<TratamentoDente> dentes) {
         this.dentes = dentes;
     }
 
@@ -133,6 +166,14 @@ public class Tratamento implements Serializable {
 
     public void setPaciente(Pessoa paciente) {
         this.paciente = paciente;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
     
     

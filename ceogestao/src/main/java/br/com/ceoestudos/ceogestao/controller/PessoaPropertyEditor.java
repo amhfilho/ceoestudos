@@ -18,6 +18,9 @@ public class PessoaPropertyEditor extends PropertyEditorSupport {
 
     @Override
     public void setAsText(String text) {
+        if(text.equals("")){
+            text = "0";
+        }
         Pessoa pessoa = pessoaDAO.getById(Long.parseLong(text));
         setValue(pessoa);
     }

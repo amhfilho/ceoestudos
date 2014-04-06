@@ -108,7 +108,7 @@ public class TurmaController {
     @Transactional
     @RequestMapping(value = "adicionarTurma", method = RequestMethod.POST)
     public String adicionarTurma(@Valid Turma turma, BindingResult result, Model model) {
-        LOG.info("adicionarTurma: " + new SimpleDateFormat("HH:mm").format(turma.getHoraInicio()) + " - " + new SimpleDateFormat("HH:mm").format(turma.getHoraFim()));
+        LOG.debug("adicionarTurma: " + new SimpleDateFormat("HH:mm").format(turma.getHoraInicio()) + " - " + new SimpleDateFormat("HH:mm").format(turma.getHoraFim()));
         if (!result.hasErrors()) {
             try {
                 if (turma.getId() == null) {
