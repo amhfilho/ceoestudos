@@ -170,7 +170,13 @@
         <form:hidden path="id" id="id" name="id" />
     <div class="form-group">
         <label for="curso" >Curso</label>
-        <form:select path="curso" items="${mapCursos}" cssClass="form-control input-sm" id="curso"/>
+        <select id="curso" name="curso" class="form-control input-sm" >
+            <c:forEach items="${todosOsCursos}" var="curso">
+                <option value="${curso.id}" <c:if test="${turma.curso.id == curso.id}"> selected </c:if>>${curso.nome}</option>
+            </c:forEach>
+        </select>
+        
+        
     </div>
 
     <div class="form-group">

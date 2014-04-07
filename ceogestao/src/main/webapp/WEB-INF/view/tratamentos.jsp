@@ -26,13 +26,17 @@
     </thead>
     <c:forEach items="${tratamentos}" var="tratamento">
         <tr>
-            <td>${tratamento.turma}</td>
+            <td>
+                <c:if test="${empty tratamento.turma}">Nenhuma turma associada</c:if>
+                <c:if test="${not empty tratamento.turma}">${tratamento.turma}</c:if>
+            </td>
             <td>${tratamento.paciente.nome}</td>
             <td><fmt:formatNumber value="${tratamento.valorBruto}" type="number"
                               minFractionDigits="2" maxFractionDigits="2"/>
              </td>
             <td>
-                <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarTratamento.html?idTratamento=${tratamento.id}'">
+                <button type="button" class="btn btn-default btn-xs" 
+                        onclick="document.location = 'editarTratamento.html?idTratamento=${tratamento.id}'">
                     <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
                 </button>
             </td>

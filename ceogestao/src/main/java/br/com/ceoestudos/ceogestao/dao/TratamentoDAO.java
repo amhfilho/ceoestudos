@@ -29,7 +29,7 @@ public class TratamentoDAO {
     }
     
     public void excluir(Tratamento t){
-        em.merge(t);
+        t = em.merge(t);
         em.remove(t);
     }
     

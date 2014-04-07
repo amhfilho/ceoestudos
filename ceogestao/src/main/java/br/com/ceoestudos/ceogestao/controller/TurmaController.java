@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -55,21 +56,21 @@ public class TurmaController {
         model.addAttribute("turmas", turmas);
         return "turmas";
     }
-    
+
     @ModelAttribute("todosOsCursos")
-    public List<Curso> getCursos(){
+    public List<Curso> getCursos() {
         return cursoDAO.listarTodos();
     }
-    
+
     @ModelAttribute("professores")
-    public Map<Long,String> getProfessores(){
-        Map<Long,String> map = new HashMap<Long, String>();
+    public Map<Long, String> getProfessores() {
+        Map<Long, String> map = new HashMap<Long, String>();
         List<Pessoa> professores = pessoaDAO.listarProfessores();
-        for(Pessoa professor:professores){
+        for (Pessoa professor : professores) {
             map.put(professor.getIdentificador(), professor.getNome());
         }
         return map;
-        
+
     }
 
     @RequestMapping(value = "novaTurma", method = RequestMethod.POST)
@@ -99,12 +100,12 @@ public class TurmaController {
         Map<Long, String> mapCursos = new LinkedHashMap<Long, String>();
         List<Curso> cursos = cursoDAO.listarTodos();
         for (Curso curso : cursos) {
-            mapCursos.put(curso.getId(), 
-                          curso.getNome() + " - " + curso.getCargaHoraria() + " horas" );
+            mapCursos.put(curso.getId(),
+                    curso.getNome() + " - " + curso.getCargaHoraria() + " horas");
         }
         return mapCursos;
     }
-    
+
     @Transactional
     @RequestMapping(value = "adicionarTurma", method = RequestMethod.POST)
     public String adicionarTurma(@Valid Turma turma, BindingResult result, Model model) {
@@ -137,18 +138,18 @@ public class TurmaController {
                 Turma turmaBD = getTurmaBD(turma);
                 LOG.debug("atualizarTurma: " + turmaBD);
                 turmaDAO.atualizar(turmaBD);
-                model.addAttribute("turma",turmaBD);
+                model.addAttribute("turma", turmaBD);
                 model.addAttribute("SUCCESS_MESSAGE", "Turma atualizada com sucesso");
                 return "formTurma";
 
             } catch (RuntimeException e) {
                 LOG.error(new Util().toString(e));
                 model.addAttribute("ERROR_MESSAGE", "Ocorreu um erro ao atualizar a turma: " + e.getMessage());
-                
-            }    
+
+            }
         }
-        model.addAttribute("turma",turma);
-        
+        model.addAttribute("turma", turma);
+
         return "formTurma";
     }
 
@@ -207,13 +208,13 @@ public class TurmaController {
     @Transactional
     @RequestMapping(value = "adicionarAluno", method = RequestMethod.POST)
     public String adicionarAluno(@ModelAttribute Turma turma, @RequestParam String alunoId, Model model) {
-        try{
+        try {
             Pessoa aluno = getAlunoBD(alunoId);
             Turma turmaBD = getTurmaBD(turma);
             turmaBD.adicionarAluno(aluno);
-            model.addAttribute("SUCCESS_MESSAGE","Aluno adicionado com sucesso");
+            model.addAttribute("SUCCESS_MESSAGE", "Aluno adicionado com sucesso");
             model.addAttribute("turma", turmaBD);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             LOG.error(new Util().toString(e));
             model.addAttribute("ERROR_MESSAGE", "Erro ao adicionar aluno: " + e.getMessage());
             return editarTurma(turma.getId().toString(), model);
@@ -221,34 +222,34 @@ public class TurmaController {
 
         return "formTurma";
     }
+
     @Transactional
     @RequestMapping(value = "excluirAluno", method = RequestMethod.POST)
-    public String excluirAluno(@ModelAttribute Turma turma, @RequestParam String excluirAlunoId, Model model){
-        try{
+    public String excluirAluno(@ModelAttribute Turma turma, @RequestParam String excluirAlunoId, Model model) {
+        try {
             Pessoa aluno = getAlunoBD(excluirAlunoId);
             Turma turmaBD = getTurmaBD(turma);
             turmaBD.removerAluno(aluno);
-            model.addAttribute("SUCCESS_MESSAGE","Aluno removido com sucesso");
+            model.addAttribute("SUCCESS_MESSAGE", "Aluno removido com sucesso");
             model.addAttribute("turma", turmaBD);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             LOG.error(new Util().toString(e));
             model.addAttribute("ERROR_MESSAGE", "Erro ao remover aluno: " + e.getMessage());
             return editarTurma(turma.getId().toString(), model);
         }
         return "formTurma";
     }
-    
-    
-    private Pessoa getAlunoBD(String alunoId){
+
+    private Pessoa getAlunoBD(String alunoId) {
         Long idAluno = new Long(alunoId);
         Pessoa aluno = pessoaDAO.getById(idAluno);
         LOG.debug("Encontrado aluno: " + aluno);
         return aluno;
     }
-    
+
     @Autowired
     private TurmaValidator turmaValidator;
-    
+
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setValidator(turmaValidator);
@@ -260,8 +261,7 @@ public class TurmaController {
         binder.registerCustomEditor(Date.class, "horaInicio", new CustomDateEditor(hourFormat, false));
         binder.registerCustomEditor(Date.class, "horaFim", new CustomDateEditor(hourFormat, false));
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+        //binder.registerCustomEditor(Curso.class, "curso",new CursoPropertyEditor(cursoDAO));
     }
-    
-    
 
 }

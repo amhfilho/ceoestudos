@@ -25,8 +25,13 @@ public class CursoFormatter implements Formatter<Curso>{
 
     @Override
     public Curso parse(String string, Locale locale) throws ParseException {
-        Long id = new Long(string);
-        return cursoDAO.getById(id);
+        if(string!=null && !string.equals("")){
+            Long id = new Long(string);
+            return cursoDAO.getById(id);
+        } else {
+            return null;
+        }
+        
     }
     
 }

@@ -8,9 +8,8 @@ import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.Procedimento;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
 import br.com.ceoestudos.ceogestao.model.Turma;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,21 +55,37 @@ public class TratamentoController {
     }
     
     @ModelAttribute("todasAsTurmas")
-    public Map<Long,String> getTurmas(){
-        Map<Long,String> map = new HashMap<Long,String>();
-        List<Turma> turmas =  turmaDAO.listarTodos();
-        for(Turma t:turmas){
-            map.put(t.getId(), t.toString());
-        }
-        return map;
+    public List<Turma> getTurmas(){
+        
+        return turmaDAO.listarTodos();
     }
     
     @RequestMapping("editarTratamento")
     public String editarTratamento(Model model,
                                    @RequestParam Long idTratamento){
         Tratamento t = tDAO.getById(idTratamento);
-        LOG.debug(t);
+        LOG.debug(idTratamento+","+t);
         model.addAttribute("tratamento",t);
+        return "formTratamento";
+    }
+    
+    @Transactional
+    @RequestMapping(value="adicionarResponsavel",method = RequestMethod.POST)
+    public String adicionarResponsavel(Model model, 
+                                       Long idResponsavel,
+                                       Tratamento tratamento) {
+        LOG.debug(idResponsavel);
+        if(tratamento.getId()!=null){
+            Tratamento tratamentoBD = tDAO.getById(tratamento.getId());
+            tratamento.setDentes(tratamentoBD.getDentes());
+            tratamento.setResponsaveis(tratamentoBD.getResponsaveis());
+        } else{
+            tDAO.adicionar(tratamento);
+        }
+        Pessoa responsavel = pessoaDAO.getById(idResponsavel);
+        tratamento.addResponsavel(responsavel);
+        tDAO.atualizar(tratamento);
+        model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
     
@@ -89,6 +104,13 @@ public class TratamentoController {
         
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
+    }
+    
+    @Transactional
+    @RequestMapping("excluirTratamento")
+    public String excluirTratamento(Model model, Long id){
+        tDAO.excluir(tDAO.getById(id));
+        return "redirect:tratamentos.html";
     }
     
     @Transactional

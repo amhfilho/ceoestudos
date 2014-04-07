@@ -9,17 +9,30 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <script>
-    function configurarModalPessoa() {
-//        document.getElementById("idFieldName").value = idFieldName;
-//        document.getElementById("nomeFieldName").value = nomeFieldName;
+    function configurarModalPessoa(action) {
+        document.getElementById("adicionarPessoaAction").value = action;
         $('#myModal').modal('show');
     }
 
     function adicionarPessoa(id, nome) {
-//        var idFieldName = document.getElementById("idFieldName").value;
-//        var nomeFieldName = document.getElementById("nomeFieldName").value;
-        document.getElementById("idPaciente").value = id;
-        document.getElementById("nomePaciente").value = nome;
+        if(document.getElementById("adicionarPessoaAction").value === "paciente"){
+            document.getElementById("idPaciente").value = id;
+            document.getElementById("nomePaciente").value = nome;
+        }
+        else {
+            document.getElementById("idResponsavel").value = id;
+            document.formTratamento.action = "adicionarResponsavel.html";
+            document.formTratamento.submit();
+            
+            //if (id !== "") {
+
+//                $.get("adicionarResponsavel.html", {pesquisa: id}, function(resposta) {
+//                    $("#responsaveis").html(resposta);
+//                });
+//            }
+//            document.location = "adicionarResponsavel.html?id="+id+"&nome="+nome;
+//            
+        }
         $('#myModal').modal('hide');
     }
 
@@ -33,18 +46,15 @@
         }
     }
 
-    function adicionarProcedimento(id,qtd_id) {
-
+    function adicionarProcedimento(id, qtd_id) {
         qtd = document.getElementById(qtd_id).value;
         document.getElementById("idProcedimento").value = id;
         document.getElementById("qtdProcedimento").value = qtd;
         document.formTratamento.action = "adicionarProcedimento.html";
         document.formTratamento.submit();
-
-
     }
 
-    function removerProcedimento(idDente,idProcedimento) {
+    function removerProcedimento(idDente, idProcedimento) {
         if (confirm('Deseja remover o procedimento?')) {
             document.formTratamento.action = "removerProcedimento.html";
             document.getElementById("idDente").value = idDente;
@@ -70,15 +80,19 @@
     <input type="hidden" id="idDente" name="idDente"/>
     <input type="hidden" id="idProcedimento" name="idProcedimento"/>
     <input type="hidden" id="qtdProcedimento" name="qtdProcedimento"/>
+    <input type="hidden" id="adicionarPessoaAction" name="adicionarPessoaAction" />
+    <input type="hidden" id="idResponsavel" name="idResponsavel" />
     <form:hidden path="id" />
 
     <div class="form-group">
         <label for="turma" class="col-sm-2 control-label">Turma</label>
         <div class="col-sm-6">
-            <form:select path="turma" id="turma" cssClass="form-control" >
-                <form:option label="Sem turma associada" value=""/>
-                <form:options items="${todasAsTurmas}"/>
-            </form:select>
+            <select id="turma" name="turma" class="form-control">
+                <option value="">Sem turma associada</option>
+                <c:forEach items="${todasAsTurmas}" var="turma">
+                    <option value="${turma.id}" <c:if test="${tratamento.turma.id == turma.id}"> selected </c:if>>${turma}</option>
+                </c:forEach>
+            </select>
         </div>
     </div>
 
@@ -92,7 +106,7 @@
                 <form:hidden path="paciente" id="idPaciente"/>
 
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" onclick="configurarModalPessoa()">
+                    <button class="btn btn-default" type="button" onclick="configurarModalPessoa('paciente')">
                         <span class="glyphicon glyphicon-search"></span> 
                     </button>
                 </span>
@@ -100,9 +114,23 @@
         </div>
     </div>
 
+    <div class="form-group">
+        <label for="">Responsáveis pelo atendimento</label>
+        <c:if test="${not empty tratamento.responsaveis}">
+            <table class="table table-striped" id="responsaveis">
+                <c:forEach items="${tratamento.responsaveis}" var="responsavel">
+                    <tr>
+                        <td>${responsavel.nome}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </c:if>
+        <button type="button" class="btn btn-default btn-xs" onclick="configurarModalPessoa('responsavel')">Adicionar</button>
+    </div>
+
     <p>Clique no dente para inserir um procedimento</p>
 
-    <table class="table">
+    <table class="table table-condensed">
         <tr>
             <td style="text-align: center"><a href="javascript:configurarModalProcedimento('18')"><img src="${pageContext.request.contextPath}/resources/images/18.jpg"/></a></td>
             <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/17.jpg"/></td>
@@ -179,69 +207,63 @@
 
     <c:if test="${fn:length(tratamento.dentes) > 0}">       
         <table class="table table-condensed table-bordered">
-            
+
             <thead>
-                <th>Dente</th>
-                <th>Procedimento</th>
-                <th style="text-align: center">Qtd</th>
-                <th style="text-align: center">Valor</th>
-                <th style="text-align: center">Remover</th>
-            </thead>
-            <c:forEach items="${tratamento.dentes}" var="dente">
-                <tr>
-                    <td>${dente.dente}</td>
-                    <td>${dente.procedimento.nome}</td>
-                    <td style="text-align: center">${dente.quantidade}</td>
-                    <td style="text-align: right">
-                        <fmt:formatNumber value="${dente.valor}" type="number"
-                              minFractionDigits="2" maxFractionDigits="2"/>
-                    </td>
-                    <td style="text-align: center">
-                        <a href="javascript:removerProcedimento(${dente.dente},${dente.procedimento.id})">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </a>
-                    </td>
-                </tr>
-            </c:forEach>
-                <tr>
-                    <td colspan="3" style="text-align: right"><strong>Total</strong></td>
+            <th>Dente</th>
+            <th>Procedimento</th>
+            <th style="text-align: center">Qtd</th>
+            <th style="text-align: center">Valor unitário</th>
+            <th style="text-align: center">Valor</th>
+            <th style="text-align: center">Remover</th>
+        </thead>
+        <c:forEach items="${tratamento.dentes}" var="dente">
+            <tr>
+                <td>${dente.dente}</td>
+                <td>${dente.procedimento.nome}</td>
+                <td style="text-align: center">${dente.quantidade}</td>
+                <td style="text-align: right">${dente.procedimento.preco}</td>
                 <td style="text-align: right">
-                    <fmt:formatNumber value="${tratamento.valorBruto}" type="number"
-                              minFractionDigits="2" maxFractionDigits="2"/>
-                    </td>
-                <td></td>
+                    <fmt:formatNumber value="${dente.valor}" type="number"
+                                      minFractionDigits="2" maxFractionDigits="2"/>
+                </td>
+                <td style="text-align: center">
+                    <a href="javascript:removerProcedimento(${dente.dente},${dente.procedimento.id})">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
             </tr>
-        </table>
-    </c:if>
-        
-    <div class="form-group">
-        <label for="valor" class="col-sm-2 control-label">Valor</label>
-        <div class="col-sm-6">
-            <form:input path="valor" id="valor"/>
-        </div>
+        </c:forEach>
+        <tr>
+            <td colspan="3" style="text-align: right"><strong>Total</strong></td>
+            <td style="text-align: right">
+                <fmt:formatNumber value="${tratamento.valorBruto}" type="number"
+                                  minFractionDigits="2" maxFractionDigits="2"/>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</c:if>
+
+<div class="form-group">
+    <label for="obs" >Observações</label>
+    <form:textarea path="obs" cssClass="form-control input-sm" id="obs"/>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" >Salvar</button>
+        <button type="button" class="btn btn-default" onclick="location.href = 'tratamentos.html'">Voltar</button>
+        <c:if test="${not empty tratamento.id}">
+            <button type="button" class="btn btn-default" 
+                    onclick="if (confirm('Deseja realmente excluir o tratamento? ')) {
+                                location.href = 'excluirTratamento.html?id=${tratamento.id}';
+
+                            }">
+                <span class="glyphicon glyphicon-trash"></span>  Excluir
+            </button>
+            <button type="button" class="btn btn-default" onclick="location.href = 'novoTratamento.html'">Novo</button>
+        </c:if>
     </div>
-
-    <div class="form-group">
-        <label for="obs" >Observações</label>
-        <form:textarea path="obs" cssClass="form-control input-sm" id="obs"/>
-    </div>
-
-
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary" >Salvar</button>
-            <button type="button" class="btn btn-default" onclick="location.href = 'tratamentos.html'">Voltar</button>
-            <c:if test="${not empty tratamento.id}">
-                <button type="button" class="btn btn-default" 
-                        onclick="if (confirm('Deseja realmente excluir o tratamento? ')) {
-                                    location.href = '#';
-
-                                }">
-                    <span class="glyphicon glyphicon-trash"></span>  Excluir
-                </button>
-                <button type="button" class="btn btn-default" onclick="location.href = 'novoTratamento.html'">Novo</button>
-            </c:if>
-        </div>
-    </div>
+</div>
 
 </form:form>

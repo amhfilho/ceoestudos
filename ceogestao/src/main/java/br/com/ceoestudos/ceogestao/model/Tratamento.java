@@ -3,13 +3,18 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
@@ -39,6 +44,12 @@ public class Tratamento implements Serializable {
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private BigDecimal valor = new BigDecimal(0);
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "TRATAMENTO_RESPONSAVEL",
+            joinColumns = @JoinColumn(name = "TRATAMENTO_ID"),
+            inverseJoinColumns = @JoinColumn(name = "RESPONSAVEL_ID"))
+    private Set<Pessoa> responsaveis;
     
     @Override
     public String toString() {
@@ -77,6 +88,20 @@ public class Tratamento implements Serializable {
             dentes.remove(td);
             
         }
+    }
+    
+    public void addResponsavel(Pessoa p){
+        if(responsaveis==null){
+            responsaveis = new HashSet<Pessoa>();
+        }
+        responsaveis.add(p);
+    }
+    
+    public void removeResponsavel(Pessoa p){
+        if(responsaveis!=null){
+            responsaveis.remove(p);
+        }
+        
     }
     
     public void removeTratamento(TratamentoDente t) {
@@ -126,6 +151,14 @@ public class Tratamento implements Serializable {
             }
         }
         return retorno;
+    }
+
+    public Set<Pessoa> getResponsaveis() {
+        return responsaveis;
+    }
+
+    public void setResponsaveis(Set<Pessoa> responsaveis) {
+        this.responsaveis = responsaveis;
     }
 
     public Long getId() {

@@ -80,5 +80,9 @@
         <put-attribute name="title" value="Controle de Tratamentos" />
         <put-attribute name="body" value="/WEB-INF/view/tratamentos.jsp" />
     </definition>
+    
+    <definition name="responsaveisTratamento" template="/WEB-INF/view/emptyLayout.jsp">
+        <put-attribute name="body" value="/WEB-INF/view/responsaveisTratamento.jsp" />
+    </definition>
  
 </tiles-definitions>
