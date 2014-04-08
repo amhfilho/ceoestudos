@@ -8,19 +8,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-    <c:if test="${empty pessoas}">
-        <td colspan="2">Nenhuma pessoa encontrada</td>
-    </c:if>
-    <c:forEach items="${pessoas}" var="pessoa">
-        <tr>
-            <td>${pessoa.nome}</td>
-            <td style="text-align: center">
-                <button type="button" class="btn btn-success btn-xs" 
-                        onclick="adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">
-                    Confirmar
-                </button>
-            </td>
-        
-        </tr>
-    </c:forEach>
-    <input type="hidden" id="pessoaId" name="pessoaId" value=""/>
+<c:if test="${empty pessoas}">
+    <td colspan="2">Nenhuma pessoa encontrada</td>
+</c:if>
+<c:forEach items="${pessoas}" var="pessoa">
+    
+    <tr><td><a href="adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}</a></td></tr>
+    
+</c:forEach>
+<input type="hidden" id="pessoaId" name="pessoaId" value=""/>

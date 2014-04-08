@@ -13,7 +13,8 @@
                     <input type="text" name="descricaoHistorico" id="descricaoHistorico" class="form-control"/>   
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Adicionar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" 
+                            onclick="javascript:adicionarHistorico()">Adicionar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 
                 </div>

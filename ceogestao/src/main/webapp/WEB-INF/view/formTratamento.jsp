@@ -12,7 +12,6 @@
     $(document).ready(function(e) {
         $('#dataHistorico').datetimepicker({
             lang: 'pt',
-            
             i18n: {
                 pt: {
                     months: [
@@ -35,7 +34,7 @@
         document.getElementById("adicionarPessoaAction").value = action;
         $('#myModal').modal('show');
     }
-    
+
     function configurarModalHistorico() {
         //document.getElementById("adicionarPessoaAction").value = action;
         $('#historicoModal').modal('show');
@@ -89,16 +88,24 @@
             document.formTratamento.submit();
         }
     }
-    
+
+    function adicionarHistorico() {
+        document.formTratamento.action = "adicionarHistorico.html";
+        //document.getElementById("dataHistorico").value = data;
+        //document.getElementById("descricao").value = descricao;
+        document.formTratamento.submit();
+    }
+
 
 </script>
 
 <jsp:include page="pessoaModal.jsp" />
 <jsp:include page="procedimentoModal.jsp" />
-<jsp:include page="historicoModal.jsp" />
+
 <form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html"
            name="formTratamento">
-
+    <jsp:include page="historicoModal.jsp" />
+    
     <form:errors path="*">
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
@@ -145,6 +152,9 @@
 
     <div class="form-group">
         <label for="">Responsáveis pelo atendimento</label>
+        <c:if test="${empty tratamento.responsaveis}">
+            <p>Nenhum responsável associado a este tratamento</p>
+        </c:if>
         <c:if test="${not empty tratamento.responsaveis}">
             <table class="table table-striped" id="responsaveis">
                 <c:forEach items="${tratamento.responsaveis}" var="responsavel">
@@ -154,7 +164,7 @@
                 </c:forEach>
             </table>
         </c:if>
-        <button type="button" class="btn btn-default btn-xs" onclick="configurarModalPessoa('responsavel')">Adicionar</button>
+        <p><button type="button" class="btn btn-default btn-xs" onclick="configurarModalPessoa('responsavel')">Adicionar</button></p>
     </div>
 
     <p>Clique no dente para inserir um procedimento</p>
@@ -279,17 +289,23 @@
 </div>
 
 <div class="form-group">
-    <label for="historico" >Histórico</label>
-    <table class="table table-striped">
-        <tr><td>07/04/2014</td><td>Atendimento inicial e orçamento</td></tr>
-        <tr><td>08/04/2014</td><td>Limpeza</td></tr>
-        <tr>
-            <td colspan="2">
-                <button type="button" class="btn btn-default btn-xs" 
-                        onclick="javascript:configurarModalHistorico();">Adicionar</button>
-            </td>
-        </tr>
-    </table>
+    <label for="historico" >Histórico de atendimento</label>
+    <c:if test="${empty tratamento.historico}">
+        <p>Não há histórico de atendimento</p>
+    </c:if>
+    <c:if test="${not empty tratamento.historico}">
+        <table class="table table-striped">
+            <c:forEach items="${tratamento.historico}" var="historico">
+                <tr>
+                    <td><fmt:formatDate dateStyle="medium" value="${historico.data}"/></td>
+                    <td>${historico.descricao}</td>
+                </tr>
+            </c:forEach>           
+        </table>
+
+    </c:if>
+    <button type="button" class="btn btn-default btn-xs" 
+            onclick="javascript:configurarModalHistorico();">Adicionar</button>
 </div>
 
 <div class="form-group">

@@ -53,11 +53,11 @@ public class Tratamento implements Serializable {
     private Set<Pessoa> responsaveis;
     
     @ElementCollection(targetClass = HistoricoTratamento.class, fetch = FetchType.EAGER)
-    private List<HistoricoTratamento> historico;
+    private Set<HistoricoTratamento> historico;
     
     public void addAdicionarHistorico(Date data,String descricao){
         if(historico==null){
-            historico = new ArrayList<HistoricoTratamento>();
+            historico = new HashSet<HistoricoTratamento>();
         }
         historico.add(new HistoricoTratamento(data, descricao));
     }
@@ -226,11 +226,11 @@ public class Tratamento implements Serializable {
         this.valor = valor;
     }
 
-    public List<HistoricoTratamento> getHistorico() {
+    public Set<HistoricoTratamento> getHistorico() {
         return historico;
     }
 
-    public void setHistorico(List<HistoricoTratamento> historico) {
+    public void setHistorico(Set<HistoricoTratamento> historico) {
         this.historico = historico;
     }
 

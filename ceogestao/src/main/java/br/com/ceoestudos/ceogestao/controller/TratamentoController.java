@@ -9,9 +9,11 @@ import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.Procedimento;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
 import br.com.ceoestudos.ceogestao.model.Turma;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,8 +163,10 @@ public class TratamentoController {
         return "formTratamento";
     }
     
+    @Transactional
+    @RequestMapping(value = "adicionarHistorico", method=RequestMethod.POST)
     public String adicionarHistorico(Model model, 
-            Tratamento tratamento, String data, String descricao){
+            Tratamento tratamento, String dataHistorico, String descricaoHistorico){
         
         if(tratamento.getId()!=null){
             Tratamento tratamentoBD = tDAO.getById(tratamento.getId());
@@ -173,11 +177,18 @@ public class TratamentoController {
             tDAO.adicionar(tratamento);
         }
         
-        Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+        Date dt;
+        try {
+            dt = new SimpleDateFormat("dd/MM/yyyy").parse(dataHistorico);
+        } catch (ParseException ex) {
+            
+            model.addAttribute("ERROR_MESSAGE","Formato de data inválida");
+            model.addAttribute("tratamento", tratamento);
+            return "formTratamento";
+        }
         
-        tratamento.addAdicionarHistorico(dt, descricao);
-        
-        
+        tratamento.addAdicionarHistorico(dt, descricaoHistorico);
+        tDAO.atualizar(tratamento);
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
