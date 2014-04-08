@@ -9,13 +9,40 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <script>
+    $(document).ready(function(e) {
+        $('#dataHistorico').datetimepicker({
+            lang: 'pt',
+            
+            i18n: {
+                pt: {
+                    months: [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                        'Maio', 'Junho', 'Julho', 'Agosto',
+                        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ],
+                    dayOfWeek: [
+                        "Dom", "Seg", "Ter", "Qua",
+                        "Qui", "Sex", "Sab"
+                    ]
+                }
+            },
+            timepicker: false,
+            allowBlank: true,
+            format: 'd/m/Y'
+        });
+    });
     function configurarModalPessoa(action) {
         document.getElementById("adicionarPessoaAction").value = action;
         $('#myModal').modal('show');
     }
+    
+    function configurarModalHistorico() {
+        //document.getElementById("adicionarPessoaAction").value = action;
+        $('#historicoModal').modal('show');
+    }
 
     function adicionarPessoa(id, nome) {
-        if(document.getElementById("adicionarPessoaAction").value === "paciente"){
+        if (document.getElementById("adicionarPessoaAction").value === "paciente") {
             document.getElementById("idPaciente").value = id;
             document.getElementById("nomePaciente").value = nome;
         }
@@ -23,7 +50,7 @@
             document.getElementById("idResponsavel").value = id;
             document.formTratamento.action = "adicionarResponsavel.html";
             document.formTratamento.submit();
-            
+
             //if (id !== "") {
 
 //                $.get("adicionarResponsavel.html", {pesquisa: id}, function(resposta) {
@@ -62,11 +89,13 @@
             document.formTratamento.submit();
         }
     }
+    
+
 </script>
 
 <jsp:include page="pessoaModal.jsp" />
 <jsp:include page="procedimentoModal.jsp" />
-
+<jsp:include page="historicoModal.jsp" />
 <form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html"
            name="formTratamento">
 
@@ -133,21 +162,21 @@
     <table class="table table-condensed">
         <tr>
             <td style="text-align: center"><a href="javascript:configurarModalProcedimento('18')"><img src="${pageContext.request.contextPath}/resources/images/18.jpg"/></a></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/17.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/16.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/15.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/14.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/13.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/12.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/11.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/21.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/22.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/23.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/24.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/25.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/26.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/27.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/28.jpg"/></td>        
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('17')"><img src="${pageContext.request.contextPath}/resources/images/17.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('16')"><img src="${pageContext.request.contextPath}/resources/images/16.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('15')"><img src="${pageContext.request.contextPath}/resources/images/15.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('14')"><img src="${pageContext.request.contextPath}/resources/images/14.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('13')"><img src="${pageContext.request.contextPath}/resources/images/13.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('12')"><img src="${pageContext.request.contextPath}/resources/images/12.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('11')"><img src="${pageContext.request.contextPath}/resources/images/11.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('21')"><img src="${pageContext.request.contextPath}/resources/images/21.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('22')"><img src="${pageContext.request.contextPath}/resources/images/22.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('23')"><img src="${pageContext.request.contextPath}/resources/images/23.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('24')"><img src="${pageContext.request.contextPath}/resources/images/24.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('25')"><img src="${pageContext.request.contextPath}/resources/images/25.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('26')"><img src="${pageContext.request.contextPath}/resources/images/26.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('27')"><img src="${pageContext.request.contextPath}/resources/images/27.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('28')"><img src="${pageContext.request.contextPath}/resources/images/28.jpg"/></a></td>        
         </tr>
         <tr>
             <td style="text-align: center">18</td>
@@ -168,22 +197,22 @@
             <td style="text-align: center">28</td>
         </tr>
         <tr>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/48.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/47.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/46.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/45.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/44.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/43.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/42.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/41.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/31.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/32.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/33.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/34.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/35.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/36.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/37.jpg"/></td>
-            <td style="text-align: center"><img src="${pageContext.request.contextPath}/resources/images/38.jpg"/></td>        
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('48')"><img src="${pageContext.request.contextPath}/resources/images/48.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('47')"><img src="${pageContext.request.contextPath}/resources/images/47.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('46')"><img src="${pageContext.request.contextPath}/resources/images/46.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('45')"><img src="${pageContext.request.contextPath}/resources/images/45.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('44')"><img src="${pageContext.request.contextPath}/resources/images/44.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('43')"><img src="${pageContext.request.contextPath}/resources/images/43.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('42')"><img src="${pageContext.request.contextPath}/resources/images/42.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('41')"><img src="${pageContext.request.contextPath}/resources/images/41.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('31')"><img src="${pageContext.request.contextPath}/resources/images/31.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('32')"><img src="${pageContext.request.contextPath}/resources/images/32.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('33')"><img src="${pageContext.request.contextPath}/resources/images/33.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('34')"><img src="${pageContext.request.contextPath}/resources/images/34.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('35')"><img src="${pageContext.request.contextPath}/resources/images/35.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('36')"><img src="${pageContext.request.contextPath}/resources/images/36.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('37')"><img src="${pageContext.request.contextPath}/resources/images/37.jpg"/></a></td>
+            <td style="text-align: center"><a href="javascript:configurarModalProcedimento('38')"><img src="${pageContext.request.contextPath}/resources/images/38.jpg"/></a></td>        
         </tr>
         <tr>
             <td style="text-align: center">48</td>
@@ -234,7 +263,7 @@
             </tr>
         </c:forEach>
         <tr>
-            <td colspan="3" style="text-align: right"><strong>Total</strong></td>
+            <td colspan="4" style="text-align: right"><strong>Total</strong></td>
             <td style="text-align: right">
                 <fmt:formatNumber value="${tratamento.valorBruto}" type="number"
                                   minFractionDigits="2" maxFractionDigits="2"/>
@@ -247,6 +276,20 @@
 <div class="form-group">
     <label for="obs" >Observações</label>
     <form:textarea path="obs" cssClass="form-control input-sm" id="obs"/>
+</div>
+
+<div class="form-group">
+    <label for="historico" >Histórico</label>
+    <table class="table table-striped">
+        <tr><td>07/04/2014</td><td>Atendimento inicial e orçamento</td></tr>
+        <tr><td>08/04/2014</td><td>Limpeza</td></tr>
+        <tr>
+            <td colspan="2">
+                <button type="button" class="btn btn-default btn-xs" 
+                        onclick="javascript:configurarModalHistorico();">Adicionar</button>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <div class="form-group">
