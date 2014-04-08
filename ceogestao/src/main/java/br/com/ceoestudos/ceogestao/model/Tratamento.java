@@ -3,6 +3,7 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +51,22 @@ public class Tratamento implements Serializable {
             joinColumns = @JoinColumn(name = "TRATAMENTO_ID"),
             inverseJoinColumns = @JoinColumn(name = "RESPONSAVEL_ID"))
     private Set<Pessoa> responsaveis;
+    
+    @ElementCollection(targetClass = HistoricoTratamento.class, fetch = FetchType.EAGER)
+    private List<HistoricoTratamento> historico;
+    
+    public void addAdicionarHistorico(Date data,String descricao){
+        if(historico==null){
+            historico = new ArrayList<HistoricoTratamento>();
+        }
+        historico.add(new HistoricoTratamento(data, descricao));
+    }
+    
+    public void removerHistorico(Date data,String descricao){
+        if(historico!=null){
+            historico.remove(new HistoricoTratamento(data, descricao));
+        }
+    }
     
     @Override
     public String toString() {
@@ -208,7 +225,13 @@ public class Tratamento implements Serializable {
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
-    
-    
+
+    public List<HistoricoTratamento> getHistorico() {
+        return historico;
+    }
+
+    public void setHistorico(List<HistoricoTratamento> historico) {
+        this.historico = historico;
+    }
 
 }

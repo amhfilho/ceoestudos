@@ -4,11 +4,13 @@ import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.ProcedimentoDAO;
 import br.com.ceoestudos.ceogestao.dao.TratamentoDAO;
 import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
+import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.Procedimento;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
 import br.com.ceoestudos.ceogestao.model.Turma;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
@@ -156,6 +158,27 @@ public class TratamentoController {
         tratamento.removeTratamentoDente(idDente,idProcedimento);
         tDAO.atualizar(tratamento);
         model.addAttribute("tratamento",tratamento);
+        return "formTratamento";
+    }
+    
+    public String adicionarHistorico(Model model, 
+            Tratamento tratamento, String data, String descricao){
+        
+        if(tratamento.getId()!=null){
+            Tratamento tratamentoBD = tDAO.getById(tratamento.getId());
+            tratamento.setDentes(tratamentoBD.getDentes());
+            tratamento.setHistorico(tratamentoBD.getHistorico());
+            tratamento.setResponsaveis(tratamentoBD.getResponsaveis());
+        } else {
+            tDAO.adicionar(tratamento);
+        }
+        
+        Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+        
+        tratamento.addAdicionarHistorico(dt, descricao);
+        
+        
+        model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
     

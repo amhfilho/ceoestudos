@@ -10,9 +10,7 @@
                     <label for="dataHistorico">Data</label>
                     <input type="text" name="dataHistorico" id="dataHistorico" class="form-control"/><br>
                     <label for="dataHistorico">Descrição</label>
-                    <input type="text" name="procurarPessoaText" id="procurarAlunoText" size="60" placeholder="Procure pelo nome"
-                           class="form-control"/>
-                    
+                    <input type="text" name="descricaoHistorico" id="descricaoHistorico" class="form-control"/>   
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Adicionar</button>
