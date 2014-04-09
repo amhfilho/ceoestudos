@@ -54,10 +54,10 @@
         });
     });
 </script>
-<br>
-<small>Campos obrigatórios são marcados com <strong>*</strong></small>
-<br>
-<form:form class="form-horizontal" role="form" method="POST" action="salvarServicoLaboratorio.html"  
+<div class="row">
+    <small>Campos obrigatórios são marcados com <strong>*</strong></small>
+</div>
+<form:form cssClass="form-horizontal" role="form" method="POST" action="salvarServicoLaboratorio.html"  
            modelAttribute="servicoLaboratorio" name="servicoForm">
 
     <jsp:include page="pessoaModal.jsp" />
@@ -71,9 +71,11 @@
     <input type="hidden" name="nomeFieldName" id="nomeFieldName"/>
 
     <div class="form-group">
+        <div class="row">
         <label for="laboratorio" class="col-sm-2 control-label">Laboratório</label>
-        <div class="col-lg-2">
+        <div class="col-sm-10">
             <form:input path="laboratorio" cssClass="form-control" id="laboratorio"/>
+        </div>
         </div>
     </div>
     
@@ -115,16 +117,20 @@
     </div>
 
     <div class="form-group">
+        <div class="row">
         <label for="envio" class="col-sm-2 control-label">Data de envio*</label>
         <div class="col-lg-2">
             <form:input path="envio" cssClass="form-control" id="envio"/>
         </div>
+        </div>
     </div>
 
     <div class="form-group">
+        <div class="row">
         <label for="entrega" class="col-sm-2 control-label">Data de entrega</label>
         <div class="col-lg-2">
             <form:input path="entrega" cssClass="form-control" id="entrega"/>
+        </div>
         </div>
     </div>
 

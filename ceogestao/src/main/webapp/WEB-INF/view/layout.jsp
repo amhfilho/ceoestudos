@@ -41,7 +41,7 @@
                         <li><a href="turmas.html">Turmas</a></li>
                         <li><a href="controleLaboratorio.html">Controle de Laboratório</a></li>
                         <li><a href="tratamentos.html">Tratamento</a></li>
-                        <li><a href="#contact">Financeiro</a></li>
+                        <li><a href="contas.html">Financeiro</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastro <b class="caret"></b></a>
                             <ul class="dropdown-menu">

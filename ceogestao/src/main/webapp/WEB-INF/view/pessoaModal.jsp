@@ -31,7 +31,7 @@
                         <label class="col-sm-2 control-label" for="procurarPessoaText">Nome</label>
                         <div class="col-sm-10">
                         <input type="text" class="form-control" name="procurarPessoaText" id="procurarAlunoText"  
-                               placeholder="Procure pelo nome" size="50">
+                               placeholder="Procure pelo nome">
                         </div>
                     </div>
                     

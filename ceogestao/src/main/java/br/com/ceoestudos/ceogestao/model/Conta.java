@@ -1,0 +1,158 @@
+package br.com.ceoestudos.ceogestao.model;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
+
+@Entity
+public class Conta implements Serializable {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
+    @Temporal(TemporalType.DATE)
+    @NotNull(message = "Data de vencimento deve ser informada")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date vencimento;
+    
+    @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
+    @Digits(integer = 8, fraction = 2)
+    @NumberFormat(style = NumberFormat.Style.NUMBER)
+    private BigDecimal valor = new BigDecimal(0);
+    
+    private String descricao;
+    
+    private SituacaoConta situacao;
+    
+    @ManyToOne
+    private Pessoa cliente;
+    
+    @ManyToOne
+    private Turma turma;
+    
+    private PapelPessoa papel;
+    
+    private String tipoConta;
+    
+    private String formaPagamento;
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Conta other = (Conta) obj;
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    public String getTipoConta() {
+        return tipoConta;
+    }
+
+    public void setTipoConta(String tipoConta) {
+        this.tipoConta = tipoConta;
+    }
+    
+    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getVencimento() {
+        return vencimento;
+    }
+
+    public void setVencimento(Date vencimento) {
+        this.vencimento = vencimento;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public SituacaoConta getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(SituacaoConta situacao) {
+        this.situacao = situacao;
+    }
+
+    public Pessoa getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Pessoa cliente) {
+        this.cliente = cliente;
+    }
+
+    public Turma getTurma() {
+        return turma;
+    }
+
+    public void setTurma(Turma turma) {
+        this.turma = turma;
+    }
+
+    public PapelPessoa getPapel() {
+        return papel;
+    }
+
+    public void setPapel(PapelPessoa papel) {
+        this.papel = papel;
+    }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+    
+    
+    
+}

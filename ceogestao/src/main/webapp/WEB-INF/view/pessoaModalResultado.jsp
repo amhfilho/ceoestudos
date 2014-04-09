@@ -13,7 +13,7 @@
 </c:if>
 <c:forEach items="${pessoas}" var="pessoa">
     
-    <tr><td><a href="adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}</a></td></tr>
+    <tr><td><a href="javascript:adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}</a></td></tr>
     
 </c:forEach>
 <input type="hidden" id="pessoaId" name="pessoaId" value=""/>

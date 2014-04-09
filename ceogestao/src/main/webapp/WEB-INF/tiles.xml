@@ -84,5 +84,15 @@
     <definition name="responsaveisTratamento" template="/WEB-INF/view/emptyLayout.jsp">
         <put-attribute name="body" value="/WEB-INF/view/responsaveisTratamento.jsp" />
     </definition>
+    
+    <definition name="contas" extends="base.definition">
+        <put-attribute name="title" value="Controle de Contas" />
+        <put-attribute name="body" value="/WEB-INF/view/contas.jsp" />
+    </definition>
+    
+    <definition name="formConta" extends="base.definition">
+        <put-attribute name="title" value="Controle de Contas" />
+        <put-attribute name="body" value="/WEB-INF/view/formConta.jsp" />
+    </definition>
  
 </tiles-definitions>
