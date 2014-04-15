@@ -54,6 +54,7 @@ public class CursoController {
     @Transactional
     @RequestMapping(value = "salvarCurso", method = RequestMethod.POST)
     public String salvarCurso(@Valid Curso curso, BindingResult result, Model model) {
+        LOG.debug(curso);
         try {
             if (result.hasErrors()) {
                 LOG.info("Erro de validação de formulário");
