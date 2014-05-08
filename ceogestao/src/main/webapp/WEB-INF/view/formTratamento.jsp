@@ -96,6 +96,12 @@
         document.formTratamento.submit();
     }
 
+    function aplicarTaxa() {
+        //taxa = document.getElementById("taxa").value;
+        document.formTratamento.action = "aplicarTaxa.html";
+        document.formTratamento.submit();
+    }
+
 
 </script>
 
@@ -105,7 +111,7 @@
 <form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html"
            name="formTratamento">
     <jsp:include page="historicoModal.jsp" />
-    
+
     <form:errors path="*">
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
@@ -273,9 +279,22 @@
             </tr>
         </c:forEach>
         <tr>
+            <td td colspan="4" style="text-align: right">
+
+            </td>
+            <td style="text-align: right">
+                <button type="button" class="btn btn-default btn-xs" onclick="aplicarTaxa();">
+                    Aplicar taxa %
+                </button>
+                <form:input path="taxa" cssClass="form-control input-sm" id="taxa"/></td>
+            <td style="text-align: center">
+
+            </td>
+        </tr>
+        <tr>
             <td colspan="4" style="text-align: right"><strong>Total</strong></td>
             <td style="text-align: right">
-                <fmt:formatNumber value="${tratamento.valorBruto}" type="number"
+                <fmt:formatNumber value="${tratamento.valorComTaxa}" type="number"
                                   minFractionDigits="2" maxFractionDigits="2"/>
             </td>
             <td></td>

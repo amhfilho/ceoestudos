@@ -168,14 +168,7 @@ public class TratamentoController {
     public String adicionarHistorico(Model model, 
             Tratamento tratamento, String dataHistorico, String descricaoHistorico){
         
-        if(tratamento.getId()!=null){
-            Tratamento tratamentoBD = tDAO.getById(tratamento.getId());
-            tratamento.setDentes(tratamentoBD.getDentes());
-            tratamento.setHistorico(tratamentoBD.getHistorico());
-            tratamento.setResponsaveis(tratamentoBD.getResponsaveis());
-        } else {
-            tDAO.adicionar(tratamento);
-        }
+        tratamento = getTratamentoBD(tratamento);
         
         Date dt;
         try {
@@ -189,6 +182,28 @@ public class TratamentoController {
         
         tratamento.addAdicionarHistorico(dt, descricaoHistorico);
         tDAO.atualizar(tratamento);
+        model.addAttribute("tratamento", tratamento);
+        return "formTratamento";
+    }
+    
+    private Tratamento getTratamentoBD(Tratamento tratamento){
+       if(tratamento.getId()!=null){
+            Tratamento tratamentoBD = tDAO.getById(tratamento.getId());
+            tratamento.setDentes(tratamentoBD.getDentes());
+            tratamento.setHistorico(tratamentoBD.getHistorico());
+            tratamento.setResponsaveis(tratamentoBD.getResponsaveis());
+        } else {
+            tDAO.adicionar(tratamento);
+        }
+       return tratamento;
+    }
+    
+    @RequestMapping(value = "aplicarTaxa", method=RequestMethod.POST)
+    public String aplicarTaxa(Model model, Tratamento tratamento){
+        
+        tratamento = getTratamentoBD(tratamento);
+        
+        
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }

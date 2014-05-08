@@ -55,6 +55,22 @@ public class Tratamento implements Serializable {
     @ElementCollection(targetClass = HistoricoTratamento.class, fetch = FetchType.EAGER)
     private Set<HistoricoTratamento> historico;
     
+    @Min(value = 0, message = "Taxa deve ser maior ou igual a zero")
+    @NumberFormat(style = NumberFormat.Style.NUMBER)
+    private Double taxa = 0d;
+
+    public Double getTaxa() {
+        if(taxa==null){
+            taxa = 0.0;
+        }
+        return taxa;
+    }
+
+    public void setTaxa(Double taxa) {
+        this.taxa = taxa;
+    }
+    
+    
     public void addAdicionarHistorico(Date data,String descricao){
         if(historico==null){
             historico = new HashSet<HistoricoTratamento>();
@@ -82,6 +98,12 @@ public class Tratamento implements Serializable {
         }
         
         return valor;
+    }
+    
+    public BigDecimal getValorComTaxa(){
+        double fator = 1 + getTaxa()/100;
+        return valor = getValorBruto().multiply(new BigDecimal(fator));
+        
     }
     
     public void addTratamentoDente(Integer dente, int qtd, Procedimento procedimento) {

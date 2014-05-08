@@ -44,7 +44,7 @@ public class PessoaController {
         return "pessoas";
     }
 
-    @RequestMapping(value = "novaPessoa", method = RequestMethod.POST)
+    @RequestMapping(value = "novaPessoa")
     public String novaPessoa(Model model) {
         model.addAttribute("pessoa", new Pessoa());
         return "formPessoa";
