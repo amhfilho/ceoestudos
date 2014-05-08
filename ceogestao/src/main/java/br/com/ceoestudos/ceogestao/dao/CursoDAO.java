@@ -36,6 +36,9 @@ public class CursoDAO {
     
     public void excluir(Long id){
         Curso curso = getById(id);
+        if(curso.getTurmas()!=null && curso.getTurmas().size()>0){
+            throw new RuntimeException("Curso não pode ser removido pois existem turmas relacionadas.");
+        }
         em.merge(curso);
         em.remove(curso);
     }

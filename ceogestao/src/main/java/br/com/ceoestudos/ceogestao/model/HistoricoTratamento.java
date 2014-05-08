@@ -3,6 +3,7 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Size;
 
 @Embeddable
 public class HistoricoTratamento implements Serializable {
@@ -15,6 +16,7 @@ public class HistoricoTratamento implements Serializable {
     }
     
     private Date data;
+    @Size(max = 255, message = "A descrição não pode exceder 255 caracteres")
     private String descricao;
 
     @Override

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.format.annotation.NumberFormat;
 
 /**
@@ -25,13 +26,14 @@ public class Procedimento implements Serializable {
     private String tipo;
     
     @NotNull(message = "O nome é obrigatório")
+    @Size(max = 255, message = "O nome do procedimento não pode exceder 255 caracteres")
     private String nome;
     
     @Min(value = 0, message = "Preço deve ser maior ou igual a zero")
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private BigDecimal preco;
-    
+    @Size (max = 3000, message = "O campo observação não pode exceder 3000 caracteres")
     private String obs;
 
     @Override

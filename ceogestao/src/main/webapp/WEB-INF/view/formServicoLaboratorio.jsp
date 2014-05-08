@@ -35,6 +35,36 @@
     $(document).ready(function(e) {
         $('#envio').datetimepicker({
             lang: 'pt',
+            onShow: function(ct) {
+                this.setOptions({
+                    maxDate: $('#entrega').val() ? $('#entrega').val() : false
+                })
+            },
+            i18n: {
+                pt: {
+                    months: [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                        'Maio', 'Junho', 'Julho', 'Agosto',
+                        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ],
+                    dayOfWeek: [
+                        "Dom", "Seg", "Ter", "Qua",
+                        "Qui", "Sex", "Sab"
+                    ]
+                }
+            },
+            timepicker: false,
+            allowBlank: true,
+            format: 'd/m/Y'
+        });
+        
+        $('#entrega').datetimepicker({
+            lang: 'pt',
+            onShow: function(ct) {
+                this.setOptions({
+                    minDate: $('#envio').val() ? $('#envio').val() : false
+                })
+            },
             i18n: {
                 pt: {
                     months: [

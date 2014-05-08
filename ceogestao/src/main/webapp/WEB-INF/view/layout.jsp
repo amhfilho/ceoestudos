@@ -40,7 +40,15 @@
                     <ul class="nav navbar-nav">
                         <li><a href="turmas.html">Turmas</a></li>
                         <li><a href="controleLaboratorio.html">Controle de Laboratório</a></li>
-                        <li><a href="tratamentos.html">Tratamento</a></li>
+                        
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tratamento <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="tratamentos.html">Prótese</a></li>
+                                
+                                
+                            </ul>
+                        </li>
                         <li><a href="contas.html">Financeiro</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastro <b class="caret"></b></a>
@@ -51,7 +59,7 @@
                                 <li class="divider"></li>
                                 <li class="dropdown-header">Nav header</li>
                                 <li><a href="controleLaboratorio.html">Controle de Laboratório</a></li>
-                                <li><a href="#">One more separated link</a></li>
+                                
                             </ul>
                         </li>
                     </ul>

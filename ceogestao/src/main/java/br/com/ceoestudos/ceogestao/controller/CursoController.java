@@ -45,7 +45,7 @@ public class CursoController {
         return "cursos";
     }
 
-    @RequestMapping(value = "novoCurso", method = RequestMethod.POST)
+    @RequestMapping(value = "novoCurso", method = RequestMethod.GET)
     public String novoCurso(Model model) {
         model.addAttribute("curso", new Curso());
         return "formCurso";
@@ -83,6 +83,7 @@ public class CursoController {
             
         } catch (RuntimeException e){
             LOG.error(e);
+            model.addAttribute("curso", cursoDAO.getById(new Long(id)));
             model.addAttribute("ERROR_MESSAGE", "Ocorreu um erro ao excluir o Curso: " + e.getMessage());
             return "formCurso";
         }

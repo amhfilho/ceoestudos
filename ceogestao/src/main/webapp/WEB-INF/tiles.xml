@@ -72,12 +72,12 @@
     </definition>
     
     <definition name="formTratamento" extends="base.definition">
-        <put-attribute name="title" value="Tratamento" />
+        <put-attribute name="title" value="Prótese" />
         <put-attribute name="body" value="/WEB-INF/view/formTratamento.jsp" />
     </definition>
     
     <definition name="tratamentos" extends="base.definition">
-        <put-attribute name="title" value="Controle de Tratamentos" />
+        <put-attribute name="title" value="Tratamentos - Prótese" />
         <put-attribute name="body" value="/WEB-INF/view/tratamentos.jsp" />
     </definition>
     

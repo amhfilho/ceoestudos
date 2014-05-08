@@ -13,6 +13,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -33,6 +34,7 @@ public class Conta implements Serializable {
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private BigDecimal valor = new BigDecimal(0);
     
+    @Size(max=255, message="A descrição não pode conter mais que 255 caracteres")
     private String descricao;
     
     private SituacaoConta situacao;

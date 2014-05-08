@@ -50,8 +50,7 @@
 </tr>
 </table>
 </c:if>
-<form:form method="POST" action="novoCurso.html">
-    <button type="submit" class="btn btn-primary">
+
+    <button type="submit" class="btn btn-primary" onclick="document.location='novoCurso.html'">
         <span class="glyphicon glyphicon-plus"></span>  Adicionar Curso
     </button>
-</form:form>

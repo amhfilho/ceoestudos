@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 
@@ -32,7 +34,9 @@ public class Curso implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull(message = "Nome é obrigatório")
+    @Size(max = 255, message = "Nome do curso não pode exceder 255 caracteres")
     private String nome;
+    @Size (max=3000, message = "Descrição não pode exceder 3000 caracteres")
     private String descricao;
     @NotNull(message = "Carga horária é obrigatória")
     @Min(value = 1, message = "Valor mínimo da carga horária é 1")
@@ -41,7 +45,9 @@ public class Curso implements Serializable {
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = Style.NUMBER)
     private BigDecimal investimento = new BigDecimal(0);
+    @Size(max = 3000, message = "Os pré-requisitos não podem exceder 3000 caracteres")
     private String preRequisitos;
+    @Size(max = 255, message = "O código do curso não pode exceder 255 caracteres")
     private String codigo;
     
     @OneToMany(mappedBy = "curso",fetch = FetchType.EAGER)

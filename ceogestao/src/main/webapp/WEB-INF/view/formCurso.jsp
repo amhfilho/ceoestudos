@@ -8,22 +8,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-<form:errors path="curso.nome">
-    <div class="alert alert-danger"><form:errors path="curso.nome"/></div>
-</form:errors>
-
-<form:errors path="curso.cargaHoraria">
-    <div class="alert alert-danger"><form:errors path="curso.cargaHoraria"/></div>
-</form:errors>
-
-<form:errors path="curso.investimento">
-    <div class="alert alert-danger"><form:errors path="curso.investimento"/></div>
-</form:errors>
-
-<small>Campos obrigatórios são marcados com <strong>*</strong></small>
-<br>
 <form:form class="form-horizontal" role="form" method="POST" action="salvarCurso.html"  
            modelAttribute="curso">
+    <form:errors path="*">
+        <div class="alert alert-danger">
+            <strong>Problemas!</strong><br>
+            <form:errors path="*"/></div>
+    </form:errors>
+        
+    <small>Campos obrigatórios são marcados com <strong>*</strong></small>
+    <br>
     <form:hidden path="id" id="id" name="id" />
 
     <div class="form-group">
@@ -75,12 +69,12 @@
             <c:if test="${not empty curso.id}">
                 <button type="button" class="btn btn-default" 
                         onclick="if (confirm('Deseja realmente excluir o curso? ')) {
-                                location.href = 'excluirCurso.html?id=${curso.id}';
-                            }">
+                                    location.href = 'excluirCurso.html?id=${curso.id}';
+                                }">
 
                     <span class="glyphicon glyphicon-trash"></span>  Excluir
                 </button>
-                            <button type="button" class="btn btn-default" onclick="location.href = 'novoCurso.html'">Novo</button>
+                <button type="button" class="btn btn-default" onclick="location.href = 'novoCurso.html'">Novo</button>
             </c:if>
         </div>
     </div>
