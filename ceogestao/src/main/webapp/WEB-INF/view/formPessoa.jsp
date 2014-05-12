@@ -63,33 +63,7 @@
             <form:input cssClass="form-control input-sm" id="email" placeholder="Email" path="email"/>
         </div>
     </div>
-    <script type="text/javascript">
-        /*
-         $(document).ready(function(e) {
-         $('#dataNascimento').datetimepicker({
-         lang: 'pt',
-         i18n: {
-         pt: {
-         months: [
-         'Janeiro', 'Fevereiro', 'Março', 'Abril',
-         'Maio', 'Junho', 'Julho', 'Agosto',
-         'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-         ],
-         dayOfWeek: [
-         "Dom", "Seg", "Ter", "Qua",
-         "Qui", "Sex", "Sab"
-         ]
-         }
-         },
-         timepicker: false,
-         allowBlank: true,
-         format: 'd/m/Y'
-         });
-         
-         
-         });
-         */
-    </script> 
+     
     <div class="form-group">
         <label for="dataNascimento" class="col-sm-2 control-label">Data de Nascimento</label>
         <div class="col-sm-2">
@@ -112,48 +86,47 @@
     <div class="form-group">
         <label for="endereco" class="col-sm-2 control-label">Endereco</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="endereco" placeholder="Rua, avenida, travessa, praça, etc" 
-                   name="endereco">
+            <form:input path="endereco" cssClass="form-control input-sm" id="endereco" placeholder="Rua, avenida, travessa, praça, etc" />
         </div>
     </div>
 
     <div class="form-group">
         <label for="numero" class="col-sm-2 control-label">Número</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="numero" placeholder="Número" 
-                   name="numero">
+            <form:input cssClass="form-control input-sm" id="numero" placeholder="Número" 
+                   path="numero"/>
         </div>
     </div>
 
     <div class="form-group">
         <label for="complemento" class="col-sm-2 control-label">Complemento</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="complemento" placeholder="Apartamento, bloco, casa, etc" 
-                   name="complemento">
+            <form:input cssClass="form-control input-sm" id="complemento" placeholder="Apartamento, bloco, casa, etc" 
+                   path="complemento"/>
         </div>
     </div>
 
     <div class="form-group">
         <label for="bairro" class="col-sm-2 control-label">Bairro</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="bairro" placeholder="Bairro" 
-                   name="bairro">
+            <form:input cssClass="form-control input-sm" id="bairro" placeholder="Bairro" 
+                   path="bairro"/>
         </div>
     </div>
 
     <div class="form-group">
         <label for="cep" class="col-sm-2 control-label">CEP</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="cep" placeholder="CEP" 
-                   name="cep">
+            <form:input type="text" cssClass="form-control input-sm" id="cep" placeholder="CEP" 
+                   path="cep"/>
         </div>
     </div>
 
     <div class="form-group">
         <label for="cidade" class="col-sm-2 control-label">Cidade</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control input-sm" id="cidade" placeholder="Cidade" 
-                   name="cidade">
+            <form:input cssClass="form-control input-sm" id="cidade" placeholder="Cidade" 
+                   path="cidade"/>
         </div>
     </div>
 
@@ -196,33 +169,33 @@
         <div class="form-group">
             <label for="telefoneResidencial" class="col-sm-2 control-label">Tel. Residencial</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control input-sm" id="telefoneResidencial" placeholder="Telefone com DDD" 
-                       name="telefoneResidencial">
+                <form:input class="form-control input-sm" id="telefoneResidencial" placeholder="Telefone com DDD" 
+                       path="telefoneResidencial"/>
             </div>
         </div>
 
         <div class="form-group">
             <label for="telefoneCelular" class="col-sm-2 control-label">Tel. Celular</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control input-sm" id="telefoneCelular" placeholder="Telefone com DDD" 
-                       name="telefoneCelular">
+                <form:input type="text" cssClass="form-control input-sm" id="telefoneCelular" placeholder="Telefone com DDD" 
+                       path="telefoneCelular"/>
             </div>
         </div>
 
         <div class="form-group">
             <label for="telefoneComercial" class="col-sm-2 control-label">Tel. Comercial</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control input-sm" id="telefoneComercial" placeholder="Telefone com DDD" 
-                       name="telefoneComercial">
+                <form:input type="text" cssClass="form-control input-sm" id="telefoneComercial" placeholder="Telefone com DDD" 
+                       path="telefoneComercial"/>
             </div>
         </div>
 
         <div class="form-group">
             <label for="cro" class="col-sm-2 control-label">CRO</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control input-sm" id="cro" placeholder="CRO" 
-                       name="cro" onchange="enableUfCro();" onkeypress="this.onchange();" 
-                       onpaste="this.onchange();" oninput="this.onchange();">
+                <form:input type="text" cssClass="form-control input-sm" id="cro" placeholder="CRO" 
+                       path="cro" onchange="enableUfCro();" onkeypress="this.onchange();" 
+                       onpaste="this.onchange();" oninput="this.onchange();"/>
             </div>
             <label for="ufCro" class="col-sm-2 control-label">U.F. do CRO</label>
             <div class="col-sm-2">
