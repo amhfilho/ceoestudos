@@ -26,7 +26,7 @@
             </div>
             <div class="modal-body">
 
-                <form class="form-inline" role="form">
+                <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="procurarPessoaText">Nome</label>
                         <div class="col-sm-10">
@@ -37,7 +37,7 @@
                     
                     <button class="btn btn-default btn-xs" type="button" id="procurarPessoaBtn" >Procurar</button>
                 </form>      
-                <div class="form-group">
+                <div class="container">
                     <table class="table table-hover" id="tabelaBuscaPessoa">
                         
                     </table>

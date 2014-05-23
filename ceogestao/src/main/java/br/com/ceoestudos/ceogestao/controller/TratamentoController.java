@@ -203,7 +203,7 @@ public class TratamentoController {
         
         tratamento = getTratamentoBD(tratamento);
         
-        
+        model.addAttribute("SUCCESS_MESSAGE","Taxa aplicada com sucesso");
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }

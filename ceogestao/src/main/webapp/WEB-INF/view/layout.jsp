@@ -45,7 +45,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tratamento <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="tratamentos.html">Prótese</a></li>
-                                
+                                <li><a href="cirurgias.html">Cirurgia</a></li>
                                 
                             </ul>
                         </li>

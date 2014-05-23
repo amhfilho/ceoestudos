@@ -3,6 +3,9 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 @Embeddable
@@ -15,9 +18,14 @@ public class HistoricoTratamento implements Serializable {
         this.descricao = descricao;
     }
     
+    @Temporal(TemporalType.DATE)
     private Date data;
+    
     @Size(max = 255, message = "A descrição não pode exceder 255 caracteres")
     private String descricao;
+    
+    @ManyToOne
+    private Pessoa professor;
 
     @Override
     public int hashCode() {
@@ -60,6 +68,16 @@ public class HistoricoTratamento implements Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public Pessoa getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Pessoa professor) {
+        this.professor = professor;
+    }
+    
+    
     
     
 }

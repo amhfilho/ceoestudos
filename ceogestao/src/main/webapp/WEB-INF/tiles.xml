@@ -94,5 +94,10 @@
         <put-attribute name="title" value="Controle de Contas" />
         <put-attribute name="body" value="/WEB-INF/view/formConta.jsp" />
     </definition>
+    
+    <definition name="cirurgias" extends="base.definition">
+        <put-attribute name="title" value="Cirurgias" />
+        <put-attribute name="body" value="/WEB-INF/view/cirurgias.jsp" />
+    </definition>
  
 </tiles-definitions>
