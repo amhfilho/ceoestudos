@@ -52,7 +52,8 @@
     }
     
     function removerHistorico(){
-        document.formCirurgia.action = "removerHistoricoCirurgia.html";
+        document.formCirurgia.action = "adicionarHistoricoCirurgia.html";
+        document.getElementById("removerHistorico").value = "true";
         document.formCirurgia.submit();
     }
 </script>
@@ -139,6 +140,7 @@
             </table>
 
         </c:if>
+            <input type="hidden" name="removerHistorico" value=""/>
         <button type="button" class="btn btn-default btn-xs" 
                 onclick="javascript:configurarModalHistorico();">Adicionar</button>
     </div>

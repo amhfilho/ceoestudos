@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,9 +41,10 @@ public class CirurgiaController {
         return pessoaDAO.listarProfessores();
     }
     
+    @Transactional
     @RequestMapping(value = "adicionarHistoricoCirurgia", method = RequestMethod.POST)
     public String adicionarHistorico(Model model, Cirurgia cirurgia,
-            String dataHistorico, String descricaoHistorico, Long idProfessor) {
+            String dataHistorico, String descricaoHistorico, Long idProfessor, String removerHistorico) {
         try {
             Date data = null;
             getCirurgiaBD(cirurgia);
@@ -54,10 +56,17 @@ public class CirurgiaController {
                 model.addAttribute("cirurgia", cirurgia);
                 return "formCirurgia";
             }
+            String successMessage = "";
+            if(removerHistorico.equals("true")){
+                cirurgia.removerHistorico(data, descricaoHistorico, pessoaDAO.getById(idProfessor));
+                successMessage = "Cirurgia atualizada e histórico removido";
+            } else{
+                cirurgia.adicionarHistorico(data, descricaoHistorico, pessoaDAO.getById(idProfessor));
+                successMessage = "Cirurgia atualizada e histórico adicionado";
+            }
             
-            cirurgia.adicionarHistorico(data, descricaoHistorico, pessoaDAO.getById(idProfessor));
             cirurgiaDAO.atualizar(cirurgia);
-            model.addAttribute("SUCCESS_MESSAGE", "Cirurgia atualizada e histórico adicionado");
+            model.addAttribute("SUCCESS_MESSAGE", successMessage);
             
         } catch (RuntimeException e) {
             model.addAttribute("ERROR_MESSAGE", "Houve um erro ao adicionar o histórico");
@@ -65,7 +74,7 @@ public class CirurgiaController {
         model.addAttribute("cirurgia", cirurgia);
         return "formCirurgia";
     }
-    
+        
     private void getCirurgiaBD(Cirurgia cirurgia) {
         if (cirurgia.getId() != null) {
             Cirurgia c = cirurgiaDAO.getById(cirurgia.getId());

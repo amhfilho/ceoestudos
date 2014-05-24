@@ -46,8 +46,9 @@ public class Cirurgia implements Serializable {
         historico.add(new HistoricoTratamento(data, descricao, professor));
     }
     
-    public void removerHistorico(HistoricoTratamento ht){
+    public void removerHistorico(Date data, String descricao, Pessoa professor){
         if(historico!=null){
+            HistoricoTratamento ht = new HistoricoTratamento(data, descricao, professor);
             historico.remove(ht);
         }
     }
