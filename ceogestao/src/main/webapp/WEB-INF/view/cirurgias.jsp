@@ -16,3 +16,6 @@
         Nenhuma cirurgia encontrada
     </div>
 </c:if>
+<button type="submit" class="btn btn-primary" onclick="document.location='novaCirurgia.html'">
+        <span class="glyphicon glyphicon-plus"></span>  Adicionar Cirurgia
+</button>

@@ -16,4 +16,16 @@ public class CirurgiaDAO {
         return em.createQuery("select c from Cirurgia c").getResultList();
     }
     
+    public Cirurgia getById(Long id){
+        return em.find(Cirurgia.class, id);
+    }
+    
+    public void adicionar(Cirurgia c){
+        em.persist(c);
+    }
+    
+    public void atualizar(Cirurgia c){
+        em.merge(c);
+    }
+    
 }

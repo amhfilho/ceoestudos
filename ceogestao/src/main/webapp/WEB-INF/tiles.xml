@@ -34,7 +34,7 @@
         <put-attribute name="body" value="/WEB-INF/view/turmas.jsp" />
     </definition>
     
-     <definition name="formTurma" extends="base.definition">
+    <definition name="formTurma" extends="base.definition">
         <put-attribute name="title" value="Controle de Turmas" />
         <put-attribute name="body" value="/WEB-INF/view/formTurma.jsp" />
     </definition>
@@ -100,4 +100,8 @@
         <put-attribute name="body" value="/WEB-INF/view/cirurgias.jsp" />
     </definition>
  
+    <definition name="formCirurgia" extends="base.definition">
+        <put-attribute name="title" value="Cirurgia" />
+        <put-attribute name="body" value="/WEB-INF/view/formCirurgia.jsp" />
+    </definition>
 </tiles-definitions>

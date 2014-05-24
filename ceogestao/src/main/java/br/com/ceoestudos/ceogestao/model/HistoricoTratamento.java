@@ -17,6 +17,12 @@ public class HistoricoTratamento implements Serializable {
         this.data = data;
         this.descricao = descricao;
     }
+
+    public HistoricoTratamento(Date data, String descricao, Pessoa professor) {
+        this.data = data;
+        this.descricao = descricao;
+        this.professor = professor;
+    }
     
     @Temporal(TemporalType.DATE)
     private Date data;
@@ -29,9 +35,10 @@ public class HistoricoTratamento implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + (this.data != null ? this.data.hashCode() : 0);
-        hash = 37 * hash + (this.descricao != null ? this.descricao.hashCode() : 0);
+        int hash = 7;
+        hash = 73 * hash + (this.data != null ? this.data.hashCode() : 0);
+        hash = 73 * hash + (this.descricao != null ? this.descricao.hashCode() : 0);
+        hash = 73 * hash + (this.professor != null ? this.professor.hashCode() : 0);
         return hash;
     }
 
@@ -50,8 +57,13 @@ public class HistoricoTratamento implements Serializable {
         if ((this.descricao == null) ? (other.descricao != null) : !this.descricao.equals(other.descricao)) {
             return false;
         }
+        if (this.professor != other.professor && (this.professor == null || !this.professor.equals(other.professor))) {
+            return false;
+        }
         return true;
     }
+
+    
 
     public Date getData() {
         return data;

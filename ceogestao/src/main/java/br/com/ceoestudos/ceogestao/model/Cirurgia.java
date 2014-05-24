@@ -1,6 +1,8 @@
 package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -36,6 +38,19 @@ public class Cirurgia implements Serializable {
     
     @ElementCollection(targetClass = HistoricoTratamento.class, fetch = FetchType.EAGER)
     private Set<HistoricoTratamento> historico;
+    
+    public void adicionarHistorico(Date data, String descricao, Pessoa professor){
+        if(historico==null){
+            historico = new HashSet<HistoricoTratamento>();
+        }
+        historico.add(new HistoricoTratamento(data, descricao, professor));
+    }
+    
+    public void removerHistorico(HistoricoTratamento ht){
+        if(historico!=null){
+            historico.remove(ht);
+        }
+    }
 
     public Long getId() {
         return id;
