@@ -28,4 +28,9 @@ public class CirurgiaDAO {
         em.merge(c);
     }
     
+    public void excluir(Cirurgia c){
+        em.merge(c);
+        em.remove(c);
+    }
+    
 }

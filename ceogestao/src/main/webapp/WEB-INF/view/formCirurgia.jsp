@@ -47,14 +47,19 @@
         }
     }
     function adicionarHistorico() {
-        document.formCirurgia.action = "adicionarHistoricoCirurgia.html";
+        document.formCirurgia.action = "atualizarHistoricoCirurgia.html";
         document.formCirurgia.submit();
     }
-    
-    function removerHistorico(){
-        document.formCirurgia.action = "adicionarHistoricoCirurgia.html";
-        document.getElementById("removerHistorico").value = "true";
-        document.formCirurgia.submit();
+
+    function removerHistorico(data, descricao, idProfessor) {
+        if (confirm('Deseja realmente excluir esta linha do histórico?')) {
+            document.formCirurgia.action = "atualizarHistoricoCirurgia.html";
+            document.getElementById("removerHistorico").value = "true";
+            document.getElementById("dataHistorico").value = data;
+            document.getElementById("descricaoHistorico").value = descricao;
+            document.getElementById("idProfessor").value = idProfessor;
+            document.formCirurgia.submit();
+        }
     }
 </script>
 <jsp:include page="pessoaModal.jsp" />
@@ -71,6 +76,18 @@
 
     <form:hidden path="id" id="id"/>
 
+    <div class="form-group">
+        <label for="turma" class="col-sm-2 control-label">Turma</label>
+        <div class="col-sm-6">
+            <select id="turma" name="turma" class="form-control">
+                <option value="">Sem turma associada</option>
+                <c:forEach items="${todasAsTurmas}" var="turma">
+                    <option value="${turma.id}" <c:if test="${cirurgia.turma.id == turma.id}"> selected </c:if>>${turma}</option>
+                </c:forEach>
+            </select>
+        </div>
+    </div>
+    
     <div class="form-group">
         <label for="nomePaciente" class="col-sm-2 control-label">Paciente*</label>
         <div class="col-sm-6">
@@ -130,17 +147,20 @@
                         <td>${historico.descricao}</td>
                         <td>${historico.professor.nome}</td>
                         <td style="text-align: center">
-                            <a href="javascript:removerHistorico()">
+                            <a href="javascript:removerHistorico('<fmt:formatDate pattern="dd/MM/yyyy" value="${historico.data}"/>',
+                               '${historico.descricao}',
+                               '${historico.professor.identificador}')">
                                 <span class="glyphicon glyphicon-remove"></span>
+                                Remover
                             </a>
-                             Remover
+                            
                         </td>
                     </tr>
                 </c:forEach>           
             </table>
 
         </c:if>
-            <input type="hidden" name="removerHistorico" value=""/>
+        <input type="hidden" name="removerHistorico" id="removerHistorico"/>
         <button type="button" class="btn btn-default btn-xs" 
                 onclick="javascript:configurarModalHistorico();">Adicionar</button>
     </div>
@@ -153,7 +173,7 @@
             <c:if test="${not empty cirurgia.id}">
                 <button type="button" class="btn btn-default" 
                         onclick="if (confirm('Deseja realmente excluir a cirurgia? ')) {
-                                    location.href = '#';
+                                    location.href = 'excluirCirurgia.html?id=${cirurgia.id}';
                                 }">
                     <span class="glyphicon glyphicon-trash"></span>  Excluir
                 </button>

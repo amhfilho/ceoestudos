@@ -16,6 +16,30 @@
         Nenhuma cirurgia encontrada
     </div>
 </c:if>
-<button type="submit" class="btn btn-primary" onclick="document.location='novaCirurgia.html'">
-        <span class="glyphicon glyphicon-plus"></span>  Adicionar Cirurgia
+
+<c:if test="${not empty cirurgias}">
+    <table class="table table-striped">
+        <thead>
+        <th>Turma</th>
+        <th>Paciente</th>
+        <th>Data do primeiro procedimento</th>
+        <th></th>
+    </thead>
+    <c:forEach items="${cirurgias}" var="cirurgia">
+        <tr>
+            <td>${cirurgia.turma}</td>
+            <td>${cirurgia.paciente.nome}</td>
+            <td><fmt:formatDate dateStyle="medium" value="${cirurgia.dataPrimeiroProcedimento}"/></td>
+            <td>
+                <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarCirurgia.html?id=${cirurgia.id}'">
+                    <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                </button>
+            </td>
+        </tr>
+    </c:forEach>
+</table>
+</c:if>
+
+<button type="submit" class="btn btn-primary" onclick="document.location = 'novaCirurgia.html'">
+    <span class="glyphicon glyphicon-plus"></span>  Adicionar Cirurgia
 </button>

@@ -2,7 +2,8 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -26,6 +27,9 @@ public class Cirurgia implements Serializable {
     @ManyToOne
     private Pessoa paciente;
     
+    @ManyToOne
+    private Turma turma;
+    
     private String exameRadiografico;
     
     private String planejamento;
@@ -41,7 +45,7 @@ public class Cirurgia implements Serializable {
     
     public void adicionarHistorico(Date data, String descricao, Pessoa professor){
         if(historico==null){
-            historico = new HashSet<HistoricoTratamento>();
+            historico = new LinkedHashSet<HistoricoTratamento>();
         }
         historico.add(new HistoricoTratamento(data, descricao, professor));
     }
@@ -51,6 +55,14 @@ public class Cirurgia implements Serializable {
             HistoricoTratamento ht = new HistoricoTratamento(data, descricao, professor);
             historico.remove(ht);
         }
+    }
+    
+    public Date getDataPrimeiroProcedimento(){
+        if(historico!=null && historico.size() > 0){
+            Iterator i = historico.iterator();
+            return ((HistoricoTratamento)i.next()).getData();
+        }
+        return null;
     }
 
     public Long getId() {
@@ -115,6 +127,14 @@ public class Cirurgia implements Serializable {
 
     public void setHistorico(Set<HistoricoTratamento> historico) {
         this.historico = historico;
+    }
+
+    public Turma getTurma() {
+        return turma;
+    }
+
+    public void setTurma(Turma turma) {
+        this.turma = turma;
     }
     
     

@@ -1,6 +1,7 @@
 package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
@@ -9,11 +10,12 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 @Embeddable
-public class HistoricoTratamento implements Serializable {
-    
-    public HistoricoTratamento(){}
-    
-    public HistoricoTratamento(Date data, String descricao){
+public class HistoricoTratamento implements Serializable, Comparable<HistoricoTratamento> {
+
+    public HistoricoTratamento() {
+    }
+
+    public HistoricoTratamento(Date data, String descricao) {
         this.data = data;
         this.descricao = descricao;
     }
@@ -23,13 +25,13 @@ public class HistoricoTratamento implements Serializable {
         this.descricao = descricao;
         this.professor = professor;
     }
-    
+
     @Temporal(TemporalType.DATE)
     private Date data;
-    
+
     @Size(max = 255, message = "A descrição não pode exceder 255 caracteres")
     private String descricao;
-    
+
     @ManyToOne
     private Pessoa professor;
 
@@ -63,8 +65,6 @@ public class HistoricoTratamento implements Serializable {
         return true;
     }
 
-    
-
     public Date getData() {
         return data;
     }
@@ -88,8 +88,33 @@ public class HistoricoTratamento implements Serializable {
     public void setProfessor(Pessoa professor) {
         this.professor = professor;
     }
-    
-    
-    
-    
+
+    @Override
+    public int compareTo(HistoricoTratamento param) {
+        final int BEFORE = -1;
+        final int EQUAL = 0;
+        final int AFTER = 1;
+        Calendar thisDate = Calendar.getInstance();
+        thisDate.setTime(data);
+        thisDate.set(Calendar.HOUR, 0);
+        thisDate.set(Calendar.MINUTE, 0);
+        thisDate.set(Calendar.SECOND, 0);
+        thisDate.set(Calendar.MILLISECOND, 0);
+
+        Calendar paramDate = Calendar.getInstance();
+        paramDate.setTime(param.getData());
+        paramDate.set(Calendar.HOUR, 0);
+        paramDate.set(Calendar.MINUTE, 0);
+        paramDate.set(Calendar.SECOND, 0);
+        paramDate.set(Calendar.MILLISECOND, 0);
+        
+        if(thisDate.before(paramDate)){
+            return BEFORE;
+        } else if(thisDate.after(paramDate)){
+            return AFTER;
+        } else {
+            return EQUAL;
+        }
+    }
+
 }

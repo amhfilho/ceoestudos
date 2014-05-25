@@ -101,7 +101,7 @@ public class TratamentoController {
                 tratamento.setDentes(tDAO.getById(tratamento.getId()).getDentes());
                 tDAO.atualizar(tratamento);
             }
-            model.addAttribute("SUCCESS_MESSAGE","Tratamento criado com sucesso");
+            model.addAttribute("SUCCESS_MESSAGE","Tratamento salvo com sucesso");
         }
         
         model.addAttribute("tratamento",tratamento);
@@ -124,16 +124,9 @@ public class TratamentoController {
                                         Integer idDente
                                         //BindingResult result
     ) {
-//        if(result.hasErrors()){
-//            return "formTratamento";
-//        }
+
         Procedimento procedimento = procedimentoDAO.getById(new Long(idProcedimento));
         
-        
-        LOG.debug(procedimento);
-        LOG.debug(tratamento);
-        LOG.debug(qtdProcedimento);
-        LOG.debug(idDente);
         if(tratamento.getId()==null){
             tratamento.addTratamentoDente(idDente, new Integer(qtdProcedimento), procedimento);
             tDAO.adicionar(tratamento);
