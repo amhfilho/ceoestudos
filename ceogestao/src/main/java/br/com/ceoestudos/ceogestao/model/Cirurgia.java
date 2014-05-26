@@ -23,7 +23,7 @@ public class Cirurgia implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @NotNull
+    @NotNull(message="Deve haver um paciente associado à cirurgia")
     @ManyToOne
     private Pessoa paciente;
     
