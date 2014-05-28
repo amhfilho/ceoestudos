@@ -8,8 +8,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
+<script>
+    function excluirCurso(){
+        if(confirm("Deseja realmente excluir o curso?")){
+            document.formCurso.action = "excluirCurso.html";
+            document.formCurso.submit();
+        }
+    }
+</script>
+
 <form:form class="form-horizontal" role="form" method="POST" action="salvarCurso.html"  
-           modelAttribute="curso">
+           modelAttribute="curso" name="formCurso" id="formCurso">
     <form:errors path="*">
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
@@ -68,9 +77,7 @@
             <button type="button" class="btn btn-default" onclick="location.href = 'cursos.html'">Voltar</button>
             <c:if test="${not empty curso.id}">
                 <button type="button" class="btn btn-default" 
-                        onclick="if (confirm('Deseja realmente excluir o curso? ')) {
-                                    location.href = 'excluirCurso.html?id=${curso.id}';
-                                }">
+                        onclick="javascript:excluirCurso();">
 
                     <span class="glyphicon glyphicon-trash"></span>  Excluir
                 </button>

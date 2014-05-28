@@ -7,6 +7,7 @@ package br.com.ceoestudos.ceogestao.controller;
 
 import br.com.ceoestudos.ceogestao.dao.CursoDAO;
 import br.com.ceoestudos.ceogestao.model.Curso;
+import br.com.ceoestudos.ceogestao.util.Util;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -76,15 +77,15 @@ public class CursoController {
     
     @Transactional
     @RequestMapping("excluirCurso")
-    public String excluirCurso(@RequestParam String id, Model model){
+    public String excluirCurso(@RequestParam String id, Model model,Curso curso){
         try {
             cursoDAO.excluir(new Long(id));
             model.addAttribute("SUCCESS_MESSAGE", "Curso excluido com sucesso!");
             
         } catch (RuntimeException e){
-            LOG.error(e);
-            model.addAttribute("curso", cursoDAO.getById(new Long(id)));
-            model.addAttribute("ERROR_MESSAGE", "Ocorreu um erro ao excluir o Curso: " + e.getMessage());
+            LOG.error(new Util().toString(e));
+            model.addAttribute("curso", curso);
+            model.addAttribute("ERROR_MESSAGE", "Erro ao excluir o Curso: " + e.getMessage());
             return "formCurso";
         }
         return "redirect:cursos.html";
