@@ -82,7 +82,7 @@ public class TurmaController {
 
     @Transactional
     @RequestMapping("excluirTurma")
-    public String excluirTurma(@RequestParam String id, Model model) {
+    public String excluirTurma(@RequestParam String id, Model model,Turma turma) {
         try {
             Long longId = new Long(id);
             turmaDAO.excluir(longId);
@@ -90,7 +90,9 @@ public class TurmaController {
 
         } catch (RuntimeException e) {
             LOG.error(new Util().toString(e));
-            model.addAttribute("ERROR_MESSAGE", "Erro ao excluir a turma");
+            model.addAttribute("ERROR_MESSAGE", "Erro ao excluir a turma: "+e.getMessage());
+            model.addAttribute("turma", turma);
+            return "formTurma";
         }
         return "redirect:turmas.html";
     }

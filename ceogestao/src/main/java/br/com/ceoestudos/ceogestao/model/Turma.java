@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
@@ -68,6 +69,12 @@ public class Turma implements Serializable {
     private String observacoes;
 
     private SituacaoTurma situacao = SituacaoTurma.NAO_CONFIRMADA;
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
+    private Set<Conta> contas;
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
+    private Set<Tratamento> tratamentos;
 
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    private Pessoa professor;
@@ -293,6 +300,22 @@ public class Turma implements Serializable {
 
     public void setProfessor(Pessoa professor) {
         this.professor = professor;
+    }
+
+    public Set<Conta> getContas() {
+        return contas;
+    }
+
+    public void setContas(Set<Conta> contas) {
+        this.contas = contas;
+    }
+
+    public Set<Tratamento> getTratamentos() {
+        return tratamentos;
+    }
+
+    public void setTratamentos(Set<Tratamento> tratamentos) {
+        this.tratamentos = tratamentos;
     }
 
 }

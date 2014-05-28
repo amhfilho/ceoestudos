@@ -60,9 +60,12 @@ public class ContaController {
     }
     
     @RequestMapping("pesquisarContas")
-    public String pesquisarContas(Model model,@RequestParam String nome, 
-            @RequestParam String cpf, @RequestParam(required=false, value="pagasCanceladas") String pagasCanceladas){
-        model.addAttribute("contas",contaDAO.listarPorNomeCpf(nome, cpf,pagasCanceladas));
+    public String pesquisarContas(Model model,
+            @RequestParam String nome, 
+            @RequestParam String cpf, 
+            @RequestParam(required=false, value="pagasCanceladas") String pagasCanceladas,
+            @RequestParam String idTurma){
+        model.addAttribute("contas",contaDAO.listarPorNomeCpfTurma(nome, cpf,pagasCanceladas,idTurma));
         return "contas";
     }
     

@@ -29,7 +29,7 @@ public class ContaDAO {
         return em.createQuery("select c from Conta c").getResultList();
     }
     
-    public List<Conta> listarPorNomeCpf(String nome, String cpf, String pagasCanceladas){
+    public List<Conta> listarPorNomeCpfTurma(String nome, String cpf, String pagasCanceladas, String idTurma){
         String query = "select c from Conta c WHERE 1 = 1 ";
         if(nome!=null && !nome.trim().equals("")){
             query+=" AND UPPER(c.cliente.nome) like '%"+nome.toUpperCase()+"%' ";
@@ -39,6 +39,9 @@ public class ContaDAO {
         }
         if(pagasCanceladas==null || pagasCanceladas.equals("")){
             query+= " AND c.situacao = 0";
+        }
+        if(idTurma!=null && !idTurma.equals("")){
+            query+= " AND c.turma.id = "+idTurma;
         }
         return em.createQuery(query).getResultList();
     }

@@ -8,7 +8,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-<c:if test="${empty turmas}">
+<form:errors path="*">
+    <div class="alert alert-danger">
+        <strong>Problemas!</strong><br>
+        <c:if test="${not empty ERROR_MESSAGE}">${ERROR_MESSAGE}</c:if>
+        <form:errors path="*"/>
+    </div>
+</form:errors>
+
+    <c:if test="${empty turmas}">
     <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Nenhuma turma encontrada
@@ -18,28 +26,28 @@
 <c:if test="${not empty turmas}">
     <table class="table table-striped" >
         <thead>
-            <th>Curso</th>
-            <th>Inicio</th>
-            <th>Dias da semana</th>
-            <th>Alunos matriculados</th>
-            <th>Situação</th>
-            <th></th>
-        </thead>
-        <c:forEach items="${turmas}" var="turma">
-            <tr>
-                
-                <td>${turma.curso.nome}</td>
-                <td><fmt:formatDate dateStyle="medium" value="${turma.dataInicio}"/> </td>
-                <td>${turma.diasDaSemanaFormatados}</td>
-                <td>${fn:length(turma.alunos)}</td>
-                <td>${turma.situacao.nome}</td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarTurma.html?id=${turma.id}'">
-                        <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
-                    </button>
-                </td>
-            </tr>
-        </c:forEach>
+        <th>Curso</th>
+        <th>Inicio</th>
+        <th>Dias da semana</th>
+        <th>Alunos matriculados</th>
+        <th>Situação</th>
+        <th></th>
+    </thead>
+    <c:forEach items="${turmas}" var="turma">
+        <tr>
+
+            <td>${turma.curso.nome}</td>
+            <td><fmt:formatDate dateStyle="medium" value="${turma.dataInicio}"/> </td>
+            <td>${turma.diasDaSemanaFormatados}</td>
+            <td>${fn:length(turma.alunos)}</td>
+            <td>${turma.situacao.nome}</td>
+            <td>
+                <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarTurma.html?id=${turma.id}'">
+                    <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                </button>
+            </td>
+        </tr>
+    </c:forEach>
 </table>
 </c:if>
 
