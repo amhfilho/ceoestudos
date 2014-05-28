@@ -8,6 +8,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
+<c:if test="${ERROR_MESSAGE != null}">
+    <div class="alert alert-danger">
+        <strong>Problemas!</strong><br>
+        ${ERROR_MESSAGE}
+    </div>
+</c:if>
 <c:if test="${empty cursos}">
     <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

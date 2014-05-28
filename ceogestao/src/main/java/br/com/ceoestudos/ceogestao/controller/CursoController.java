@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -77,10 +78,11 @@ public class CursoController {
     
     @Transactional
     @RequestMapping("excluirCurso")
-    public String excluirCurso(@RequestParam String id, Model model,Curso curso){
+    public String excluirCurso(@RequestParam String id, Model model,Curso curso,
+            RedirectAttributes redirectAttributes){
         try {
             cursoDAO.excluir(new Long(id));
-            model.addAttribute("SUCCESS_MESSAGE", "Curso excluido com sucesso!");
+            redirectAttributes.addFlashAttribute("SUCCESS_MESSAGE", "Curso excluido com sucesso!");
             
         } catch (RuntimeException e){
             LOG.error(new Util().toString(e));
