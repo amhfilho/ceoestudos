@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -82,11 +82,12 @@ public class TurmaController {
 
     @Transactional
     @RequestMapping("excluirTurma")
-    public String excluirTurma(@RequestParam String id, Model model,Turma turma) {
+    public String excluirTurma(@RequestParam String id, Model model,Turma turma,
+            RedirectAttributes rqAttr) {
         try {
             Long longId = new Long(id);
             turmaDAO.excluir(longId);
-            model.addAttribute("SUCCESS_MESSAGE", "Turma excluída com sucesso");
+            rqAttr.addFlashAttribute("SUCCESS_MESSAGE", "Turma excluída com sucesso");
 
         } catch (RuntimeException e) {
             LOG.error(new Util().toString(e));

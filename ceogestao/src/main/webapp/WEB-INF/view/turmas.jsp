@@ -8,15 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-<form:errors path="*">
-    <div class="alert alert-danger">
-        <strong>Problemas!</strong><br>
-        <c:if test="${not empty ERROR_MESSAGE}">${ERROR_MESSAGE}</c:if>
-        <form:errors path="*"/>
-    </div>
-</form:errors>
-
-    <c:if test="${empty turmas}">
+<c:if test="${empty turmas}">
     <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         Nenhuma turma encontrada
