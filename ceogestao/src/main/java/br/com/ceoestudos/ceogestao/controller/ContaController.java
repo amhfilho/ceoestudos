@@ -66,6 +66,7 @@ public class ContaController {
             @RequestParam(required=false, value="pagasCanceladas") String pagasCanceladas,
             @RequestParam String idTurma){
         model.addAttribute("contas",contaDAO.listarPorNomeCpfTurma(nome, cpf,pagasCanceladas,idTurma));
+        model.addAttribute("idTurmaPesquisada",idTurma);
         return "contas";
     }
     

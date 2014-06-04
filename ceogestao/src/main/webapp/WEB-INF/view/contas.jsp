@@ -20,10 +20,11 @@
             <input type="cpf" class="form-control input-sm" id="cpf" placeholder="CPF" name="cpf">
         </div>
         
-        <div class="col-sm-2">
-            <select class="form-control" name="turma" id="turma">
-                <c:forEach items="todasAsTurmas" var="turma">
-                    <option value="${turma.id}" <c:if test="${turma.id==turmaPesquisa}"> selected </c:if>>${turma}</option>
+        <div class="col-sm-3">
+            <select class="form-control" name="idTurma" id="turma">
+                <option value="">Qualquer turma</option>
+                <c:forEach items="${todasAsTurmas}" var="turma">
+                    <option value="${turma.id}" <c:if test="${turma.id == idTurmaPesquisada}"> selected </c:if>>${turma}</option>
                 </c:forEach>
             </select>
         </div>
