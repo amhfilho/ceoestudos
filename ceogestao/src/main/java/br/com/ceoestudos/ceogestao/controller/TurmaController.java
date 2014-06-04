@@ -73,7 +73,7 @@ public class TurmaController {
 
     }
 
-    @RequestMapping(value = "novaTurma", method = RequestMethod.POST)
+    @RequestMapping("novaTurma")
     public String novaTurma(Model model) {
         model.addAttribute("turma", new Turma());
         //model.addAttribute("mapCursos", getMapCursos());

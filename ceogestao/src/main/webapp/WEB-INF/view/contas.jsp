@@ -54,7 +54,6 @@
         <thead>
         <th>Turma</th>
         <th>Pessoa</th>
-        <th>Papel</th>
         <th>Data</th>
         <th>Valor</th>
         <th>Descricao</th>
@@ -67,7 +66,6 @@
         <tr>
             <td>${conta.turma}</td>
             <td>${conta.cliente.nome}</td>
-            <td>${conta.papel}</td>
             <td><fmt:formatDate dateStyle="medium" value="${conta.vencimento}"/></td>
             <td><fmt:formatNumber value="${conta.valor}" type="number"
                               minFractionDigits="2" maxFractionDigits="2"/></td>
