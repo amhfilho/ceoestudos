@@ -10,6 +10,7 @@ import br.com.ceoestudos.ceogestao.model.Conta;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 public class ContaDAO {
     @PersistenceContext
     private EntityManager em;
+    private Logger LOG = Logger.getLogger(getClass());
     
     public Conta getById(Long id){
         return em.find(Conta.class, id);
@@ -38,11 +40,12 @@ public class ContaDAO {
             query += " AND c.cliente.cpf = '"+cpf+"'";
         }
         if(pagasCanceladas==null || pagasCanceladas.equals("")){
-            query+= " AND c.situacao = 0";
+            query+= " AND c.situacao = 1";
         }
         if(idTurma!=null && !idTurma.equals("")){
             query+= " AND c.turma.id = "+idTurma;
         }
+        LOG.debug(query);
         return em.createQuery(query).getResultList();
     }
     
