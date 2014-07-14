@@ -104,15 +104,15 @@ public class PessoaDAO {
     }
 
     public List<Pessoa> listarProfessores() {
-        return em.createQuery("select p from Pessoa p where p.professor = TRUE").getResultList();
+        return em.createQuery("select p from Pessoa p where p.tipo = 'PROFESSOR'").getResultList();
     }
 
     public List<Pessoa> listarAlunos() {
-        return em.createQuery("select p from Pessoa p where p.professor = FALSE").getResultList();
+        return em.createQuery("select p from Pessoa p where p.tipo = 'ALUNO'").getResultList();
     }
 
     public List<Pessoa> listarAlunosPorNome(String pesquisa) {
-        String query = "select p from Pessoa p where p.professor = FALSE and p.nome like :pesquisa";
+        String query = "select p from Pessoa p where p.tipo = 'ALUNO' and p.nome like :pesquisa";
         return em.createQuery(query)
                 .setParameter("pesquisa", "%" + pesquisa + "%")
                 .getResultList();

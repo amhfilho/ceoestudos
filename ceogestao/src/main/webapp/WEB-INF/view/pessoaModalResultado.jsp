@@ -11,9 +11,11 @@
 <c:if test="${empty pessoas}">
     <td colspan="2">Nenhuma pessoa encontrada</td>
 </c:if>
+    
 <c:forEach items="${pessoas}" var="pessoa">
     
-    <tr><td><a href="javascript:adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}</a></td></tr>
+    <div><a href="javascript:adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}<br></div>
     
 </c:forEach>
+    
 <input type="hidden" id="pessoaId" name="pessoaId" value=""/>

@@ -59,6 +59,10 @@ public class TurmaDAO {
         if(turma.getTratamentos()!=null && turma.getTratamentos().size() > 0){
             throw new RuntimeException("Não é possível excluir uma turma pois há tratamentos relacionados");
         }
+        if(turma.getCirurgias()!=null && turma.getCirurgias().size() > 0){
+            throw new RuntimeException("Não é possível excluir uma turma pois há cirurgias relacionadas");
+        }
+        
         //turma = em.merge(turma);
         em.remove(turma);
     }

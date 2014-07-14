@@ -34,13 +34,6 @@
             return;
         }
 
-//        if(document.formTurma.radioEmAndamento.checked ==="checked") {
-//            
-//            //verificar se data de inicio é igual ou anteriorà data de hoje
-//            var dataInicio
-//            
-//        }
-
         var id = document.getElementById("id").value;
 
         if (id === null | id === "") {
@@ -148,7 +141,7 @@
                     <input type="text" name="procurarAlunoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do aluno"/>
                     <button class="btn btn-default btn-xs" type="button" id="procurarAlunoBtn" >Procurar</button>
                     <br>
-                    <table class="table table-bordered" id="tabelaBuscaAlunos" style="width: 100%">
+                    <table class="table" id="tabelaBuscaAlunos" style="width: 100%">
 
                     </table>
 

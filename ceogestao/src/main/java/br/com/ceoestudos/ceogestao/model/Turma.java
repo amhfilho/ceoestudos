@@ -75,6 +75,9 @@ public class Turma implements Serializable {
     
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
     private Set<Tratamento> tratamentos;
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
+    private Set<Cirurgia> cirurgias;
 
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    private Pessoa professor;
@@ -316,6 +319,14 @@ public class Turma implements Serializable {
 
     public void setTratamentos(Set<Tratamento> tratamentos) {
         this.tratamentos = tratamentos;
+    }
+
+    public Set<Cirurgia> getCirurgias() {
+        return cirurgias;
+    }
+
+    public void setCirurgias(Set<Cirurgia> cirurgias) {
+        this.cirurgias = cirurgias;
     }
 
 }
