@@ -8,37 +8,49 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
+<script>
+    function pesquisarPessoas(tipo){
+        acao = tipo+"s.html";
+        form = document.getElementById('pesquisaForm');
+        form.action = acao;
+        form.submit();
+    }
+    
+    function novaPessoa(tipo){
+        acao = "novo"+tipo+".html";
+        document.location = acao;
+    }
+</script>
 
 
-<form:form role="form" action="pessoas.html">
-
+<form id="pesquisaForm">
     <div class="row">
         <div class="col-lg-6">
             <div class="input-group">
                 <input type="text" class="form-control" name="pesquisa" id="pesquisa"
                        placeholder="Pesquisar por nome">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
+                    <button class="btn btn-default" type="button" onclick="pesquisarPessoas('${tipoPessoa}')">
                         <span class="glyphicon glyphicon-search"></span> Pesquisar
                     </button>
                 </span>
             </div>
         </div>
     </div>
+</form>
 
-</form:form>
 
 <p></p>
 <c:if test="${empty pessoas}">
     <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Nenhuma pessoa encontrada
+        Nenhum ${tipoPessoa} encontrado
     </div>
 </c:if>
 <c:if test="${not empty pessoas}">  
     <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Foram encontradas <strong>${fn:length(pessoas)}</strong> pessoas
+        Foram encontrados <strong>${fn:length(pessoas)}</strong> ${tipoPessoa}
     </div>
 
     <table class="table table-striped" style="font-size: 11px">
@@ -84,8 +96,7 @@
 </c:forEach>
 </table>
 </c:if>
-<form:form action="novaPessoa.html" method="POST">
-    <button type="submit" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus"></span>  Adicionar Pessoa
+
+    <button type="button" class="btn btn-primary" onclick="novaPessoa('${tipoPessoa}')">
+        <span class="glyphicon glyphicon-plus"></span>  Adicionar ${tipoPessoa}
     </button>
-</form:form>

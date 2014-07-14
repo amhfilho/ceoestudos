@@ -8,14 +8,34 @@
         <put-attribute name="title" value="Teste" />
         <put-attribute name="body" value="" />
     </definition>
- 
-    <definition name="pessoas" extends="base.definition">
-        <put-attribute name="title" value="Cadastro de Pessoas" />
+    
+    <definition name="alunos" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Alunos" />
         <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
     </definition>
     
-    <definition name="formPessoa" extends="base.definition">
-        <put-attribute name="title" value="Cadastro de Pessoas" />
+    <definition name="pacientes" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Pacientes" />
+        <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
+    </definition>
+    
+    <definition name="professores" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Professores" />
+        <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
+    </definition>
+    
+    <definition name="formAluno" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Alunos" />
+        <put-attribute name="body" value="/WEB-INF/view/formPessoa.jsp" />
+    </definition>
+    
+    <definition name="formPaciente" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Paciente" />
+        <put-attribute name="body" value="/WEB-INF/view/formPessoa.jsp" />
+    </definition>
+    
+    <definition name="formProfessor" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Professor" />
         <put-attribute name="body" value="/WEB-INF/view/formPessoa.jsp" />
     </definition>
     

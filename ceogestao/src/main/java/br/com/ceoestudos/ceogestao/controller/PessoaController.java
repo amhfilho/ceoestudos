@@ -2,6 +2,8 @@ package br.com.ceoestudos.ceogestao.controller;
 
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
+import br.com.ceoestudos.ceogestao.model.TipoPessoa;
+import br.com.ceoestudos.ceogestao.util.Util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -33,32 +36,75 @@ public class PessoaController {
     @Autowired
     private PessoaDAO pessoaDAO;
 
-    @RequestMapping(value = "pessoas")
-    public String pesquisarPessoas(Model model, String pesquisa, String resultado) {
-        LOGGER.debug("String de Pesquisa: " + pesquisa);
-        List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa);
+    private TipoPessoa tipoPessoa = TipoPessoa.PROFESSOR;
+
+    @RequestMapping(value = "alunos")
+    public String pesquisarAlunos(Model model, String pesquisa, String resultado) {
+        tipoPessoa = TipoPessoa.ALUNO;
+        model.addAttribute("tipoPessoa", "aluno");
+        List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa, tipoPessoa);
         model.addAttribute("pessoas", lista);
         if (resultado != null && !resultado.equals("")) {
             return resultado;
         }
-        return "pessoas";
+        return "alunos";
     }
 
-    @RequestMapping(value = "novaPessoa")
-    public String novaPessoa(Model model) {
+    @RequestMapping(value = "pacientes")
+    public String pesquisarPacientes(Model model, String pesquisa, String resultado) {
+        tipoPessoa = TipoPessoa.PACIENTE;
+        model.addAttribute("tipoPessoa", "paciente");
+        List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa, tipoPessoa);
+        model.addAttribute("pessoas", lista);
+        if (resultado != null && !resultado.equals("")) {
+            return resultado;
+        }
+        return "pacientes";
+    }
+
+    @RequestMapping(value = "professores")
+    public String pesquisarProfessores(Model model, String pesquisa, String resultado) {
+        tipoPessoa = TipoPessoa.PROFESSOR;
+        model.addAttribute("tipoPessoa", "professor");
+        List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa, tipoPessoa);
+        model.addAttribute("pessoas", lista);
+        if (resultado != null && !resultado.equals("")) {
+            return resultado;
+        }
+        return "professores";
+    }
+
+    @RequestMapping(value = "novoaluno")
+    public String novoAluno(Model model) {
         model.addAttribute("pessoa", new Pessoa());
-        return "formPessoa";
+        model.addAttribute("tipoPessoa", "ALUNO");
+        return "formAluno";
+    }
+
+    @RequestMapping(value = "novopaciente")
+    public String novoPaciente(Model model) {
+        model.addAttribute("pessoa", new Pessoa());
+        model.addAttribute("tipoPessoa", "PACIENTE");
+        return "formPaciente";
+    }
+
+    @RequestMapping(value = "novoprofessor")
+    public String novoProfessor(Model model) {
+        model.addAttribute("pessoa", new Pessoa());
+        model.addAttribute("tipoPessoa", "PROFESSOR");
+        return "formProfessor";
     }
 
     @Transactional
     @RequestMapping(value = "salvarPessoa", method = RequestMethod.POST)
-    public String salvarPessoa(@Valid Pessoa pessoa, BindingResult result, Model model) {
+    public String salvarPessoa(@Valid Pessoa pessoa, BindingResult result, Model model, String tipoPessoa) {
 
         if (!result.hasErrors()) {
             try {
-                if(pessoa.getCro()==null){
+                if (pessoa.getCro() == null) {
                     pessoa.setUfCro(null);
                 }
+                pessoa.setTipo(TipoPessoa.valueOf(tipoPessoa));
                 if (pessoa.getIdentificador() == null || pessoa.getIdentificador() == 0) {
                     pessoaDAO.adicionar(pessoa);
                 } else {
@@ -71,8 +117,17 @@ public class PessoaController {
                 LOGGER.error(e);
             }
         }
+        String retorno = "";
         model.addAttribute("pessoa", pessoa);
-        return "formPessoa";
+        model.addAttribute("tipoPessoa", tipoPessoa);
+        if (tipoPessoa.equals("ALUNO")) {
+            retorno = "formAluno";
+        } else if (tipoPessoa.equals("PACIENTE")) {
+            retorno = "formPaciente";
+        } else if (tipoPessoa.equals("PROFESSOR")) {
+            retorno = "formProfessor";
+        }
+        return retorno;
     }
 
     @RequestMapping("editarPessoa")
@@ -81,7 +136,16 @@ public class PessoaController {
             Long identificador = new Long(id);
             Pessoa pessoa = pessoaDAO.getById(identificador);
             model.addAttribute("pessoa", pessoa);
-            return "formPessoa";
+            model.addAttribute("tipoPessoa",pessoa.getTipo().name());
+            String retorno = "";
+            if (pessoa.getTipo().name().equals("ALUNO")) {
+                retorno = "formAluno";
+            } else if (pessoa.getTipo().name().equals("PACIENTE")) {
+                retorno = "formPaciente";
+            } else if (pessoa.getTipo().name().equals("PROFESSOR")) {
+                retorno = "formProfessor";
+            }
+            return retorno;
         } catch (RuntimeException e) {
             LOGGER.error(e);
             model.addAttribute("ERROR_MESSAGE", e.getMessage());

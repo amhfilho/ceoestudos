@@ -13,6 +13,17 @@
         var cro = document.getElementById("cro").value;
         document.getElementById("ufCro").disabled = cro === "";
     }
+    function voltar(tipoPessoa){
+        if(tipoPessoa=== "ALUNO"){
+            document.location = 'alunos.html';
+        }
+        else if(tipoPessoa==="PACIENTE"){
+            document.location = 'pacientes.html';
+        }
+        else if(tipoPessoa === "PROFESSOR"){
+            document.location = 'professores.html';
+        }
+    }
 
 </script>
 
@@ -24,6 +35,8 @@
     <small>Campos obrigatórios são marcados com <strong>*</strong></small>
     <br>
     <form:hidden path="identificador" id="identificador" name="identificador" />
+    <input type="hidden" name="tipoPessoa" value="${tipoPessoa}"/>
+    
     <div class="row">
         <label for="nome" class="col-sm-2 control-label">Nome*</label>
         <div class="col-sm-10">
@@ -32,11 +45,7 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <div class="checkbox">
-                <label>
-                    <form:checkbox id="checkboxProfessor" path="professor" /> Professor
-                </label>
-            </div>
+            
         </div>
     </div>
 
@@ -239,7 +248,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">Salvar</button>
-                <button type="button" class="btn btn-default" onclick="location.href = 'pessoas.html'">Voltar</button>
+                <button type="button" class="btn btn-default" onclick="voltar('${tipoPessoa}')">Voltar</button>
             <c:if test="${not empty pessoa.identificador}">
                 <button type="button" class="btn btn-default" 
                         onclick="if (confirm('Deseja realmente excluir a pessoa? ')) {

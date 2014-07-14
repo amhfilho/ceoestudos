@@ -53,11 +53,12 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastro <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="pessoas.html">Pessoas</a></li>
+                                <li><a href="alunos.html">Alunos</a></li>
+                                <li><a href="pacientes.html">Pacientes</a></li>
+                                <li><a href="professores.html">Professores</a></li>
                                 <li><a href="cursos.html">Cursos</a></li>
                                 <li><a href="procedimentos.html">Procedimentos</a></li>
                                 <li class="divider"></li>
-                                <li class="dropdown-header">Nav header</li>
                                 <li><a href="controleLaboratorio.html">Controle de Laboratório</a></li>
                                 
                             </ul>

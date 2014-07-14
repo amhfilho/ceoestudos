@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,7 +53,9 @@ public class Pessoa implements Serializable {
     private String complemento;
     private Sexo sexo;
     private boolean professor;
-    
+    @Enumerated(EnumType.STRING)
+    private TipoPessoa tipo;
+        
     @ManyToMany(mappedBy = "alunos")
     private List<Turma> turmas;
 
@@ -341,4 +345,11 @@ public class Pessoa implements Serializable {
         this.professor = professor;
     }
 
+    public TipoPessoa getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoPessoa tipo) {
+        this.tipo = tipo;
+    }
 }
