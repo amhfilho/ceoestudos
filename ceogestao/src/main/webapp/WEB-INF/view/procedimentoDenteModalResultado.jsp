@@ -14,6 +14,7 @@
 <c:if test="${not empty procedimentos}">
     <td colspan="2">Clique para selecionar o procedimento</td>
 </c:if>
+    <table class="table-striped" style="width: 100%">
 <c:forEach items="${procedimentos}" var="procedimento">
     <tr>
         <td><a href="adicionarProcedimento(${procedimento.id}, '${procedimento.nome}')">${procedimento.tipo}</a></td>
@@ -24,5 +25,8 @@
         
 
     </tr>
+    <tr><td></td></tr>
+        
 </c:forEach>
+    </table>
 <input type="hidden" id="procedimentoId" name="procedimentoId" value=""/>

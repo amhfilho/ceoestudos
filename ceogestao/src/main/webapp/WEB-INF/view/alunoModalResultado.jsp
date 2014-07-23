@@ -9,13 +9,12 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <c:if test="${empty pessoas}">
-    <tr><td colspan="2">Nenhuma pessoa encontrada</td></tr>
+    <tr><td colspan="2">Nenhum aluno encontrado</td></tr>
 </c:if>
-
-    <table class="table-striped" style="width: 100%">
+<table class="table-striped" style="width: 100%">
 <c:forEach items="${pessoas}" var="pessoa">
     <tr><td><a href="javascript:adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}</td></tr>
     <tr><td></td></tr>
 </c:forEach>
-    </table>
+</table>
 <input type="hidden" id="pessoaId" name="pessoaId" value=""/>

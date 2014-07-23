@@ -87,6 +87,10 @@
         <put-attribute name="body" value="/WEB-INF/view/pessoaModalResultado.jsp" />
     </definition>
     
+    <definition name="pacienteModalResultado" template="/WEB-INF/view/emptyLayout.jsp">
+        <put-attribute name="body" value="/WEB-INF/view/pacienteModalResultado.jsp" />
+    </definition>
+    
     <definition name="procedimentoModalResultado" template="/WEB-INF/view/emptyLayout.jsp">
         <put-attribute name="body" value="/WEB-INF/view/procedimentoModalResultado.jsp" />
     </definition>

@@ -19,9 +19,10 @@
     <c:if test="${empty listaAlunosBusca}">
         <td colspan="2">Nenhum aluno encontrado</td>
     </c:if>
+        <table class="table-striped" style="width: 100%">
     <c:forEach items="${listaAlunosBusca}" var="aluno">
         <tr>
-            <td>${aluno.nome}</td>
+            <td >${aluno.nome}</td>
             <td style="text-align: right">
                 <button type="button" class="btn btn-success btn-xs" onclick="adicionarAluno(${aluno.identificador})">
                     Matricular
@@ -29,5 +30,7 @@
             </td>
         
         </tr>
+        <tr><td></td></tr>
     </c:forEach>
+    </table>
     <input type="hidden" id="alunoId" name="alunoId" value=""/>

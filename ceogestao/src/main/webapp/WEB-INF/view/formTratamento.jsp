@@ -34,6 +34,11 @@
         document.getElementById("adicionarPessoaAction").value = action;
         $('#myModal').modal('show');
     }
+    
+    function configurarModalPaciente(action) {
+        document.getElementById("adicionarPessoaAction").value = action;
+        $('#pacienteModal').modal('show');
+    }
 
     function configurarModalHistorico() {
         //document.getElementById("adicionarPessoaAction").value = action;
@@ -105,7 +110,7 @@
 
 </script>
 
-<jsp:include page="pessoaModal.jsp" />
+<jsp:include page="pacienteModal.jsp" />
 <jsp:include page="procedimentoModal.jsp" />
 
 <form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html"
@@ -148,7 +153,7 @@
                 <form:hidden path="paciente" id="idPaciente"/>
 
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" onclick="configurarModalPessoa('paciente')">
+                    <button class="btn btn-default" type="button" onclick="configurarModalPaciente('paciente')">
                         <span class="glyphicon glyphicon-search"></span> 
                     </button>
                 </span>

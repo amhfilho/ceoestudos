@@ -9,9 +9,8 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <c:if test="${empty pessoas}">
-    <tr><td colspan="2">Nenhuma pessoa encontrada</td></tr>
+    <tr><td colspan="2">Nenhum paciente encontrado</td></tr>
 </c:if>
-
     <table class="table-striped" style="width: 100%">
 <c:forEach items="${pessoas}" var="pessoa">
     <tr><td><a href="javascript:adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}</td></tr>
