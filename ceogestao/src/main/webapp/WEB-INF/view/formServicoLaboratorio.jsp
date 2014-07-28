@@ -90,7 +90,9 @@
 <form:form cssClass="form-horizontal" role="form" method="POST" action="salvarServicoLaboratorio.html"  
            modelAttribute="servicoLaboratorio" name="servicoForm">
 
-    <jsp:include page="pessoaModal.jsp" />
+    
+    <jsp:include page="pacienteModal.jsp" />
+    <jsp:include page="alunoModal.jsp" />
     <jsp:include page="procedimentoModal.jsp"/>
     <form:errors path="*">
         <div class="alert alert-danger"><form:errors path="*"/></div>
