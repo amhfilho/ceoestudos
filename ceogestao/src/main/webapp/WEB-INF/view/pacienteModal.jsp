@@ -17,12 +17,12 @@
     });
 </script>
 <!-- Modal -->
-<div class="modal fade" id="pacienteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="pacienteModal" tabindex="-1" role="dialog" aria-labelledby="pacienteModallLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Selecione um paciente</h4>
+                <h4 class="modal-title" id="pacienteModalLabel">Selecione um paciente</h4>
                 <input type="text" name="procurarPacienteText" id="procurarPacienteText" size="50" placeholder="Procure pelo nome do paciente"/>
                 <button class="btn btn-default btn-xs" type="button" id="procurarPacienteBtn" >Procurar</button>
             </div>

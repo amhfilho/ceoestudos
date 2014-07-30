@@ -47,8 +47,8 @@
 </table>
 </c:if>
 
-<form:form action="novoServicoLaboratorio.html" method="POST">
-    <button type="submit" class="btn btn-primary">
+
+    <button type="submit" class="btn btn-primary" onclick="document.location='novoServicoLaboratorio.html'">
         <span class="glyphicon glyphicon-plus"></span>  Adicionar Serviço
     </button>
-</form:form>
+

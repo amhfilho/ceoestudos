@@ -38,6 +38,14 @@ public class PessoaController {
 
     private TipoPessoa tipoPessoa = TipoPessoa.PROFESSOR;
 
+    @RequestMapping(value = "clientes")
+    public String pesquisarClientes(Model model, String pesquisa, String resultado) {
+        List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa, TipoPessoa.ALUNO);
+        lista.addAll(pessoaDAO.listarPorNome(pesquisa, TipoPessoa.PACIENTE));
+        model.addAttribute("pessoas", lista);
+        return resultado;
+    }
+
     @RequestMapping(value = "alunos")
     public String pesquisarAlunos(Model model, String pesquisa, String resultado) {
         tipoPessoa = TipoPessoa.ALUNO;
@@ -136,7 +144,7 @@ public class PessoaController {
             Long identificador = new Long(id);
             Pessoa pessoa = pessoaDAO.getById(identificador);
             model.addAttribute("pessoa", pessoa);
-            model.addAttribute("tipoPessoa",pessoa.getTipo().name());
+            model.addAttribute("tipoPessoa", pessoa.getTipo().name());
             String retorno = "";
             if (pessoa.getTipo().name().equals("ALUNO")) {
                 retorno = "formAluno";

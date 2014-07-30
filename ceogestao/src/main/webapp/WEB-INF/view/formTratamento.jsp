@@ -30,41 +30,33 @@
             format: 'd/m/Y'
         });
     });
-    function configurarModalPessoa(action) {
-        document.getElementById("adicionarPessoaAction").value = action;
-        $('#myModal').modal('show');
-    }
-    
+       
     function configurarModalPaciente(action) {
         document.getElementById("adicionarPessoaAction").value = action;
         $('#pacienteModal').modal('show');
+    }
+    
+    function configurarModalAluno(action) {
+        document.getElementById("adicionarPessoaAction").value = action;
+        $('#alunoModal').modal('show');
+    }
+    
+    function adicionarPaciente(id,nome){
+        document.getElementById("idPaciente").value = id;
+        document.getElementById("nomePaciente").value = nome;
+        $('#pacienteModal').modal('hide');
+    }
+    
+    function adicionarAluno(id,nome){
+        document.getElementById("idResponsavel").value = id;
+        document.formTratamento.action = "adicionarResponsavel.html";
+        document.formTratamento.submit();
+        $('#alunoModal').modal('hide');
     }
 
     function configurarModalHistorico() {
         //document.getElementById("adicionarPessoaAction").value = action;
         $('#historicoModal').modal('show');
-    }
-
-    function adicionarPessoa(id, nome) {
-        if (document.getElementById("adicionarPessoaAction").value === "paciente") {
-            document.getElementById("idPaciente").value = id;
-            document.getElementById("nomePaciente").value = nome;
-        }
-        else {
-            document.getElementById("idResponsavel").value = id;
-            document.formTratamento.action = "adicionarResponsavel.html";
-            document.formTratamento.submit();
-
-            //if (id !== "") {
-
-//                $.get("adicionarResponsavel.html", {pesquisa: id}, function(resposta) {
-//                    $("#responsaveis").html(resposta);
-//                });
-//            }
-//            document.location = "adicionarResponsavel.html?id="+id+"&nome="+nome;
-//            
-        }
-        $('#myModal').modal('hide');
     }
 
     function configurarModalProcedimento(dente) {
@@ -111,6 +103,7 @@
 </script>
 
 <jsp:include page="pacienteModal.jsp" />
+<jsp:include page="alunoModal.jsp" />
 <jsp:include page="procedimentoModal.jsp" />
 
 <form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html"
@@ -162,9 +155,9 @@
     </div>
 
     <div class="form-group">
-        <label for="">Responsáveis pelo atendimento</label>
+        <label for="">Alunos responsáveis pelo atendimento</label>
         <c:if test="${empty tratamento.responsaveis}">
-            <p>Nenhum responsável associado a este tratamento</p>
+            <p>Não há aluno responsável por este tratamento</p>
         </c:if>
         <c:if test="${not empty tratamento.responsaveis}">
             <table class="table table-striped" id="responsaveis">
@@ -175,7 +168,7 @@
                 </c:forEach>
             </table>
         </c:if>
-        <p><button type="button" class="btn btn-default btn-xs" onclick="configurarModalPessoa('responsavel')">Adicionar</button></p>
+        <p><button type="button" class="btn btn-default btn-xs" onclick="configurarModalAluno('responsavel')">Adicionar</button></p>
     </div>
 
     <p>Clique no dente para inserir um procedimento</p>
@@ -323,6 +316,7 @@
                 <tr>
                     <td><fmt:formatDate dateStyle="medium" value="${historico.data}"/></td>
                     <td>${historico.descricao}</td>
+                    <td>${historico.professor.nome}</td>
                 </tr>
             </c:forEach>           
         </table>

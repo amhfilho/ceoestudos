@@ -4,6 +4,7 @@ import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.ProcedimentoDAO;
 import br.com.ceoestudos.ceogestao.dao.TratamentoDAO;
 import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
+import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.Procedimento;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
@@ -62,6 +63,11 @@ public class TratamentoController {
         return turmaDAO.listarTodos();
     }
     
+    @ModelAttribute("professores")
+    public List<Pessoa> getProfessores(){
+        return pessoaDAO.listarProfessores();
+    }
+    
     @RequestMapping("editarTratamento")
     public String editarTratamento(Model model,
                                    @RequestParam Long idTratamento){
@@ -98,7 +104,7 @@ public class TratamentoController {
             if(tratamento.getId()==null){
                 tDAO.adicionar(tratamento);
             } else {
-                tratamento.setDentes(tDAO.getById(tratamento.getId()).getDentes());
+                tratamento = getTratamentoBD(tratamento);
                 tDAO.atualizar(tratamento);
             }
             model.addAttribute("SUCCESS_MESSAGE","Tratamento salvo com sucesso");
@@ -157,10 +163,11 @@ public class TratamentoController {
     @Transactional
     @RequestMapping(value = "adicionarHistorico", method=RequestMethod.POST)
     public String adicionarHistorico(Model model, 
-            Tratamento tratamento, String dataHistorico, String descricaoHistorico){
+            Tratamento tratamento, String dataHistorico, String descricaoHistorico,
+            Long idProfessor){
         
         tratamento = getTratamentoBD(tratamento);
-        
+        Pessoa professor = pessoaDAO.getById(idProfessor);
         Date dt;
         try {
             dt = new SimpleDateFormat("dd/MM/yyyy").parse(dataHistorico);
@@ -171,7 +178,7 @@ public class TratamentoController {
             return "formTratamento";
         }
         
-        tratamento.addAdicionarHistorico(dt, descricaoHistorico);
+        tratamento.adicionarHistorico(new HistoricoTratamento(dt, dataHistorico, professor));
         tDAO.atualizar(tratamento);
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";

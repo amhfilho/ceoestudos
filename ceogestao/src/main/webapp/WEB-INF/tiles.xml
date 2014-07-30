@@ -91,8 +91,16 @@
         <put-attribute name="body" value="/WEB-INF/view/pacienteModalResultado.jsp" />
     </definition>
     
+    <definition name="alunoModalResultado" template="/WEB-INF/view/emptyLayout.jsp">
+        <put-attribute name="body" value="/WEB-INF/view/alunoModalResultado.jsp" />
+    </definition>
+    
     <definition name="procedimentoModalResultado" template="/WEB-INF/view/emptyLayout.jsp">
         <put-attribute name="body" value="/WEB-INF/view/procedimentoModalResultado.jsp" />
+    </definition>
+    
+    <definition name="clienteModalResultado" template="/WEB-INF/view/emptyLayout.jsp">
+        <put-attribute name="body" value="/WEB-INF/view/clienteModalResultado.jsp" />
     </definition>
     
     <definition name="formTratamento" extends="base.definition">

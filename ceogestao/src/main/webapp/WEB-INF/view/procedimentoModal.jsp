@@ -3,7 +3,9 @@
 
         $("#procurarProcedimentoBtn").click(function() {
 
-            var a = $("input[name=procurarProcedimentoText]").val();
+            //var a = $("input[name=procurarProcedimentoText]").val();
+            var a = document.getElementById('procurarProcedimentoText').value;
+            
             if (a !== "") {
 
                 $.get("procedimentos.html", {pesquisa: a, resultado: "procedimentoModalResultado"}, function(resposta) {
@@ -21,16 +23,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="procedimentoModalLabel">Selecione um procedimento</h4>
+                <h4 class="modal-title" id="procedimentoModalLabel">Pesquisar um procedimento</h4>
             </div>
             <div class="modal-body">
 
-                <input type="text" name="procurarProcedimentoText" id="procurarAlunoText" size="50" placeholder="Procure pelo nome do procedimento"/>
+                <input type="text" name="procurarProcedimentoText" id="procurarProcedimentoText" size="50" placeholder="Procure pelo nome do procedimento"/>
                 <button class="btn btn-default btn-xs" type="button" id="procurarProcedimentoBtn" >Procurar</button>
                 <div >
-                    <table id="tabelaBuscaProcedimento" >
+                    <div id="tabelaBuscaProcedimento" >
 
-                    </table>
+                    </div>
                 </div>
 
             </div>

@@ -41,13 +41,13 @@ public class ControleLaboratorioController {
     @Autowired
     private ProcedimentoDAO procedimentoDAO;
     
-    @RequestMapping("controleLaboratorio.html")
+    @RequestMapping("controleLaboratorio")
     public String listarServicosLaboratorio(Model model){
         model.addAttribute("servicosLaboratorio",sDAO.listarTodos());
         return "controleLaboratorio";
     }
     
-    @RequestMapping(value="novoServicoLaboratorio", method = RequestMethod.POST)
+    @RequestMapping(value="novoServicoLaboratorio")
     public String novoServicoLaboratorio(Model model){
         model.addAttribute("servicoLaboratorio",new ServicoLaboratorio());
         return "formServicoLaboratorio";

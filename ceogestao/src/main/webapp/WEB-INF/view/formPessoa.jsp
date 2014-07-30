@@ -24,6 +24,18 @@
             document.location = 'professores.html';
         }
     }
+    
+    function novaPessoa(tipoPessoa){
+        if(tipoPessoa=== "ALUNO"){
+            document.location = 'novoaluno.html';
+        }
+        else if(tipoPessoa==="PACIENTE"){
+            document.location = 'novopaciente.html';
+        }
+        else if(tipoPessoa === "PROFESSOR"){
+            document.location = 'novoprofessor.html';
+        }
+    }
 
 </script>
 
@@ -256,7 +268,7 @@
                                 }">
                     <span class="glyphicon glyphicon-trash"></span>  Excluir
                 </button>
-                <button type="button" class="btn btn-default" onclick="location.href = 'novaPessoa.html'">Novo</button>
+                <button type="button" class="btn btn-default" onclick="novaPessoa('${tipoPessoa}')">Novo</button>
             </c:if>
         </div>
     </div>

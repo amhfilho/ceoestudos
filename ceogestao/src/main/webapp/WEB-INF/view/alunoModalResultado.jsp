@@ -13,7 +13,7 @@
 </c:if>
 <table class="table-striped" style="width: 100%">
 <c:forEach items="${pessoas}" var="pessoa">
-    <tr><td><a href="javascript:adicionarPessoa(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}</td></tr>
+    <tr><td><a href="javascript:adicionarAluno(${pessoa.identificador},'${pessoa.nome}')">${pessoa.nome}</td></tr>
     <tr><td></td></tr>
 </c:forEach>
 </table>

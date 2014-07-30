@@ -70,6 +70,12 @@ public class Tratamento implements Serializable {
         this.taxa = taxa;
     }
     
+    public void adicionarHistorico(HistoricoTratamento ht){
+        if(historico==null){
+            historico = new HashSet<HistoricoTratamento>();
+        }
+        historico.add(ht);
+    }
     
     public void addAdicionarHistorico(Date data,String descricao){
         if(historico==null){

@@ -30,14 +30,15 @@
             format: 'd/m/Y'
         });
     });
-    function configurarModalPessoa() {
+    
+    function configurarModalPaciente() {
         //document.getElementById("adicionarPessoaAction").value = action;
-        $('#myModal').modal('show');
+        $('#pacienteModal').modal('show');
     }
-    function adicionarPessoa(id, nome) {
+    function adicionarPaciente(id, nome) {
         document.getElementById("idPaciente").value = id;
         document.getElementById("nomePaciente").value = nome;
-        $('#myModal').modal('hide');
+        $('#pacienteModal').modal('hide');
     }
     function configurarModalHistorico() {
         if (document.getElementById("idPaciente").value === "") {
@@ -62,7 +63,7 @@
         }
     }
 </script>
-<jsp:include page="pessoaModal.jsp" />
+<jsp:include page="pacienteModal.jsp" />
 <form:form class="form-horizontal" role="form" method="POST" action="salvarCirurgia.html"  
            modelAttribute="cirurgia" id="formCirurgia" name="formCirurgia">
 
@@ -98,7 +99,7 @@
                 <form:hidden path="paciente" id="idPaciente"/>
 
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" onclick="configurarModalPessoa()">
+                    <button class="btn btn-default" type="button" onclick="configurarModalPaciente()">
                         <span class="glyphicon glyphicon-search"></span> 
                     </button>
                 </span>

@@ -8,14 +8,14 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <script>
-    function adicionarPessoa(id, nome) {
+    function adicionarCliente(id, nome) {
         document.getElementById("idCliente").value = id;
         document.getElementById("nomeCliente").value = nome;
-        $('#myModal').modal('hide');
+        $('#clienteModal').modal('hide');
     }
 
-    function configurarModalPessoa() {
-        $('#myModal').modal('show');
+    function configurarModalCliente() {
+        $('#clienteModal').modal('show');
     }
 
     $(document).ready(function(e) {
@@ -40,7 +40,7 @@
         });
     });
 </script>
-<jsp:include page="pessoaModal.jsp" />
+<jsp:include page="clienteModal.jsp" />
 
 <form:form cssClass="form-horizontal" role="form" method="POST" action="salvarConta.html" id="formConta" 
            modelAttribute="conta" >
@@ -71,7 +71,7 @@
 
     <div class="form-group">
         <div class="row">
-            <label for="nomeCliente" class="col-sm-2 control-label">Cliente*</label>
+            <label for="nomeCliente" class="col-sm-2 control-label">Cliente (Aluno ou Paciente)*</label>
             <div class="col-sm-6">
                 <div class="input-group">
                     <input type="text" class="form-control" name="nomeCliente" id="nomeCliente"
@@ -80,7 +80,7 @@
                     <form:hidden path="cliente" id="idCliente"/>
 
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" onclick="configurarModalPessoa()">
+                        <button class="btn btn-default" type="button" onclick="configurarModalCliente()">
                             <span class="glyphicon glyphicon-search"></span> 
                         </button>
                     </span>

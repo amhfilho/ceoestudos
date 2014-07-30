@@ -53,7 +53,7 @@
     <table class="table table-striped">
         <thead>
         <th>Turma</th>
-        <th>Pessoa</th>
+        <th>Cliente</th>
         <th>Data</th>
         <th>Valor</th>
         <th>Descricao</th>

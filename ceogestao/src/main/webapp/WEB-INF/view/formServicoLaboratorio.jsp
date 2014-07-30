@@ -8,25 +8,35 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <script>
-    function adicionarPessoa(id, nome) {
-        var idFieldName = document.getElementById("idFieldName").value;
-        var nomeFieldName = document.getElementById("nomeFieldName").value;
-        document.getElementById(idFieldName).value = id;
-        document.getElementById(nomeFieldName).value = nome;
-        $('#myModal').modal('hide');
+    function configurarModalPaciente(){
+        $('#pacienteModal').modal('show');
     }
-    function adicionarProcedimento(id, nome) {
+    
+    function adicionarPaciente(id, nome){
+        document.getElementById('paciente').value = id;
+        document.getElementById('nomePaciente').value = nome;
+        $('#pacienteModal').modal('hide');
+    }
+    
+    function configurarModalAluno(){
+        $('#alunoModal').modal('show');
+    }
+    
+    function adicionarAluno(id, nome){
+        document.getElementById('profissional').value = id;
+        document.getElementById('nomeProfissional').value = nome;
+        $('#alunoModal').modal('hide');
+    }
+    
+   
+    function adicionarProcedimento(id, qtd, nome) {
         var idFieldName = document.getElementById("idFieldName").value;
         var nomeFieldName = document.getElementById("nomeFieldName").value;
         document.getElementById(idFieldName).value = id;
         document.getElementById(nomeFieldName).value = nome;
         $('#procedimentoModal').modal('hide');
     }
-    function configurarModalPessoa(idFieldName, nomeFieldName) {
-        document.getElementById("idFieldName").value = idFieldName;
-        document.getElementById("nomeFieldName").value = nomeFieldName;
-        $('#myModal').modal('show');
-    }
+    
     function configurarModalProcedimento(idFieldName, nomeFieldName) {
         document.getElementById("idFieldName").value = idFieldName;
         document.getElementById("nomeFieldName").value = nomeFieldName;
@@ -121,7 +131,7 @@
                     <form:hidden id="paciente" path="paciente" />
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" 
-                                onclick="configurarModalPessoa('paciente', 'nomePaciente')">
+                                onclick="configurarModalPaciente()">
                             Adicionar
                         </button>
                     </span>
@@ -139,7 +149,7 @@
                     <form:hidden id="profissional" path="profissional" />
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" 
-                                onclick="configurarModalPessoa('profissional', 'nomeProfissional')">
+                                onclick="configurarModalAluno('profissional', 'nomeProfissional')">
                             Adicionar
                         </button>
                     </span>
