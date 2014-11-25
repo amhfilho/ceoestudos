@@ -56,47 +56,35 @@
     <table class="table table-striped" style="font-size: 11px">
         <tr>
         <thead>
-
         <th>Nome</th>
+        <th>Data de inclusão</th>    
         <c:if test="${tipoPessoa == 'interessado'}">
             <th>Curso de interesse</th>
             <th>Contato efetuado</th>
-        </c:if>
-        <th>Data de inclusão</th>    
-        <th>RG</th>
-        <th>CPF</th>
+        </c:if>      
         <th>Endereço</th>
-
         <th>Cidade - Estado</th>
-
         <th>Telefone Celular</th>
         <th>Telefone Residencial</th>
         <th>Telefone Comercial</th>
         <th>E-mail</th>
-        
         <th></th>
     </thead>
 </tr>
 <c:forEach items="${pessoas}" var="pessoa">
     <tr>
-
         <td>${pessoa.nome}</td>
+        <td><fmt:formatDate dateStyle="medium" value="${pessoa.dataInclusao}"/></td>   
         <c:if test="${tipoPessoa == 'interessado'}">
             <td>${pessoa.cursoInteresse.nome}</td>
             <td>${pessoa.contato}</td>
         </c:if>
-        <td><fmt:formatDate dateStyle="medium" value="${pessoa.dataInclusao}"/></td>   
-        <td>${pessoa.rg}</td>
-        <td>${pessoa.cpf}</td>
         <td>${pessoa.endereco},${pessoa.numero}</td>
-
         <td>${pessoa.cidade} - ${pessoa.estado}</td>
-
         <td>${pessoa.telefoneCelular}</td>
         <td>${pessoa.telefoneResidencial}</td>
         <td>${pessoa.telefoneComercial}</td>
-        <td>${pessoa.email}</td>
-        
+        <td>${pessoa.email}</td>        
         <td>
             <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
                     <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>

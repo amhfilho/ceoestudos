@@ -163,6 +163,8 @@ public class PessoaController {
             retorno = "formPaciente";
         } else if (tipoPessoa.equals("PROFESSOR")) {
             retorno = "formProfessor";
+        } else if (tipoPessoa.equals("LISTA_ESPERA")) {
+            retorno = "formInteressado";
         }
         return retorno;
     }
@@ -205,7 +207,17 @@ public class PessoaController {
             model.addAttribute("pessoa", pessoaDAO.getById(identificador));
             return "formPessoa";
         }
-        return "redirect:pessoas.html";
+        if (tipoPessoa.equals("ALUNO")) {
+            return "redirect:alunos.html";
+        } else if (tipoPessoa.equals("PACIENTE")) {
+            return "redirect:pacientes.html";
+        } else if (tipoPessoa.equals("PROFESSOR")) {
+            return "redirect:professores.html";
+        } else if (tipoPessoa.equals("LISTA_ESPERA")) {
+            return "redirect:lista.html";
+        } else {
+            return null;
+        }
     }
 
     @InitBinder
