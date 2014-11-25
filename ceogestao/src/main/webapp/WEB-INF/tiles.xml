@@ -14,6 +14,11 @@
         <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
     </definition>
     
+    <definition name="lista_espera" extends="base.definition">
+        <put-attribute name="title" value="Lista de Espera" />
+        <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
+    </definition>
+    
     <definition name="pacientes" extends="base.definition">
         <put-attribute name="title" value="Cadastro de Pacientes" />
         <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
@@ -36,6 +41,11 @@
     
     <definition name="formProfessor" extends="base.definition">
         <put-attribute name="title" value="Cadastro de Professor" />
+        <put-attribute name="body" value="/WEB-INF/view/formPessoa.jsp" />
+    </definition>
+    
+    <definition name="formInteressado" extends="base.definition">
+        <put-attribute name="title" value="Cadastro de Interessado" />
         <put-attribute name="body" value="/WEB-INF/view/formPessoa.jsp" />
     </definition>
     

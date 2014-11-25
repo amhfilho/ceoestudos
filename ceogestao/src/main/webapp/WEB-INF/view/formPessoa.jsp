@@ -23,6 +23,9 @@
         else if(tipoPessoa === "PROFESSOR"){
             document.location = 'professores.html';
         }
+        else if(tipoPessoa === "PROFESSOR"){
+            document.location = 'lista.html';
+        }
     }
     
     function novaPessoa(tipoPessoa){
@@ -34,6 +37,9 @@
         }
         else if(tipoPessoa === "PROFESSOR"){
             document.location = 'novoprofessor.html';
+        }
+        else if(tipoPessoa === "LISTA_ESPERA"){
+            document.location = 'novointeressado.html';
         }
     }
 
@@ -60,10 +66,38 @@
             
         </div>
     </div>
+    
+    <c:if test="${tipoPessoa == 'LISTA_ESPERA'}">
+        <div class="row">
+            <label for="curso" class="col-sm-2 control-label">Curso de interesse</label>
+            <div class="col-sm-10">
+                <select id="curso" name="curso" class="form-control input-sm" >
+                    <c:forEach items="${todosOsCursos}" var="curso">
+                        <option value="${curso.id}" <c:if test="${pessoa.cursoInteresse.id == curso.id}"> selected </c:if>>${curso.nome}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
+        <div class="form-group"><div class="col-sm-offset-2 col-sm-10"></div>
+     </div>
+        
+        <div class="row">
+        <label for="contato" class="col-sm-2 control-label">Contato</label>
+        <div class="col-sm-10">
+            <form:input cssClass="form-control input-sm" id="contato" placeholder="Observações sobre contato efetuado" path="contato" />
+        </div>
+    </div>
+        
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
 
+            </div>
+        </div>
+    </c:if>
+        
 
     <div class="form-group">
-        <label for="cpf" class="col-sm-2 control-label">CPF*</label>
+        <label for="cpf" class="col-sm-2 control-label">CPF</label>
         <div class="col-sm-10">
             <form:input path="cpf" cssClass="form-control input-sm" id="cpf" placeholder="Sem pontos e traços" />
         </div>
@@ -79,7 +113,7 @@
 
 
     <div class="form-group">
-        <label for="email" class="col-sm-2 control-label">Email*</label>
+        <label for="email" class="col-sm-2 control-label">Email</label>
         <div class="col-sm-10">
             <form:input cssClass="form-control input-sm" id="email" placeholder="Email" path="email"/>
         </div>

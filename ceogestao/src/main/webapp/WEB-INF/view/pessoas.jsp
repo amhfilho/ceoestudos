@@ -58,6 +58,11 @@
         <thead>
 
         <th>Nome</th>
+        <c:if test="${tipoPessoa == 'interessado'}">
+            <th>Curso de interesse</th>
+            <th>Contato efetuado</th>
+        </c:if>
+        <th>Data de inclusão</th>    
         <th>RG</th>
         <th>CPF</th>
         <th>Endereço</th>
@@ -76,6 +81,11 @@
     <tr>
 
         <td>${pessoa.nome}</td>
+        <c:if test="${tipoPessoa == 'interessado'}">
+            <td>${pessoa.cursoInteresse.nome}</td>
+            <td>${pessoa.contato}</td>
+        </c:if>
+        <td><fmt:formatDate dateStyle="medium" value="${pessoa.dataInclusao}"/></td>   
         <td>${pessoa.rg}</td>
         <td>${pessoa.cpf}</td>
         <td>${pessoa.endereco},${pessoa.numero}</td>

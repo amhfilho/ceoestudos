@@ -6,10 +6,12 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -42,7 +44,7 @@ public class Pessoa implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dataNascimento;
     private String rg;
-    @NotNull(message="CPF é obrigatório")
+    //@NotNull(message="CPF é obrigatório")
     
     private String cpf;
     private String telefoneCelular;
@@ -58,6 +60,15 @@ public class Pessoa implements Serializable {
         
     @ManyToMany(mappedBy = "alunos")
     private List<Turma> turmas;
+    
+    @OneToOne (fetch = FetchType.EAGER)
+    private Curso cursoInteresse;
+    
+    private String contato;
+    
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dataInclusao;
 
     public List<Turma> getTurmas() {
         return turmas;
@@ -88,6 +99,10 @@ public class Pessoa implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    public Pessoa(){
+        dataInclusao = new Date();
     }
 
     @Override
@@ -352,4 +367,47 @@ public class Pessoa implements Serializable {
     public void setTipo(TipoPessoa tipo) {
         this.tipo = tipo;
     }
+
+    /**
+     * @return the cursoInteresse
+     */
+    public Curso getCursoInteresse() {
+        return cursoInteresse;
+    }
+
+    /**
+     * @param cursoInteresse the cursoInteresse to set
+     */
+    public void setCursoInteresse(Curso cursoInteresse) {
+        this.cursoInteresse = cursoInteresse;
+    }
+
+    /**
+     * @return the contato
+     */
+    public String getContato() {
+        return contato;
+    }
+
+    /**
+     * @param contato the contato to set
+     */
+    public void setContato(String contato) {
+        this.contato = contato;
+    }
+
+    /**
+     * @return the dataInclusao
+     */
+    public Date getDataInclusao() {
+        return dataInclusao;
+    }
+
+    /**
+     * @param dataInclusao the dataInclusao to set
+     */
+    public void setDataInclusao(Date dataInclusao) {
+        this.dataInclusao = dataInclusao;
+    }
+    
 }

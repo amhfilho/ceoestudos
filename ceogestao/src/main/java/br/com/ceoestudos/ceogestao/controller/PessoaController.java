@@ -1,6 +1,8 @@
 package br.com.ceoestudos.ceogestao.controller;
 
+import br.com.ceoestudos.ceogestao.dao.CursoDAO;
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
+import br.com.ceoestudos.ceogestao.model.Curso;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.TipoPessoa;
 import br.com.ceoestudos.ceogestao.util.Util;
@@ -35,17 +37,37 @@ public class PessoaController {
 
     @Autowired
     private PessoaDAO pessoaDAO;
+    @Autowired
+    private CursoDAO cursoDAO;
 
     private TipoPessoa tipoPessoa = TipoPessoa.PROFESSOR;
+    
+    @ModelAttribute("todosOsCursos")
+    public List<Curso> getCursos() {
+        return cursoDAO.listarTodos();
+    }
 
     @RequestMapping(value = "clientes")
     public String pesquisarClientes(Model model, String pesquisa, String resultado) {
         List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa, TipoPessoa.ALUNO);
         lista.addAll(pessoaDAO.listarPorNome(pesquisa, TipoPessoa.PACIENTE));
+        lista.addAll(pessoaDAO.listarPorNome(pesquisa, TipoPessoa.LISTA_ESPERA));
         model.addAttribute("pessoas", lista);
         return resultado;
     }
 
+    @RequestMapping(value = "lista")
+    public String pesquisarListaEspera(Model model, String pesquisa, String resultado){
+        tipoPessoa = TipoPessoa.LISTA_ESPERA;
+        model.addAttribute("tipoPessoa", "interessado");
+        List<Pessoa> lista = pessoaDAO.listarPorNome(pesquisa, tipoPessoa);
+        model.addAttribute("pessoas", lista);
+        if (resultado != null && !resultado.equals("")) {
+            return resultado;
+        }
+        return "lista_espera";
+    }
+    
     @RequestMapping(value = "alunos")
     public String pesquisarAlunos(Model model, String pesquisa, String resultado) {
         tipoPessoa = TipoPessoa.ALUNO;
@@ -102,6 +124,13 @@ public class PessoaController {
         model.addAttribute("tipoPessoa", "PROFESSOR");
         return "formProfessor";
     }
+    
+    @RequestMapping(value = "novointeressado")
+    public String novoInteressado(Model model) {
+        model.addAttribute("pessoa", new Pessoa());
+        model.addAttribute("tipoPessoa", "LISTA_ESPERA");
+        return "formInteressado";
+    }
 
     @Transactional
     @RequestMapping(value = "salvarPessoa", method = RequestMethod.POST)
@@ -152,6 +181,8 @@ public class PessoaController {
                 retorno = "formPaciente";
             } else if (pessoa.getTipo().name().equals("PROFESSOR")) {
                 retorno = "formProfessor";
+            } else if (pessoa.getTipo().name().equals("LISTA_ESPERA")) {
+                retorno = "formInteressado";
             }
             return retorno;
         } catch (RuntimeException e) {

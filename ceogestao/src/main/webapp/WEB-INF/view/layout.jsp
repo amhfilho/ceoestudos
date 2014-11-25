@@ -53,6 +53,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastro <b class="caret"></b></a>
                             <ul class="dropdown-menu">
+                                <li><a href="lista.html">Lista de espera</a></li>
                                 <li><a href="alunos.html">Alunos</a></li>
                                 <li><a href="pacientes.html">Pacientes</a></li>
                                 <li><a href="professores.html">Professores</a></li>
