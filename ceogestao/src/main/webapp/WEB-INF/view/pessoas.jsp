@@ -53,7 +53,7 @@
         Foram encontrados <strong>${fn:length(pessoas)}</strong> ${tipoPessoa}
     </div>
 
-    <table class="table table-striped" style="font-size: 11px">
+    <table class="table table-condensed" style="font-size: 11px">
         <tr>
         <thead>
         <th>Nome</th>
@@ -62,29 +62,33 @@
             <th>Curso de interesse</th>
             <th>Contato efetuado</th>
         </c:if>      
-        <th>Endereço</th>
+        
         <th>Cidade - Estado</th>
         <th>Telefone Celular</th>
         <th>Telefone Residencial</th>
         <th>Telefone Comercial</th>
-        <th>E-mail</th>
+        
         <th></th>
     </thead>
 </tr>
 <c:forEach items="${pessoas}" var="pessoa">
-    <tr>
+    <tr
+        <c:if test="${tipoPessoa == 'interessado' and not empty pessoa.contato}">
+            class="success"
+        </c:if>
+    >
         <td>${pessoa.nome}</td>
         <td><fmt:formatDate dateStyle="medium" value="${pessoa.dataInclusao}"/></td>   
         <c:if test="${tipoPessoa == 'interessado'}">
             <td>${pessoa.cursoInteresse.nome}</td>
             <td>${pessoa.contato}</td>
         </c:if>
-        <td>${pessoa.endereco},${pessoa.numero}</td>
+        
         <td>${pessoa.cidade} - ${pessoa.estado}</td>
         <td>${pessoa.telefoneCelular}</td>
         <td>${pessoa.telefoneResidencial}</td>
         <td>${pessoa.telefoneComercial}</td>
-        <td>${pessoa.email}</td>        
+        
         <td>
             <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
                     <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>

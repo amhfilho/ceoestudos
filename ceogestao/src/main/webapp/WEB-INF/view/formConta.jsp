@@ -100,13 +100,27 @@
 
     <div class="form-group">
         <div class="row">
-            <label for="valor" class="col-sm-2 control-label">Valor</label>
+            <label for="valor" class="col-sm-2 control-label">Valor total</label>
             <div class="col-sm-2">
                 <form:input path="valor" id="valor" cssClass="form-control input-sm"/>
             </div>
 
         </div>
     </div>
+          
+    <div class="form-group">
+        <div class="row">
+            <label for="parcelas" class="col-sm-2 control-label">Parcelas</label>
+            <div class="col-sm-6">
+                <table class="table table-bordered" style="font-size: 11px" id="parcelas">
+                    <thead><th>Valor</th><th>Vencimento</th><th>Data Pagto</th><th>Forma pagto</th></thead>
+                    <tr><td>R$ 120,00</td><td>25/11/2014</td><td>25/11/2014</td><td>Cheque núm 02342</td></tr>
+                    <tr><td>R$ 130,00</td><td>30/11/2014</td><td></td><td>Cheque núm 76654</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+            
     <div class="form-group">
         <div class="row">
             <label for="tipoConta" class="col-sm-2 control-label">Tipo</label>
