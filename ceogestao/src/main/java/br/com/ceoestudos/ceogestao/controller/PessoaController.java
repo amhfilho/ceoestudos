@@ -56,7 +56,7 @@ public class PessoaController {
         return resultado;
     }
 
-    @RequestMapping(value = "lista")
+    @RequestMapping(value = "interessados")
     public String pesquisarListaEspera(Model model, String pesquisa, String resultado){
         tipoPessoa = TipoPessoa.LISTA_ESPERA;
         model.addAttribute("tipoPessoa", "interessado");
@@ -65,7 +65,7 @@ public class PessoaController {
         if (resultado != null && !resultado.equals("")) {
             return resultado;
         }
-        return "lista_espera";
+        return "interessados";
     }
     
     @RequestMapping(value = "alunos")
@@ -207,14 +207,14 @@ public class PessoaController {
             model.addAttribute("pessoa", pessoaDAO.getById(identificador));
             return "formPessoa";
         }
-        if (tipoPessoa.equals("ALUNO")) {
+        if (tipoPessoa.name().equals("ALUNO")) {
             return "redirect:alunos.html";
-        } else if (tipoPessoa.equals("PACIENTE")) {
+        } else if (tipoPessoa.name().equals("PACIENTE")) {
             return "redirect:pacientes.html";
-        } else if (tipoPessoa.equals("PROFESSOR")) {
+        } else if (tipoPessoa.name().equals("PROFESSOR")) {
             return "redirect:professores.html";
-        } else if (tipoPessoa.equals("LISTA_ESPERA")) {
-            return "redirect:lista.html";
+        } else if (tipoPessoa.name().equals("LISTA_ESPERA")) {
+            return "redirect:interessados.html";
         } else {
             return null;
         }

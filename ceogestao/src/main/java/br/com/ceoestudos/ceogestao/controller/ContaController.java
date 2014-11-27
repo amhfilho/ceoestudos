@@ -11,6 +11,7 @@ import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
 import br.com.ceoestudos.ceogestao.model.Conta;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
+import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 import br.com.ceoestudos.ceogestao.model.Turma;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,8 +49,8 @@ public class ContaController {
     } 
     
     @RequestMapping("contas")
-    public String listarTodas(Model model){
-        model.addAttribute("contas",contaDAO.listarTodos());
+    public String listarContasPendentes(Model model){
+        model.addAttribute("contas",contaDAO.listarContasPorSituacao(SituacaoConta.PENDENTE));
         return "contas";
     }
     
@@ -67,6 +68,7 @@ public class ContaController {
             @RequestParam String idTurma){
         model.addAttribute("contas",contaDAO.listarPorNomeCpfTurma(nome, cpf,pagasCanceladas,idTurma));
         model.addAttribute("idTurmaPesquisada",idTurma);
+        model.addAttribute("pagasCanceladas",pagasCanceladas);
         return "contas";
     }
     

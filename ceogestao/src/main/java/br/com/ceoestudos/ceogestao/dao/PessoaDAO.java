@@ -118,6 +118,13 @@ public class PessoaDAO {
                 .getResultList();
 
     }
+    
+    public List<Pessoa> listarAlunosEInteressadosPorNome(String pesquisa){
+        String query = "select p from Pessoa p where (p.tipo = 'ALUNO' or p.tipo='LISTA_ESPERA') and p.nome like :pesquisa";
+        return em.createQuery(query)
+                .setParameter("pesquisa", "%" + pesquisa + "%")
+                .getResultList();
+    }
 
     public void adicionar(Pessoa pessoa) {
         if (cpfEncontrado(pessoa.getCpf())) {

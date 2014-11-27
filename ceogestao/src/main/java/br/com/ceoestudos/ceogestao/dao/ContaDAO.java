@@ -7,9 +7,11 @@
 package br.com.ceoestudos.ceogestao.dao;
 
 import br.com.ceoestudos.ceogestao.model.Conta;
+import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +34,7 @@ public class ContaDAO {
     }
     
     public List<Conta> listarPorNomeCpfTurma(String nome, String cpf, String pagasCanceladas, String idTurma){
+        
         String query = "select c from Conta c WHERE 1 = 1 ";
         if(nome!=null && !nome.trim().equals("")){
             query+=" AND UPPER(c.cliente.nome) like '%"+nome.toUpperCase()+"%' ";
@@ -45,8 +48,15 @@ public class ContaDAO {
         if(idTurma!=null && !idTurma.equals("")){
             query+= " AND c.turma.id = "+idTurma;
         }
-        LOG.debug(query);
+        LOG.info(query);
         return em.createQuery(query).getResultList();
+    }
+    
+    public List<Conta> listarContasPorSituacao(SituacaoConta sc){
+        String query = "select c from Conta c WHERE c.situacao = :situacao";
+        Query q = em.createQuery(query);
+        q.setParameter("situacao", sc);
+        return q.getResultList();
     }
     
     public void adicionar(Conta c){

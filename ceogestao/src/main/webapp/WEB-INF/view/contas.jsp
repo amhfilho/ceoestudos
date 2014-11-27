@@ -37,7 +37,7 @@
     <div class="form-group">
         <div class="checkbox">
             <label>
-                <input type="checkbox" name="pagasCanceladas" value="true" id="pagasCanceladas"> Exibir contas pagas e canceladas
+                <input type="checkbox" name="pagasCanceladas" value="${pagasCanceladas}" id="pagasCanceladas"> Exibir contas pagas e canceladas
             </label>
         </div>
     </div>

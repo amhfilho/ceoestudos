@@ -9,6 +9,14 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <script>
+    $(document).ready(function() {
+        $('#pessoasTable').dataTable({
+            "paging":   false,
+            "info":     false,
+            "bFilter":  false,
+            
+        });
+    } );
     function pesquisarPessoas(tipo){
         acao = tipo+"s.html";
         form = document.getElementById('pesquisaForm');
@@ -50,11 +58,11 @@
 <c:if test="${not empty pessoas}">  
     <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        Foram encontrados <strong>${fn:length(pessoas)}</strong> ${tipoPessoa}
+        Foram encontrados <strong>${fn:length(pessoas)}</strong> ${tipoPessoa}<c:if test="${fn:length(pessoas)>1}">s</c:if>
     </div>
 
-    <table class="table table-condensed" style="font-size: 11px">
-        <tr>
+    <table class="table table-condensed table-bordered" style="font-size: 11px" id="pessoasTable">
+        
         <thead>
         <th>Nome</th>
         <th>Data de inclusão</th>    
@@ -62,7 +70,9 @@
             <th>Curso de interesse</th>
             <th>Contato efetuado</th>
         </c:if>      
-        
+        <c:if test="${tipoPessoa == 'aluno'}">
+            <th>Turma</th>
+        </c:if>
         <th>Cidade - Estado</th>
         <th>Telefone Celular</th>
         <th>Telefone Residencial</th>
@@ -70,32 +80,35 @@
         
         <th></th>
     </thead>
-</tr>
-<c:forEach items="${pessoas}" var="pessoa">
-    <tr
-        <c:if test="${tipoPessoa == 'interessado' and not empty pessoa.contato}">
-            class="success"
-        </c:if>
-    >
-        <td>${pessoa.nome}</td>
-        <td><fmt:formatDate dateStyle="medium" value="${pessoa.dataInclusao}"/></td>   
-        <c:if test="${tipoPessoa == 'interessado'}">
-            <td>${pessoa.cursoInteresse.nome}</td>
-            <td>${pessoa.contato}</td>
-        </c:if>
-        
-        <td>${pessoa.cidade} - ${pessoa.estado}</td>
-        <td>${pessoa.telefoneCelular}</td>
-        <td>${pessoa.telefoneResidencial}</td>
-        <td>${pessoa.telefoneComercial}</td>
-        
-        <td>
-            <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
-                    <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
-            </button>
-        </td>
-    </tr>
-</c:forEach>
+<tbody>
+    <c:forEach items="${pessoas}" var="pessoa">
+        <tr
+            <c:if test="${tipoPessoa == 'interessado' and not empty pessoa.contato}">
+                class="success"
+            </c:if>
+        >
+            <td>${pessoa.nome}</td>
+            <td><fmt:formatDate dateStyle="medium" value="${pessoa.dataInclusao}"/></td>   
+            <c:if test="${tipoPessoa == 'interessado'}">
+                <td>${pessoa.cursoInteresse.nome}</td>
+                <td>${pessoa.contato}</td>
+            </c:if>
+            <c:if test="${tipoPessoa == 'aluno'}">
+                <td>${pessoa.nomeTurmas}</td>
+            </c:if>
+            <td>${pessoa.cidade} - ${pessoa.estado}</td>
+            <td>${pessoa.telefoneCelular}</td>
+            <td>${pessoa.telefoneResidencial}</td>
+            <td>${pessoa.telefoneComercial}</td>
+
+            <td>
+                <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
+                        <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                </button>
+            </td>
+        </tr>
+    </c:forEach>
+</tbody>
 </table>
 </c:if>
 

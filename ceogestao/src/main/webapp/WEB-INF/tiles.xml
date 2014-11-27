@@ -14,7 +14,7 @@
         <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
     </definition>
     
-    <definition name="lista_espera" extends="base.definition">
+    <definition name="interessados" extends="base.definition">
         <put-attribute name="title" value="Lista de Espera" />
         <put-attribute name="body" value="/WEB-INF/view/pessoas.jsp" />
     </definition>

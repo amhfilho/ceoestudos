@@ -6,6 +6,7 @@ import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
 import br.com.ceoestudos.ceogestao.model.Curso;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.SituacaoTurma;
+import br.com.ceoestudos.ceogestao.model.TipoPessoa;
 import br.com.ceoestudos.ceogestao.model.Turma;
 import br.com.ceoestudos.ceogestao.util.Util;
 import java.text.SimpleDateFormat;
@@ -202,7 +203,7 @@ public class TurmaController {
     @RequestMapping("procurarAluno")
     public String procurarAluno(String nome, HttpServletResponse response, Model model) {
         LOG.debug("procurarAluno: " + nome);
-        List<Pessoa> alunos = pessoaDAO.listarAlunosPorNome(nome);
+        List<Pessoa> alunos = pessoaDAO.listarAlunosEInteressadosPorNome(nome);
         model.addAttribute("listaAlunosBusca", alunos);
         response.setStatus(200);
         return "formTurmaListaAlunos";
@@ -214,6 +215,7 @@ public class TurmaController {
         try {
             Pessoa aluno = getAlunoBD(alunoId);
             Turma turmaBD = getTurmaBD(turma);
+            aluno.setTipo(TipoPessoa.ALUNO);
             turmaBD.adicionarAluno(aluno);
             model.addAttribute("SUCCESS_MESSAGE", "Aluno adicionado com sucesso");
             model.addAttribute("turma", turmaBD);

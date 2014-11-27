@@ -21,10 +21,16 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui-1.10.4.custom.css" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.datetimepicker.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css"/>
+        
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/dataTables.bootstrap.css"/>
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.4.custom.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.4.custom.min.js"></script>      
         <script src="${pageContext.request.contextPath}/resources/js/jquery.datetimepicker.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.js"></script>
+        
+        
 
     </head>
     <body style="padding-top: 100px;">
@@ -53,7 +59,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastro <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="lista.html">Lista de espera</a></li>
+                                <li><a href="interessados.html">Lista de espera</a></li>
                                 <li><a href="alunos.html">Alunos</a></li>
                                 <li><a href="pacientes.html">Pacientes</a></li>
                                 <li><a href="professores.html">Professores</a></li>
