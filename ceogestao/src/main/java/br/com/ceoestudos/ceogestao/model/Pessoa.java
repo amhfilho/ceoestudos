@@ -63,14 +63,14 @@ public class Pessoa implements Serializable {
     private Set<Turma> turmas;
     
     public String getNomeTurmas(){
-        if(turmas!=null){
+        if(turmas!=null && turmas.size() > 0){
             String retorno = "";
             for (Turma t:turmas){
                 retorno+=t.getCurso().getNome()+", ";
             }
             return retorno;
         }
-        return "Não matriculado";
+        return "Nenhum curso associado";
     }
     
     @OneToOne (fetch = FetchType.EAGER)

@@ -13,7 +13,8 @@
         $('#pessoasTable').dataTable({
             "paging":   false,
             "info":     false,
-            "bFilter":  false,
+            "bFilter":  false
+            
             
         });
     } );
@@ -70,7 +71,7 @@
             <th>Curso de interesse</th>
             <th>Contato efetuado</th>
         </c:if>      
-        <c:if test="${tipoPessoa == 'aluno'}">
+        <c:if test="${tipoPessoa == 'aluno' or tipoPessoa == 'paciente'}">
             <th>Turma</th>
         </c:if>
         <th>Cidade - Estado</th>
@@ -89,11 +90,11 @@
         >
             <td>${pessoa.nome}</td>
             <td><fmt:formatDate dateStyle="medium" value="${pessoa.dataInclusao}"/></td>   
-            <c:if test="${tipoPessoa == 'interessado'}">
+            <c:if test="${tipoPessoa == 'interessado' }">
                 <td>${pessoa.cursoInteresse.nome}</td>
                 <td>${pessoa.contato}</td>
             </c:if>
-            <c:if test="${tipoPessoa == 'aluno'}">
+            <c:if test="${tipoPessoa == 'aluno' or tipoPessoa == 'paciente'}">
                 <td>${pessoa.nomeTurmas}</td>
             </c:if>
             <td>${pessoa.cidade} - ${pessoa.estado}</td>
