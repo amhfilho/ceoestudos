@@ -7,6 +7,8 @@ package br.com.ceoestudos.ceogestao.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -38,6 +40,24 @@ public class Util {
             retorno+=obj.toString()+"\n";
         }
         return retorno;
+    }
+    
+    public boolean sameDate(Date date1, Date date2){
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        if(date1!=null){
+           cal1.setTime(date1);
+        }
+        
+        if(date2 != null){
+            cal2.setTime(date2);
+        }
+        
+        return( (date1==null && date2 == null) ||
+                cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)&&
+                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR));
+        
     }
 
 }

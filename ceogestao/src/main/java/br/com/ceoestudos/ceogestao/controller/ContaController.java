@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -43,6 +44,8 @@ public class ContaController {
     @Autowired
     private PessoaDAO pessoaDAO;
     
+    private Logger LOG = Logger.getLogger(getClass());
+    
     @ModelAttribute("todasAsTurmas")
     public List<Turma> todasAsTurmas(){
         return turmaDAO.listarTodos();
@@ -66,9 +69,10 @@ public class ContaController {
             @RequestParam String cpf, 
             @RequestParam(required=false, value="pagasCanceladas") String pagasCanceladas,
             @RequestParam String idTurma){
+        LOG.info("pagasCanceladas: "+pagasCanceladas);
         model.addAttribute("contas",contaDAO.listarPorNomeCpfTurma(nome, cpf,pagasCanceladas,idTurma));
         model.addAttribute("idTurmaPesquisada",idTurma);
-        model.addAttribute("pagasCanceladas",pagasCanceladas);
+        model.addAttribute("pesquisarPagasCanceladas",pagasCanceladas);
         return "contas";
     }
     

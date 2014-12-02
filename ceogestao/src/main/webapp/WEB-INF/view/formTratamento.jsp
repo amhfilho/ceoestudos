@@ -29,7 +29,14 @@
             allowBlank: true,
             format: 'd/m/Y'
         });
+        
+        $('#historicoTable').dataTable({
+            "paging":   false,
+            "info":     false,
+            "bFilter":  false             
+        });
     });
+   
        
     function configurarModalPaciente(action) {
         document.getElementById("adicionarPessoaAction").value = action;
@@ -311,10 +318,13 @@
         <p>Não há histórico de atendimento</p>
     </c:if>
     <c:if test="${not empty tratamento.historico}">
-        <table class="table table-striped">
+        <table class="table table-striped" id="historicoTable">
             <c:forEach items="${tratamento.historico}" var="historico">
                 <tr>
-                    <td><fmt:formatDate dateStyle="medium" value="${historico.data}"/></td>
+                    <td>
+                        <span style="display: none"><fmt:formatDate pattern="yyyy/MM/dd" value="${historico.data}"/> </span>
+                        <fmt:formatDate pattern="dd/MM/yyyy" value="${historico.data}"/>
+                    </td>
                     <td>${historico.descricao}</td>
                     <td>${historico.professor.nome}</td>
                 </tr>

@@ -8,6 +8,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
+<script>
+    $(document).ready(function() {
+        $('#contasTable').dataTable({
+            "paging":   false,
+            "info":     false,
+            "bFilter":  false
+            
+            
+        });
+    } );
+</script>
 
 <form class="form-horizontal" role="form" action="pesquisarContas.html">
     <div class="form-group">
@@ -37,7 +48,8 @@
     <div class="form-group">
         <div class="checkbox">
             <label>
-                <input type="checkbox" name="pagasCanceladas" value="${pagasCanceladas}" id="pagasCanceladas"> Exibir contas pagas e canceladas
+                <input type="checkbox" name="pagasCanceladas" 
+                  <c:if test="${not empty pesquisarPagasCanceladas}">checked</c:if> id="pagasCanceladas"> Exibir contas pagas e canceladas
             </label>
         </div>
     </div>
@@ -50,7 +62,7 @@
 </c:if>
 
 <c:if test="${not empty contas}">
-    <table class="table table-striped">
+    <table class="table table-striped" id="contasTable">
         <thead>
         <th>Turma</th>
         <th>Cliente</th>
@@ -66,7 +78,11 @@
         <tr>
             <td>${conta.turma}</td>
             <td>${conta.cliente.nome}</td>
-            <td><fmt:formatDate dateStyle="medium" value="${conta.vencimento}"/></td>
+            <td>
+                <span style="display: none"><fmt:formatDate pattern="yyyy/MM/dd" value="${conta.vencimento}"/> </span>
+                <fmt:formatDate pattern="dd/MM/yyyy" value="${conta.vencimento}"/>
+                
+            </td>
             <td><fmt:formatNumber value="${conta.valor}" type="number"
                               minFractionDigits="2" maxFractionDigits="2"/></td>
             <td>${conta.descricao}</td>

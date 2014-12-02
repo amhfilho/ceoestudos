@@ -3,11 +3,14 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
@@ -50,6 +53,9 @@ public class Conta implements Serializable {
     private String tipoConta;
     
     private String formaPagamento;
+    
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
+    private Set<Parcela> parcelas;
 
     @Override
     public int hashCode() {
@@ -153,6 +159,20 @@ public class Conta implements Serializable {
 
     public void setFormaPagamento(String formaPagamento) {
         this.formaPagamento = formaPagamento;
+    }
+
+    /**
+     * @return the parcelas
+     */
+    public Set<Parcela> getParcelas() {
+        return parcelas;
+    }
+
+    /**
+     * @param parcelas the parcelas to set
+     */
+    public void setParcelas(Set<Parcela> parcelas) {
+        this.parcelas = parcelas;
     }
     
     

@@ -45,8 +45,6 @@
 <form:form cssClass="form-horizontal" role="form" method="POST" action="salvarConta.html" id="formConta" 
            modelAttribute="conta" >
 
-
-
     <form:errors path="*">
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
@@ -102,7 +100,7 @@
         <div class="row">
             <label for="valor" class="col-sm-2 control-label">Valor total</label>
             <div class="col-sm-2">
-                <form:input path="valor" id="valor" cssClass="form-control input-sm"/>
+                <form:input path="valor" id="valor" cssClass="form-control input-sm" disabled="true"/>
             </div>
 
         </div>
@@ -114,8 +112,18 @@
             <div class="col-sm-6">
                 <table class="table table-bordered" style="font-size: 11px" id="parcelas">
                     <thead><th>Valor</th><th>Vencimento</th><th>Data Pagto</th><th>Forma pagto</th></thead>
-                    <tr><td>R$ 120,00</td><td>25/11/2014</td><td>25/11/2014</td><td>Cheque núm 02342</td></tr>
+                    <tr>
+                        <td><span style="text-align: right">R$ 120,00</span></td>
+                        <td>25/11/2014</td><td>25/11/2014</td><td>Cheque núm 02342</td>
+                    </tr>
                     <tr><td>R$ 130,00</td><td>30/11/2014</td><td></td><td>Cheque núm 76654</td></tr>
+                    <tr>
+                        <td colspan="4">
+                            <span style="text-align: right">
+                                <button type="button" class="btn btn-default btn-xs">Adicionar</button>
+                            </span>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>

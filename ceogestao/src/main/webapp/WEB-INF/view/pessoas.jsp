@@ -89,7 +89,11 @@
             </c:if>
         >
             <td>${pessoa.nome}</td>
-            <td><fmt:formatDate dateStyle="medium" value="${pessoa.dataInclusao}"/></td>   
+            <td>
+                <span style="display: none"><fmt:formatDate pattern="yyyy/MM/dd" value="${pessoa.dataInclusao}"/> </span>
+                <fmt:formatDate pattern="dd/MM/yyyy" value="${pessoa.dataInclusao}"/>
+                
+            </td>   
             <c:if test="${tipoPessoa == 'interessado' }">
                 <td>${pessoa.cursoInteresse.nome}</td>
                 <td>${pessoa.contato}</td>

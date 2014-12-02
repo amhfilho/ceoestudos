@@ -7,7 +7,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-
+<script>
+    $(document).ready(function() {
+        $('#turmasTable').dataTable({
+            "paging":   false,
+            "info":     false,
+            "bFilter":  false,
+            
+        });
+    } );
+</script>
 <c:if test="${empty turmas}">
     <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -16,7 +25,7 @@
 </c:if>
 
 <c:if test="${not empty turmas}">
-    <table class="table table-striped" >
+    <table class="table table-striped" id="turmasTable">
         <thead>
         <th>Curso</th>
         <th>Inicio</th>
@@ -29,7 +38,9 @@
         <tr>
 
             <td>${turma.curso.nome}</td>
-            <td><fmt:formatDate dateStyle="medium" value="${turma.dataInicio}"/> </td>
+            <td><span style="display: none"><fmt:formatDate pattern="yyyy/MM/dd" value="${turma.dataInicio}"/> </span>
+                <fmt:formatDate pattern="dd/MM/yyyy" value="${turma.dataInicio}"/> 
+            </td>
             <td>${turma.diasDaSemanaFormatados}</td>
             <td>${fn:length(turma.alunos)}</td>
             <td>${turma.situacao.nome}</td>

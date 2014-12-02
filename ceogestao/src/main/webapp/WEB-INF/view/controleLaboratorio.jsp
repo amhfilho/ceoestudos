@@ -7,7 +7,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-
+<script>
+    $(document).ready(function() {
+        $('#servicosLaboratorio').dataTable({
+            "paging":   false,
+            "info":     false,
+            "bFilter":  false
+        });
+    } );
+</script>
 <p></p>
 <c:if test="${empty servicosLaboratorio}">
     <div class="alert alert-warning alert-dismissable">
@@ -17,7 +25,7 @@
 </c:if>
 
 <c:if test="${not empty servicosLaboratorio}">
-    <table class="table table-striped" >
+    <table class="table table-striped" id="servicosLaboratorio">
         <thead>
         <th>Nome</th>
         <th>Envio</th>
@@ -30,8 +38,15 @@
     <c:forEach items="${servicosLaboratorio}" var="s">
         <tr>
             <td>${s.paciente.nome}</td>
-            <td><fmt:formatDate dateStyle="medium" value="${s.envio}"/></td>
-            <td><fmt:formatDate dateStyle="medium" value="${s.entrega}"/></td>
+            <td>
+                <span style="display: none"><fmt:formatDate pattern="yyyy/MM/dd" value="${s.envio}"/> </span>
+                        <fmt:formatDate pattern="dd/MM/yyyy" value="${s.envio}"/>
+                
+            </td>
+            <td>
+                <span style="display: none"><fmt:formatDate pattern="yyyy/MM/dd" value="${s.entrega}"/> </span>
+                        <fmt:formatDate pattern="dd/MM/yyyy" value="${s.entrega}"/>
+            </td>
             <td>${s.profissional.nome}</td>
             <td>${s.procedimento.nome}</td>
             <td>${s.laboratorio}</td>
