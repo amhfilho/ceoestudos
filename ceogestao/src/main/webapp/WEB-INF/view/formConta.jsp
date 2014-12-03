@@ -145,21 +145,27 @@
         <div class="row">
             <label for="parcelas" class="col-sm-2 control-label">Parcelas</label>
             <div class="col-sm-6">
-                <table class="table table-bordered" style="font-size: 11px" id="parcelas">
-                    <thead><th>Valor</th><th>Vencimento</th><th>Data Pagto</th><th>Forma pagto</th></thead>
-                    <tr>
-                        <td><span style="text-align: right">R$ 120,00</span></td>
-                        <td>25/11/2014</td><td>25/11/2014</td><td>Cheque núm 02342</td>
-                    </tr>
-                    <tr><td>R$ 130,00</td><td>30/11/2014</td><td></td><td>Cheque núm 76654</td></tr>
-                    <tr>
-                        <td colspan="4">
-                            <span style="text-align: right">
-                                <button type="button" class="btn btn-default btn-xs" onclick="configurarModalParcela()">Adicionar</button>
-                            </span>
-                        </td>
-                    </tr>
-                </table>
+                <c:if test="${not empty conta.parcelas}">
+                    <table class="table table-bordered" style="font-size: 11px" id="parcelas">
+                        <thead><th>Valor</th><th>Vencimento</th><th>Data Pagto</th><th>Forma pagto</th></thead>
+                        <tbody>    
+                            <c:forEach items="${conta.parcelas}" var="parcela">
+                                <tr>
+                                    <td><span style="text-align: right">${parcela.valor}</span></td>
+                                    <td>${parcela.vencimento}</td><td>${parcela.pagamento}</td><td>${parcela.obs}</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                        
+                        <tr>
+                            <td colspan="4">
+                                <span style="text-align: right">
+                                    <button type="button" class="btn btn-default btn-xs" onclick="configurarModalParcela()">Adicionar</button>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </c:if>
             </div>
         </div>
     </div>

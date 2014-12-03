@@ -10,6 +10,7 @@ import br.com.ceoestudos.ceogestao.dao.ContaDAO;
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
 import br.com.ceoestudos.ceogestao.model.Conta;
+import br.com.ceoestudos.ceogestao.model.Parcela;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 import br.com.ceoestudos.ceogestao.model.Turma;
@@ -109,6 +110,7 @@ public class ContaController {
         return "redirect:contas.html";
     }
     
+    @Transactional
     @RequestMapping(value="salvarParcela", method = RequestMethod.POST)
     public String salvarParcela(@ModelAttribute Conta conta,
                                 Long idParcela,
@@ -127,7 +129,23 @@ public class ContaController {
             df.setParseBigDecimal (true); 
             BigDecimal valor = (BigDecimal)df.parse(valorParcela);
             
-            
+            Parcela parcela;
+            if(idParcela == null){
+                parcela = new Parcela();
+                parcela.setConta(conta);
+                parcela.setVencimento(vencimento);
+                parcela.setObs(obsParcela);
+                parcela.setPagamento(pagamento);
+                parcela.setValor(valor);
+                contaDAO.adicionarParcela(parcela);
+            } else {
+                parcela = contaDAO.getParcelaById(idParcela);
+                parcela.setVencimento(vencimento);
+                parcela.setObs(obsParcela);
+                parcela.setPagamento(pagamento);
+                parcela.setValor(valor);
+                contaDAO.atualizarParcela(parcela);
+            }
             
             if(conta.getId()==null){
                 contaDAO.adicionar(conta);
@@ -135,15 +153,17 @@ public class ContaController {
                 contaDAO.atualizar(conta);
             }
             
-            
+            model.addAttribute("SUCCESS_MESSAGE","Parcela atualizada com sucesso");
             
         } catch (ParseException ex) {
             LOG.error(ex);
             model.addAttribute("ERROR_MESSAGE","Valores inválidos");
             model.addAttribute("conta",conta);
-            return "formConta";
+        } catch (RuntimeException rt){
+            LOG.error(rt);
+            model.addAttribute("ERROR_MESSAGE","Erro ao salvar a parcela: "+rt.getMessage());
+            model.addAttribute("conta",conta);
         }
-        
         
         return "formConta";
     }

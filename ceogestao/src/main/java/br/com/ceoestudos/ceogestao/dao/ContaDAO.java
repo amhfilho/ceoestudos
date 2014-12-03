@@ -7,6 +7,7 @@
 package br.com.ceoestudos.ceogestao.dao;
 
 import br.com.ceoestudos.ceogestao.model.Conta;
+import br.com.ceoestudos.ceogestao.model.Parcela;
 import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -26,7 +27,10 @@ public class ContaDAO {
     private Logger LOG = Logger.getLogger(getClass());
     
     public Conta getById(Long id){
-        return em.find(Conta.class, id);
+        String query = "select c from Conta c join fetch c.parcelas where c.id =:id";
+        Query q = em.createQuery(query);
+        q.setParameter("id", id);
+        return (Conta)q.getSingleResult();
     }
     
     public List<Conta> listarTodos(){
@@ -69,6 +73,18 @@ public class ContaDAO {
     
     public void excluir(Long id){
         em.remove(getById(id));
+    }
+    
+    public void adicionarParcela(Parcela p){
+        em.persist(p);
+    }
+    
+    public void atualizarParcela(Parcela p){
+        em.merge(p);
+    }
+    
+    public Parcela getParcelaById(Long id){
+        return em.find(Parcela.class, id);
     }
     
 }
