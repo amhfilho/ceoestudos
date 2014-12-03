@@ -13,6 +13,10 @@ import br.com.ceoestudos.ceogestao.model.Conta;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 import br.com.ceoestudos.ceogestao.model.Turma;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -103,6 +107,45 @@ public class ContaController {
         contaDAO.excluir(id);
         
         return "redirect:contas.html";
+    }
+    
+    @RequestMapping(value="salvarParcela", method = RequestMethod.POST)
+    public String salvarParcela(@ModelAttribute Conta conta,
+                                Long idParcela,
+                                String vencimentoParcela, 
+                                String pagamentoParcela, 
+                                String valorParcela,
+                                String obsParcela,
+                                Model model) {
+        
+        LOG.info(conta+"\n"+
+                idParcela+","+vencimentoParcela+","+pagamentoParcela+","+valorParcela+","+obsParcela);
+        try {
+            Date vencimento = new SimpleDateFormat("dd/MM/yyyy").parse(vencimentoParcela);
+            Date pagamento = new SimpleDateFormat("dd/MM/yyyy").parse(pagamentoParcela);
+            DecimalFormat df = new DecimalFormat ("#,##0.00", new DecimalFormatSymbols ());  
+            df.setParseBigDecimal (true); 
+            BigDecimal valor = (BigDecimal)df.parse(valorParcela);
+            
+            
+            
+            if(conta.getId()==null){
+                contaDAO.adicionar(conta);
+            } else {
+                contaDAO.atualizar(conta);
+            }
+            
+            
+            
+        } catch (ParseException ex) {
+            LOG.error(ex);
+            model.addAttribute("ERROR_MESSAGE","Valores inválidos");
+            model.addAttribute("conta",conta);
+            return "formConta";
+        }
+        
+        
+        return "formConta";
     }
     
     @InitBinder

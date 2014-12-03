@@ -17,9 +17,19 @@
     function configurarModalCliente() {
         $('#clienteModal').modal('show');
     }
+    
+    function configurarModalParcela() {
+        $('#parcelaModal').modal('show');
+    }
+    
+    function salvarParcela(){
+        alert(document.forms.formConta.action);
+        document.forms.formConta.action = "salvarParcela.html";
+        document.forms.formConta.submit();
+    }
 
     $(document).ready(function(e) {
-        $('#vencimento').datetimepicker({
+        $('#vencimentoParcela').datetimepicker({
             lang: 'pt',
             i18n: {
                 pt: {
@@ -38,13 +48,38 @@
             allowBlank: true,
             format: 'd/m/Y'
         });
+        
+        $('#pagamentoParcela').datetimepicker({
+            lang: 'pt',
+            i18n: {
+                pt: {
+                    months: [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                        'Maio', 'Junho', 'Julho', 'Agosto',
+                        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ],
+                    dayOfWeek: [
+                        "Dom", "Seg", "Ter", "Qua",
+                        "Qui", "Sex", "Sab"
+                    ]
+                }
+            },
+            timepicker: false,
+            allowBlank: true,
+            format: 'd/m/Y'
+        });
+        
+        $('#valorParcela').mask("#.##0,00", {reverse: true});
     });
 </script>
 <jsp:include page="clienteModal.jsp" />
 
+
 <form:form cssClass="form-horizontal" role="form" method="POST" action="salvarConta.html" id="formConta" 
            modelAttribute="conta" >
-
+    
+    <jsp:include page="parcelaModal.jsp" />
+    
     <form:errors path="*">
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
@@ -120,7 +155,7 @@
                     <tr>
                         <td colspan="4">
                             <span style="text-align: right">
-                                <button type="button" class="btn btn-default btn-xs">Adicionar</button>
+                                <button type="button" class="btn btn-default btn-xs" onclick="configurarModalParcela()">Adicionar</button>
                             </span>
                         </td>
                     </tr>

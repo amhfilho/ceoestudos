@@ -9,6 +9,11 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <script type="text/javascript">
+    $(document).ready(function(){
+        $('#cpf').mask('000.000.000-00', {reverse: true});
+        $('#dataNascimento').mask('00/00/0000');
+        
+    });
     function enableUfCro() {
         var cro = document.getElementById("cro").value;
         document.getElementById("ufCro").disabled = cro === "";

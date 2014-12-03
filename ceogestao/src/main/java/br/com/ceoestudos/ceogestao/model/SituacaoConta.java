@@ -12,6 +12,6 @@ package br.com.ceoestudos.ceogestao.model;
  */
 public enum SituacaoConta {
     
-    PAGA,PENDENTE,CANCELADA
+    PAGA,PENDENTE,CANCELADA,PAGA_PARCIAL
     
 }

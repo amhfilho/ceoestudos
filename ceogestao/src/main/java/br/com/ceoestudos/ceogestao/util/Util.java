@@ -59,5 +59,19 @@ public class Util {
                 cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR));
         
     }
+    
+    /**
+     * Compara se begin é posterior a end
+     * @param begin
+     * @param end
+     * @return 
+     */
+    public boolean after(Date begin,Date end){
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(begin);
+        cal2.setTime(end);
+        return cal1.after(cal2);
+    }
 
 }

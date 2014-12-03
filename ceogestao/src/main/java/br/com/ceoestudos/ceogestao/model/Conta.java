@@ -79,6 +79,11 @@ public class Conta implements Serializable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Conta{" + "id=" + id + ", vencimento=" + vencimento + ", valor=" + valor + ", descricao=" + descricao + ", situacao=" + situacao + ", cliente=" + cliente + ", turma=" + turma + ", papel=" + papel + ", tipoConta=" + tipoConta + ", formaPagamento=" + formaPagamento + ", parcelas=" + parcelas + '}';
+    }
+
     public String getTipoConta() {
         return tipoConta;
     }

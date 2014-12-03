@@ -19,9 +19,7 @@
         <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/css/navbar-fixed-top.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui-1.10.4.custom.css" />
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.datetimepicker.css"/>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css"/>
-        
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.datetimepicker.css"/>        
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/dataTables.bootstrap.css"/>
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.4.custom.js"></script>
@@ -29,6 +27,7 @@
         <script src="${pageContext.request.contextPath}/resources/js/jquery.datetimepicker.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/dataTables.bootstrap.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/jquery.mask.min.js"></script>
         
         
 
