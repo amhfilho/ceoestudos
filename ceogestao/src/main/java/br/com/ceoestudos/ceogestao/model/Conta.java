@@ -3,6 +3,7 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,7 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
@@ -29,7 +29,7 @@ public class Conta implements Serializable {
     private Long id;
     
     @Temporal(TemporalType.DATE)
-    @NotNull(message = "Data de vencimento deve ser informada")
+    //@NotNull(message = "Data de vencimento deve ser informada")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date vencimento;
     
@@ -58,6 +58,13 @@ public class Conta implements Serializable {
     @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Parcela> parcelas;
 
+    public void addParcela(Parcela parcela){
+        if(parcelas==null){
+            parcelas = new HashSet<Parcela>();
+        }
+        parcelas.add(parcela);
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;
@@ -112,6 +119,13 @@ public class Conta implements Serializable {
     }
 
     public BigDecimal getValor() {
+        BigDecimal total = new BigDecimal(0);
+        if(parcelas==null){
+            return total;
+        }
+        for (Parcela p:parcelas){
+            total = total.add(p.getValor());
+        }
         return valor;
     }
 

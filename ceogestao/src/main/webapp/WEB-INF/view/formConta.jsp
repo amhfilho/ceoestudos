@@ -19,11 +19,15 @@
     }
     
     function configurarModalParcela() {
-        $('#parcelaModal').modal('show');
+//        if(document.forms.formConta.id.value === null || document.forms.formConta.id.value === ""){
+//            alert ('Salvar conta primeiro');
+//        } else {
+            $('#parcelaModal').modal('show');
+        //}
     }
     
     function salvarParcela(){
-        alert(document.forms.formConta.action);
+        
         document.forms.formConta.action = "salvarParcela.html";
         document.forms.formConta.submit();
     }
@@ -122,14 +126,7 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="row">
-            <label for="vencimento" class="col-sm-2 control-label">Vencimento</label>
-            <div class="col-sm-2">
-                <form:input path="vencimento" id="vencimento" cssClass="form-control input-sm"/>
-            </div>
-        </div>
-    </div>
+    
 
     <div class="form-group">
         <div class="row">
@@ -147,25 +144,25 @@
             <div class="col-sm-6">
                 <c:if test="${not empty conta.parcelas}">
                     <table class="table table-bordered" style="font-size: 11px" id="parcelas">
-                        <thead><th>Valor</th><th>Vencimento</th><th>Data Pagto</th><th>Forma pagto</th></thead>
+                        <thead><th>Valor</th><th>Vencimento</th><th>Data Pagto</th><th>Forma pagto</th><th></th></thead>
                         <tbody>    
                             <c:forEach items="${conta.parcelas}" var="parcela">
                                 <tr>
                                     <td><span style="text-align: right">${parcela.valor}</span></td>
-                                    <td>${parcela.vencimento}</td><td>${parcela.pagamento}</td><td>${parcela.obs}</td>
+                                    <td><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.vencimento}"/></td>
+                                    <td><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.pagamento}"/></td>
+                                    <td>${parcela.obs}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
+                                            <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                                        </button>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
-                        
-                        <tr>
-                            <td colspan="4">
-                                <span style="text-align: right">
-                                    <button type="button" class="btn btn-default btn-xs" onclick="configurarModalParcela()">Adicionar</button>
-                                </span>
-                            </td>
-                        </tr>
                     </table>
                 </c:if>
+                <button type="button" class="btn btn-default btn-xs" onclick="configurarModalParcela()">Adicionar</button>
             </div>
         </div>
     </div>

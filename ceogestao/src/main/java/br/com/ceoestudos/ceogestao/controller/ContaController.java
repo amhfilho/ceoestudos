@@ -14,6 +14,7 @@ import br.com.ceoestudos.ceogestao.model.Parcela;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 import br.com.ceoestudos.ceogestao.model.Turma;
+import br.com.ceoestudos.ceogestao.util.Util;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -120,50 +121,62 @@ public class ContaController {
                                 String obsParcela,
                                 Model model) {
         
-        LOG.info(conta+"\n"+
-                idParcela+","+vencimentoParcela+","+pagamentoParcela+","+valorParcela+","+obsParcela);
+        LOG.info(conta+"\n"+idParcela+","+vencimentoParcela+","+pagamentoParcela+","
+                +valorParcela+","+obsParcela);
         try {
+            if(vencimentoParcela == null){
+                throw new RuntimeException("A data de vencimento deve estar preenchida");
+            }
             Date vencimento = new SimpleDateFormat("dd/MM/yyyy").parse(vencimentoParcela);
-            Date pagamento = new SimpleDateFormat("dd/MM/yyyy").parse(pagamentoParcela);
+            Date pagamento = null;
+            if(pagamentoParcela!=null){
+                pagamento = new SimpleDateFormat("dd/MM/yyyy").parse(pagamentoParcela);
+            }
+            if(valorParcela == null){
+                throw new RuntimeException("O valor deve ser preenchido");
+            }
             DecimalFormat df = new DecimalFormat ("#,##0.00", new DecimalFormatSymbols ());  
             df.setParseBigDecimal (true); 
             BigDecimal valor = (BigDecimal)df.parse(valorParcela);
             
-            Parcela parcela;
-            if(idParcela == null){
-                parcela = new Parcela();
-                parcela.setConta(conta);
-                parcela.setVencimento(vencimento);
-                parcela.setObs(obsParcela);
-                parcela.setPagamento(pagamento);
-                parcela.setValor(valor);
-                contaDAO.adicionarParcela(parcela);
-            } else {
-                parcela = contaDAO.getParcelaById(idParcela);
-                parcela.setVencimento(vencimento);
-                parcela.setObs(obsParcela);
-                parcela.setPagamento(pagamento);
-                parcela.setValor(valor);
-                contaDAO.atualizarParcela(parcela);
-            }
+            Parcela parcela = new Parcela();
+            parcela.setConta(conta);
+            parcela.setObs(obsParcela);
+            parcela.setPagamento(pagamento);
+            parcela.setValor(valor);
+            parcela.setVencimento(vencimento);
+            conta.addParcela(parcela);
+            //Parcela parcela;
+//            if(idParcela == null){
+//                parcela = new Parcela();
+//                //parcela.setConta(conta);
+//                parcela.setVencimento(vencimento);
+//                parcela.setObs(obsParcela);
+//                parcela.setPagamento(pagamento);
+//                parcela.setValor(valor);
+//                //contaDAO.adicionarParcela(parcela);
+//            } else {
+//                //parcela = contaDAO.getParcelaById(idParcela);
+//                parcela.setVencimento(vencimento);
+//                parcela.setObs(obsParcela);
+//                parcela.setPagamento(pagamento);
+//                parcela.setValor(valor);
+//                //contaDAO.atualizarParcela(parcela);
+//            }
             
-            if(conta.getId()==null){
-                contaDAO.adicionar(conta);
-            } else {
-                contaDAO.atualizar(conta);
-            }
-            
+            model.addAttribute("conta",conta);
             model.addAttribute("SUCCESS_MESSAGE","Parcela atualizada com sucesso");
             
         } catch (ParseException ex) {
             LOG.error(ex);
             model.addAttribute("ERROR_MESSAGE","Valores inválidos");
-            model.addAttribute("conta",conta);
+            //model.addAttribute("conta",conta);
         } catch (RuntimeException rt){
-            LOG.error(rt);
+            LOG.error(new Util().toString(rt));
             model.addAttribute("ERROR_MESSAGE","Erro ao salvar a parcela: "+rt.getMessage());
-            model.addAttribute("conta",conta);
+            //model.addAttribute("conta",conta);
         }
+        
         
         return "formConta";
     }

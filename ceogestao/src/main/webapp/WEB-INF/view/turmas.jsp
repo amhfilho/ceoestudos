@@ -12,7 +12,7 @@
         $('#turmasTable').dataTable({
             "paging":   false,
             "info":     false,
-            "bFilter":  false,
+            "bFilter":  false
             
         });
     } );
