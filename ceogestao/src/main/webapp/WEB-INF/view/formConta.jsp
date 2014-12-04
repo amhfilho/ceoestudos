@@ -19,11 +19,11 @@
     }
     
     function configurarModalParcela() {
-//        if(document.forms.formConta.id.value === null || document.forms.formConta.id.value === ""){
-//            alert ('Salvar conta primeiro');
-//        } else {
+        if(document.forms.formConta.id.value === null || document.forms.formConta.id.value === ""){
+            alert ('Salvar conta primeiro');
+        } else {
             $('#parcelaModal').modal('show');
-        //}
+        }
     }
     
     function salvarParcela(){
@@ -149,18 +149,27 @@
                             <c:forEach items="${conta.parcelas}" var="parcela">
                                 <tr>
                                     <td><span style="text-align: right">${parcela.valor}</span></td>
-                                    <td><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.vencimento}"/></td>
-                                    <td><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.pagamento}"/></td>
+                                    <td><span style="text-align: center"><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.vencimento}"/></span></td>
+                                    <td><span style="text-align: center"><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.pagamento}"/></span></td>
                                     <td>${parcela.obs}</td>
-                                    <td>
+                                    <td><span style="text-align: center">
+                                        <c:if test="${not empty parcela.id}">
+                                            <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
+                                                <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                                            </button>
+                                        </c:if>
                                         <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
-                                            <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                                                <span class="glyphicon glyphicon-trash"></span>  Excluir</a>
                                         </button>
+                                        </span>
                                     </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
+                </c:if>
+                <c:if test="${empty conta.parcelas}">
+                    <small>Atualmente o valor desta conta é 0 (zero). Você deve inserir ao menos uma parcela</small>
                 </c:if>
                 <button type="button" class="btn btn-default btn-xs" onclick="configurarModalParcela()">Adicionar</button>
             </div>
@@ -185,6 +194,7 @@
                 <form:select path="situacao" id="situacao" cssClass="form-control input-sm">
                     <form:option value="PENDENTE">Pendente</form:option>
                     <form:option value="PAGA">Paga</form:option>
+                    <form:option value="PAGA_PARCIAL">Parcialmente paga</form:option>
                     <form:option value="CANCELADA">Cancelada</form:option>
                 </form:select>
             </div>
@@ -199,14 +209,7 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="row">
-            <label for="formaPagamento" class="col-sm-2 control-label">Forma de Pagamento</label>
-            <div class="col-sm-2">
-                <form:input path="formaPagamento" id="formaPagamento" placeholder="" cssClass="form-control input-sm"/>
-            </div>
-        </div>
-    </div>
+    
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-primary" >Salvar</button>

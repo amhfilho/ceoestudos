@@ -139,31 +139,30 @@ public class ContaController {
             df.setParseBigDecimal (true); 
             BigDecimal valor = (BigDecimal)df.parse(valorParcela);
             
-            Parcela parcela = new Parcela();
+            
+            Parcela parcela;
+            if(idParcela==null){
+                parcela = new Parcela();   
+            } else {
+                parcela = contaDAO.getParcelaById(idParcela);
+            }
             parcela.setConta(conta);
             parcela.setObs(obsParcela);
             parcela.setPagamento(pagamento);
             parcela.setValor(valor);
             parcela.setVencimento(vencimento);
-            conta.addParcela(parcela);
-            //Parcela parcela;
-//            if(idParcela == null){
-//                parcela = new Parcela();
-//                //parcela.setConta(conta);
-//                parcela.setVencimento(vencimento);
-//                parcela.setObs(obsParcela);
-//                parcela.setPagamento(pagamento);
-//                parcela.setValor(valor);
-//                //contaDAO.adicionarParcela(parcela);
-//            } else {
-//                //parcela = contaDAO.getParcelaById(idParcela);
-//                parcela.setVencimento(vencimento);
-//                parcela.setObs(obsParcela);
-//                parcela.setPagamento(pagamento);
-//                parcela.setValor(valor);
-//                //contaDAO.atualizarParcela(parcela);
-//            }
+            contaDAO.adicionarParcela(parcela);
             
+            Conta contaDB = contaDAO.getById(conta.getId());
+            conta.setCliente(contaDB.getCliente());
+            conta.setDescricao(contaDB.getDescricao());
+            conta.setParcelas(contaDB.getParcelas());
+            conta.setSituacao(contaDB.getSituacao());
+            conta.setTipoConta(contaDB.getTipoConta());
+            LOG.info("parcelas: "+conta.getParcelas());
+            conta.addParcela(parcela);
+            conta = contaDAO.atualizar(conta);     
+                        
             model.addAttribute("conta",conta);
             model.addAttribute("SUCCESS_MESSAGE","Parcela atualizada com sucesso");
             

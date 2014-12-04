@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
@@ -44,6 +45,7 @@ public class Conta implements Serializable {
     private SituacaoConta situacao;
     
     @ManyToOne
+    @NotNull(message="O Cliente deve ser informado")
     private Pessoa cliente;
     
     @ManyToOne
@@ -56,6 +58,7 @@ public class Conta implements Serializable {
     private String formaPagamento;
     
     @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //@NotEmpty (message = "Deve haver no mínimo uma parcela")
     private Set<Parcela> parcelas;
 
     public void addParcela(Parcela parcela){
@@ -126,7 +129,7 @@ public class Conta implements Serializable {
         for (Parcela p:parcelas){
             total = total.add(p.getValor());
         }
-        return valor;
+        return total;
     }
 
     public void setValor(BigDecimal valor) {

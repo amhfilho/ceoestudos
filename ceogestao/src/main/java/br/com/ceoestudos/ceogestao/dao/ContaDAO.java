@@ -27,19 +27,19 @@ public class ContaDAO {
     private Logger LOG = Logger.getLogger(getClass());
     
     public Conta getById(Long id){
-        String query = "select c from Conta c join fetch c.parcelas where c.id =:id";
+        String query = "select c from Conta c left join fetch c.parcelas where c.id =:id";
         Query q = em.createQuery(query);
         q.setParameter("id", id);
         return (Conta)q.getSingleResult();
     }
     
     public List<Conta> listarTodos(){
-        return em.createQuery("select c from Conta c").getResultList();
+        return em.createQuery("select distinct c from Conta c left join fetch c.parcelas").getResultList();
     }
     
     public List<Conta> listarPorNomeCpfTurma(String nome, String cpf, String pagasCanceladas, String idTurma){
         
-        String query = "select c from Conta c WHERE 1 = 1 ";
+        String query = "select distinct c from Conta c left join fetch c.parcelas WHERE 1 = 1 ";
         if(nome!=null && !nome.trim().equals("")){
             query+=" AND UPPER(c.cliente.nome) like '%"+nome.toUpperCase()+"%' ";
         }
@@ -57,7 +57,7 @@ public class ContaDAO {
     }
     
     public List<Conta> listarContasPorSituacao(SituacaoConta sc){
-        String query = "select c from Conta c WHERE c.situacao = :situacao";
+        String query = "select distinct c from Conta c left join fetch c.parcelas WHERE c.situacao = :situacao";
         Query q = em.createQuery(query);
         q.setParameter("situacao", sc);
         return q.getResultList();
@@ -67,8 +67,9 @@ public class ContaDAO {
         em.persist(c);
     }
     
-    public void atualizar(Conta c){
-        em.merge(c);
+    public Conta atualizar(Conta c){
+        return em.merge(c);
+        
     }
     
     public void excluir(Long id){
