@@ -111,6 +111,13 @@ public class ContaController {
         return "redirect:contas.html";
     }
     
+    @RequestMapping("editarParcela")
+    public void editarParcela(Model model,Long idParcela){
+        Parcela parcela = contaDAO.getParcelaById(idParcela);
+        model.addAttribute("parcela",parcela);
+        
+    }
+    
     @Transactional
     @RequestMapping(value="salvarParcela", method = RequestMethod.POST)
     public String salvarParcela(@ModelAttribute Conta conta,

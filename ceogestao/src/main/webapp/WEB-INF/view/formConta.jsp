@@ -26,6 +26,11 @@
         }
     }
     
+    function editarParcela(id){
+        alert(id);
+        $('#parcelaModal').modal('show');
+    }
+    
     function salvarParcela(){
         
         document.forms.formConta.action = "salvarParcela.html";
@@ -131,10 +136,18 @@
     <div class="form-group">
         <div class="row">
             <label for="valor" class="col-sm-2 control-label">Valor total</label>
-            <div class="col-sm-2">
-                <form:input path="valor" id="valor" cssClass="form-control input-sm" disabled="true"/>
+            <div class="col-sm-2" id="valor">
+                <fmt:formatNumber value="${conta.getValor('TOTAL')}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
             </div>
-
+        </div>
+    </div>
+            
+   <div class="form-group">
+        <div class="row">
+            <label for="valorPago" class="col-sm-2 control-label">Valor pago</label>
+            <div class="col-sm-2" id="valorPago">
+                <fmt:formatNumber value="${conta.getValor('PAGA')}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
+            </div>
         </div>
     </div>
           
@@ -148,13 +161,17 @@
                         <tbody>    
                             <c:forEach items="${conta.parcelas}" var="parcela">
                                 <tr>
-                                    <td><span style="text-align: right">${parcela.valor}</span></td>
+                                    <td>
+                                        <span style="text-align: right">
+                                            <fmt:formatNumber value="${parcela.valor}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </span>
+                                    </td>
                                     <td><span style="text-align: center"><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.vencimento}"/></span></td>
                                     <td><span style="text-align: center"><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.pagamento}"/></span></td>
                                     <td>${parcela.obs}</td>
                                     <td><span style="text-align: center">
                                         <c:if test="${not empty parcela.id}">
-                                            <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
+                                            <button type="button" class="btn btn-default btn-xs" onclick="editarParcela(${parcela.id})">
                                                 <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
                                             </button>
                                         </c:if>
@@ -172,6 +189,15 @@
                     <small>Atualmente o valor desta conta é 0 (zero). Você deve inserir ao menos uma parcela</small>
                 </c:if>
                 <button type="button" class="btn btn-default btn-xs" onclick="configurarModalParcela()">Adicionar</button>
+            </div>
+        </div>
+    </div>
+            
+            <div class="form-group">
+        <div class="row">
+            <label for="valorNaoPago" class="col-sm-2 control-label">Valor não pago</label>
+            <div class="col-sm-2" id="valorNaoPago">
+                <fmt:formatNumber value="${conta.getValor('NAO_PAGA')}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
             </div>
         </div>
     </div>

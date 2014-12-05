@@ -67,6 +67,35 @@ public class Conta implements Serializable {
         }
         parcelas.add(parcela);
     }
+       
+    public BigDecimal getValor(String tipo) {
+        BigDecimal total = new BigDecimal(0);
+        if(parcelas==null){
+            return total;
+        }
+        for (Parcela p:parcelas){
+            if((tipo.equals(Parcela.PAGA) && p.getPagamento()!=null) ||
+               (tipo.equals(Parcela.NAO_PAGA) && p.getPagamento()==null)||
+               (tipo.equals("TOTAL"))){
+                
+                total = total.add(p.getValor());
+            }
+        }
+        return total;
+    }
+    
+    public BigDecimal getValorPago(){
+        BigDecimal total = new BigDecimal(0);
+        if(parcelas==null){
+            return total;
+        }
+        for (Parcela p:parcelas){
+            if(p.getPagamento()!=null){
+                total = total.add(p.getValor());
+            }
+        }
+        return total;
+    }
     
     @Override
     public int hashCode() {
@@ -121,16 +150,7 @@ public class Conta implements Serializable {
         this.vencimento = vencimento;
     }
 
-    public BigDecimal getValor() {
-        BigDecimal total = new BigDecimal(0);
-        if(parcelas==null){
-            return total;
-        }
-        for (Parcela p:parcelas){
-            total = total.add(p.getValor());
-        }
-        return total;
-    }
+    
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;

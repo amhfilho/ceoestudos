@@ -37,6 +37,9 @@ public class Parcela implements Serializable {
     
     private String obs;
     
+    public static final String PAGA = "PAGA";
+    public static final String NAO_PAGA = "NAO_PAGA";
+    
     public Parcela()   {  }
     
     public Parcela(Date vencimento, BigDecimal valor) {

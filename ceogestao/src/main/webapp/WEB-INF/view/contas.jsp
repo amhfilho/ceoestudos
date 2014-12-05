@@ -67,9 +67,9 @@
         <th>Turma</th>
         <th>Cliente</th>
         <th>Data</th>
-        <th>Valor</th>
+        <th>Valor Total</th>
+        <th>Num. de Parcelas</th>
         <th>Descricao</th>
-        <th>Forma de Pagamento</th>
         <th>Situação</th>
         <th></th>
         
@@ -80,18 +80,21 @@
             <td>${conta.cliente.nome}</td>
             <td>
                 <span style="display: none"><fmt:formatDate pattern="yyyy/MM/dd" value="${conta.vencimento}"/> </span>
-                <fmt:formatDate pattern="dd/MM/yyyy" value="${conta.vencimento}"/>
-                
+                <fmt:formatDate pattern="dd/MM/yyyy" value="${conta.vencimento}"/>         
             </td>
-            <td><fmt:formatNumber value="${conta.valor}" type="number"
+            <td><fmt:formatNumber value="${conta.getValor('TOTAL')}" type="number"
                               minFractionDigits="2" maxFractionDigits="2"/></td>
+            <td>
+                <c:if test="${not empty conta.parcelas}">
+                    ${fn:length(conta.parcelas)}
+                </c:if>
+            </td>
             <td>${conta.descricao}</td>
-            <td>${conta.formaPagamento}</td>
             <td>${conta.situacao}</td>
             <td>
                 <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarConta.html?id=${conta.id}'">
-                        <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
-                    </button>
+                   <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                </button>
             </td>
         </tr>
     </c:forEach>
