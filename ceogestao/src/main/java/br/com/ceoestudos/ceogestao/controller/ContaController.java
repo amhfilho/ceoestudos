@@ -76,6 +76,8 @@ public class ContaController {
         model.addAttribute("contas",contaDAO.listarPorNomeCpfTurmaSituacao(nome, cpf,sc,idTurma));
         model.addAttribute("idTurmaPesquisada",idTurma);
         model.addAttribute("situacaoPesquisa",situacao);
+        model.addAttribute("nomePesquisa",nome);
+        model.addAttribute("cpfPesquisa",cpf);
         return "contas";
     }
     

@@ -24,11 +24,11 @@
     <div class="form-group form-group-sm">
         <label for="nome" class="col-sm-1 control-label">Nome</label>
         <div class="col-sm-2">
-            <input type="text" class="form-control input-sm" id="nome" placeholder="Nome" name="nome">
+            <input type="text" class="form-control input-sm" id="nome" placeholder="Nome" name="nome" value="${nomePesquisa}">
         </div>
         <label for="cpf" class="col-sm-1 control-label">CPF</label>
         <div class="col-sm-2">
-            <input type="cpf" class="form-control input-sm" id="cpf" placeholder="CPF" name="cpf">
+            <input type="cpf" class="form-control input-sm" id="cpf" placeholder="CPF" name="cpf" value="${cpfPesquisa}">
         </div>
         
         <div class="col-sm-3">
@@ -71,7 +71,7 @@
         <th>Valor Total</th>
         <th>Valor Não Pago</th>
         <th>Num. de Parcelas</th>
-        <th>Descricao</th>
+        
         <th>Situação</th>
         <th></th>
         
@@ -92,7 +92,7 @@
                     ${fn:length(conta.parcelas)}
                 </c:if>
             </td>
-            <td>${conta.descricao}</td>
+            
             <td>${conta.situacao}</td>
             <td>
                 <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarConta.html?id=${conta.id}'">
