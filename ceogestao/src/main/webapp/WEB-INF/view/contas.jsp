@@ -66,8 +66,8 @@
         <thead>
         <th>Turma</th>
         <th>Cliente</th>
-        <th>Data</th>
         <th>Valor Total</th>
+        <th>Valor Não Pago</th>
         <th>Num. de Parcelas</th>
         <th>Descricao</th>
         <th>Situação</th>
@@ -78,12 +78,13 @@
         <tr>
             <td>${conta.turma}</td>
             <td>${conta.cliente.nome}</td>
-            <td>
-                <span style="display: none"><fmt:formatDate pattern="yyyy/MM/dd" value="${conta.vencimento}"/> </span>
-                <fmt:formatDate pattern="dd/MM/yyyy" value="${conta.vencimento}"/>         
-            </td>
+            
             <td><fmt:formatNumber value="${conta.getValor('TOTAL')}" type="number"
-                              minFractionDigits="2" maxFractionDigits="2"/></td>
+                              minFractionDigits="2" maxFractionDigits="2"/>
+            </td>
+            <td><fmt:formatNumber value="${conta.getValor('NAO_PAGA')}" type="number"
+                              minFractionDigits="2" maxFractionDigits="2"/>
+            </td>
             <td>
                 <c:if test="${not empty conta.parcelas}">
                     ${fn:length(conta.parcelas)}

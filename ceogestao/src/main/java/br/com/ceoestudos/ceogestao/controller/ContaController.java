@@ -111,13 +111,6 @@ public class ContaController {
         return "redirect:contas.html";
     }
     
-    @RequestMapping("editarParcela")
-    public void editarParcela(Model model,Long idParcela){
-        Parcela parcela = contaDAO.getParcelaById(idParcela);
-        model.addAttribute("parcela",parcela);
-        
-    }
-    
     @Transactional
     @RequestMapping(value="salvarParcela", method = RequestMethod.POST)
     public String salvarParcela(@ModelAttribute Conta conta,
@@ -164,7 +157,6 @@ public class ContaController {
             conta.setCliente(contaDB.getCliente());
             conta.setDescricao(contaDB.getDescricao());
             conta.setParcelas(contaDB.getParcelas());
-            conta.setSituacao(contaDB.getSituacao());
             conta.setTipoConta(contaDB.getTipoConta());
             LOG.info("parcelas: "+conta.getParcelas());
             conta.addParcela(parcela);
@@ -183,6 +175,25 @@ public class ContaController {
             //model.addAttribute("conta",conta);
         }
         
+        
+        return "formConta";
+    }
+    
+    @Transactional
+    @RequestMapping(value="excluirParcela",method = RequestMethod.POST)
+    public String excluirParcela(Conta conta,Model model, Long idParcelaExcluir){
+        try{
+            LOG.info(idParcelaExcluir);
+            LOG.info(conta);
+            
+            contaDAO.excluirParcela(idParcelaExcluir);
+            model.addAttribute("conta",contaDAO.getById(conta.getId()));
+            
+            
+        } catch (RuntimeException e){
+            LOG.error(new Util().toString(e));
+            model.addAttribute("ERROR_MESSAGE","Não foi possível excluir a parcela: "+e.getMessage());
+        }
         
         return "formConta";
     }

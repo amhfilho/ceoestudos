@@ -46,11 +46,14 @@ public class ContaDAO {
         if(cpf!=null && !cpf.trim().equals("")){
             query += " AND c.cliente.cpf = '"+cpf+"'";
         }
-        if(pagasCanceladas==null || pagasCanceladas.equals("")){
-            query+= " AND c.situacao = 1";
-        }
+//        if(pagasCanceladas==null || pagasCanceladas.equals("")){
+//            query+= " AND c.situacao = 1";
+//        }
         if(idTurma!=null && !idTurma.equals("")){
             query+= " AND c.turma.id = "+idTurma;
+        }
+        if(pagasCanceladas!=null){
+            
         }
         LOG.info(query);
         return em.createQuery(query).getResultList();
@@ -74,6 +77,10 @@ public class ContaDAO {
     
     public void excluir(Long id){
         em.remove(getById(id));
+    }
+    
+    public void excluirParcela(Long id){
+        em.remove(getParcelaById(id));
     }
     
     public void adicionarParcela(Parcela p){

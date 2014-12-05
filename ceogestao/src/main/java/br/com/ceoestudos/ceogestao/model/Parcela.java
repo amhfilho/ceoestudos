@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Digits;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 /**
  *
@@ -28,11 +31,15 @@ public class Parcela implements Serializable {
     private Conta conta;
     
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date vencimento;
     
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date pagamento;
     
+    @Digits(integer = 8, fraction = 2)
+    @NumberFormat(style = NumberFormat.Style.NUMBER)
     private BigDecimal valor;
     
     private String obs;

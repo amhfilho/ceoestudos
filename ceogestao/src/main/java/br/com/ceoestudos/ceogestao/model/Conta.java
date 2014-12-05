@@ -2,7 +2,6 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -13,90 +12,90 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 @Entity
 public class Conta implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
-    @Temporal(TemporalType.DATE)
-    //@NotNull(message = "Data de vencimento deve ser informada")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date vencimento;
-    
+
     @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private BigDecimal valor = new BigDecimal(0);
-    
-    @Size(max=255, message="A descrição não pode conter mais que 255 caracteres")
+
+    @Size(max = 255, message = "A descrição não pode conter mais que 255 caracteres")
     private String descricao;
-    
+
     private SituacaoConta situacao;
-    
+
     @ManyToOne
-    @NotNull(message="O Cliente deve ser informado")
+    @NotNull(message = "O Cliente deve ser informado")
     private Pessoa cliente;
-    
+
     @ManyToOne
     private Turma turma;
-    
+
     private PapelPessoa papel;
-    
+
     private String tipoConta;
-    
+
     private String formaPagamento;
-    
+
     @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //@NotEmpty (message = "Deve haver no mínimo uma parcela")
     private Set<Parcela> parcelas;
 
-    public void addParcela(Parcela parcela){
-        if(parcelas==null){
+    public void addParcela(Parcela parcela) {
+        if (parcelas == null) {
             parcelas = new HashSet<Parcela>();
         }
         parcelas.add(parcela);
     }
-       
+
     public BigDecimal getValor(String tipo) {
         BigDecimal total = new BigDecimal(0);
-        if(parcelas==null){
+        if (parcelas == null) {
             return total;
         }
-        for (Parcela p:parcelas){
-            if((tipo.equals(Parcela.PAGA) && p.getPagamento()!=null) ||
-               (tipo.equals(Parcela.NAO_PAGA) && p.getPagamento()==null)||
-               (tipo.equals("TOTAL"))){
-                
+        for (Parcela p : parcelas) {
+            if ((tipo.equals(Parcela.PAGA) && p.getPagamento() != null)
+                    || (tipo.equals(Parcela.NAO_PAGA) && p.getPagamento() == null)
+                    || (tipo.equals("TOTAL"))) {
+
                 total = total.add(p.getValor());
             }
         }
         return total;
     }
     
-    public BigDecimal getValorPago(){
-        BigDecimal total = new BigDecimal(0);
+    public SituacaoConta getSituacao(){
+        boolean paga=false;
         if(parcelas==null){
-            return total;
-        }
-        for (Parcela p:parcelas){
-            if(p.getPagamento()!=null){
-                total = total.add(p.getValor());
+            return SituacaoConta.PENDENTE;
+        } else {
+            for (Parcela p: parcelas){
+                if(p.getPagamento()!=null){
+                    paga=true;
+                }
+                else if(p.getPagamento()==null && paga){
+                    return SituacaoConta.PAGA_PARCIAL;
+                }
+            }
+            if(paga){
+                return SituacaoConta.PAGA;
+            } else {
+                return SituacaoConta.PENDENTE;
             }
         }
-        return total;
     }
-    
+
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -121,7 +120,7 @@ public class Conta implements Serializable {
 
     @Override
     public String toString() {
-        return "Conta{" + "id=" + id + ", vencimento=" + vencimento + ", valor=" + valor + ", descricao=" + descricao + ", situacao=" + situacao + ", cliente=" + cliente + ", turma=" + turma + ", papel=" + papel + ", tipoConta=" + tipoConta + ", formaPagamento=" + formaPagamento + ", parcelas=" + parcelas + '}';
+        return "Conta{" + "id=" + id + ", valor=" + valor + ", descricao=" + descricao + ", situacao=" + situacao + ", cliente=" + cliente + ", turma=" + turma + ", papel=" + papel + ", tipoConta=" + tipoConta + ", formaPagamento=" + formaPagamento + ", parcelas=" + parcelas + '}';
     }
 
     public String getTipoConta() {
@@ -131,8 +130,6 @@ public class Conta implements Serializable {
     public void setTipoConta(String tipoConta) {
         this.tipoConta = tipoConta;
     }
-    
-    
 
     public Long getId() {
         return id;
@@ -141,16 +138,6 @@ public class Conta implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public Date getVencimento() {
-        return vencimento;
-    }
-
-    public void setVencimento(Date vencimento) {
-        this.vencimento = vencimento;
-    }
-
-    
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
@@ -164,14 +151,7 @@ public class Conta implements Serializable {
         this.descricao = descricao;
     }
 
-    public SituacaoConta getSituacao() {
-        return situacao;
-    }
-
-    public void setSituacao(SituacaoConta situacao) {
-        this.situacao = situacao;
-    }
-
+    
     public Pessoa getCliente() {
         return cliente;
     }
@@ -217,7 +197,5 @@ public class Conta implements Serializable {
     public void setParcelas(Set<Parcela> parcelas) {
         this.parcelas = parcelas;
     }
-    
-    
-    
+
 }

@@ -26,8 +26,13 @@
         }
     }
     
-    function editarParcela(id){
-        alert(id);
+    function editarParcela(id,vencimento,pagamento,valor,obs){
+        alert(id+","+vencimento+","+pagamento+","+valor+","+obs);
+        document.getElementById("idParcela").value=id;
+        document.getElementById("vencimentoParcela").value=vencimento;
+        document.getElementById("pagamentoParcela").value=pagamento;
+        document.getElementById("valorParcela").value=valor;
+        document.getElementById("obsParcela").value=obs;
         $('#parcelaModal').modal('show');
     }
     
@@ -35,6 +40,14 @@
         
         document.forms.formConta.action = "salvarParcela.html";
         document.forms.formConta.submit();
+    }
+    
+    function excluirParcela(id){
+        if (confirm('Deseja realmente excluir a parcela? ')) {
+            document.forms.formConta.action = "excluirParcela.html";
+            document.getElementById("idParcelaExcluir").value=id;
+            document.forms.formConta.submit();
+        }
     }
 
     $(document).ready(function(e) {
@@ -89,6 +102,8 @@
     
     <jsp:include page="parcelaModal.jsp" />
     
+    <input type="hidden" id="idParcelaExcluir" name="idParcelaExcluir" />
+    
     <form:errors path="*">
         <div class="alert alert-danger">
             <strong>Problemas!</strong><br>
@@ -131,7 +146,14 @@
         </div>
     </div>
 
-    
+    <div class="form-group">
+        <div class="row">
+            <label for="situacao" class="col-sm-2 control-label">Situação</label>
+            <div class="col-sm-6" id="situacao">
+                ${conta.situacao}
+            </div>
+        </div>
+    </div>
 
     <div class="form-group">
         <div class="row">
@@ -171,11 +193,16 @@
                                     <td>${parcela.obs}</td>
                                     <td><span style="text-align: center">
                                         <c:if test="${not empty parcela.id}">
-                                            <button type="button" class="btn btn-default btn-xs" onclick="editarParcela(${parcela.id})">
+                                            <button type="button" class="btn btn-default btn-xs" 
+                                                    onclick="editarParcela('${parcela.id}',
+                                                                           '<fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.vencimento}"/>',
+                                                                           '<fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.pagamento}"/>',
+                                                                           '<fmt:formatNumber value="${parcela.valor}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>',
+                                                                           '${parcela.obs}')">
                                                 <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
                                             </button>
                                         </c:if>
-                                        <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarPessoa.html?id=${pessoa.identificador}'">
+                                        <button type="button" class="btn btn-default btn-xs" onclick="excluirParcela(${parcela.id})">
                                                 <span class="glyphicon glyphicon-trash"></span>  Excluir</a>
                                         </button>
                                         </span>
@@ -213,22 +240,10 @@
             </div>
         </div>
     </div>
+    
     <div class="form-group">
         <div class="row">
-            <label for="situacao" class="col-sm-2 control-label">Situação</label>
-            <div class="col-sm-2">
-                <form:select path="situacao" id="situacao" cssClass="form-control input-sm">
-                    <form:option value="PENDENTE">Pendente</form:option>
-                    <form:option value="PAGA">Paga</form:option>
-                    <form:option value="PAGA_PARCIAL">Parcialmente paga</form:option>
-                    <form:option value="CANCELADA">Cancelada</form:option>
-                </form:select>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <label for="descricao" class="col-sm-2 control-label">Descrição</label>
+            <label for="descricao" class="col-sm-2 control-label">Observações</label>
             <div class="col-sm-6">
                 <form:input path="descricao" id="descricao" placeholder="" cssClass="form-control input-sm"/>
             </div>
