@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package br.com.ceoestudos.ceogestao.dao;
 
 import br.com.ceoestudos.ceogestao.model.Conta;
@@ -22,77 +21,95 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ContaDAO {
+
     @PersistenceContext
     private EntityManager em;
     private Logger LOG = Logger.getLogger(getClass());
-    
-    public Conta getById(Long id){
+
+    public Conta getById(Long id) {
         String query = "select c from Conta c left join fetch c.parcelas where c.id =:id";
         Query q = em.createQuery(query);
         q.setParameter("id", id);
-        return (Conta)q.getSingleResult();
+        return (Conta) q.getSingleResult();
     }
-    
-    public List<Conta> listarTodos(){
+
+    public List<Conta> listarTodos() {
         return em.createQuery("select distinct c from Conta c left join fetch c.parcelas").getResultList();
     }
-    
-    public List<Conta> listarPorNomeCpfTurma(String nome, String cpf, String pagasCanceladas, String idTurma){
-        
+
+    public List<Conta> listarPorNomeCpfTurma(String nome, String cpf, String pagasCanceladas, String idTurma) {
+
         String query = "select distinct c from Conta c left join fetch c.parcelas WHERE 1 = 1 ";
-        if(nome!=null && !nome.trim().equals("")){
-            query+=" AND UPPER(c.cliente.nome) like '%"+nome.toUpperCase()+"%' ";
+        if (nome != null && !nome.trim().equals("")) {
+            query += " AND UPPER(c.cliente.nome) like '%" + nome.toUpperCase() + "%' ";
         }
-        if(cpf!=null && !cpf.trim().equals("")){
-            query += " AND c.cliente.cpf = '"+cpf+"'";
+        if (cpf != null && !cpf.trim().equals("")) {
+            query += " AND c.cliente.cpf = '" + cpf + "'";
         }
 //        if(pagasCanceladas==null || pagasCanceladas.equals("")){
 //            query+= " AND c.situacao = 1";
 //        }
-        if(idTurma!=null && !idTurma.equals("")){
-            query+= " AND c.turma.id = "+idTurma;
+        if (idTurma != null && !idTurma.equals("")) {
+            query += " AND c.turma.id = " + idTurma;
         }
-        if(pagasCanceladas!=null){
-            
+
+        List<Conta> contasDB = em.createQuery(query).getResultList();
+        if (pagasCanceladas != null) {
+            Conta[] contas = (Conta[]) contasDB.toArray();
+            for (Conta c : contas) {
+                if (c.getSituacao().equals(SituacaoConta.PAGA)) {
+                    contasDB.remove(c);
+                }
+            }
         }
-        LOG.info(query);
-        return em.createQuery(query).getResultList();
+        
+        return contasDB;
     }
-    
-    public List<Conta> listarContasPorSituacao(SituacaoConta sc){
-        String query = "select distinct c from Conta c left join fetch c.parcelas WHERE c.situacao = :situacao";
-        Query q = em.createQuery(query);
-        q.setParameter("situacao", sc);
-        return q.getResultList();
+
+    public List<Conta> listarContasPorSituacao(SituacaoConta sc) {
+        List<Conta> contasDB = listarTodos();
+        Object[] contas = (Conta[])contasDB.toArray();
+        for (Object c : contas) {
+            c = (Conta)c;
+            if (!c.getSituacao().equals(sc)) {
+                contasDB.remove(c);
+            }
+        }
+        return contasDB;
+
+//        String query = "select distinct c from Conta c left join fetch c.parcelas WHERE c.situacao = :situacao";
+//        Query q = em.createQuery(query);
+//        q.setParameter("situacao", sc);
+//        return q.getResultList();
     }
-    
-    public void adicionar(Conta c){
+
+    public void adicionar(Conta c) {
         em.persist(c);
     }
-    
-    public Conta atualizar(Conta c){
+
+    public Conta atualizar(Conta c) {
         return em.merge(c);
-        
+
     }
-    
-    public void excluir(Long id){
+
+    public void excluir(Long id) {
         em.remove(getById(id));
     }
-    
-    public void excluirParcela(Long id){
+
+    public void excluirParcela(Long id) {
         em.remove(getParcelaById(id));
     }
-    
-    public void adicionarParcela(Parcela p){
+
+    public void adicionarParcela(Parcela p) {
         em.persist(p);
     }
-    
-    public void atualizarParcela(Parcela p){
+
+    public void atualizarParcela(Parcela p) {
         em.merge(p);
     }
-    
-    public Parcela getParcelaById(Long id){
+
+    public Parcela getParcelaById(Long id) {
         return em.find(Parcela.class, id);
     }
-    
+
 }
