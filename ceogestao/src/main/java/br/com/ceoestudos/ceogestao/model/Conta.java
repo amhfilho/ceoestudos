@@ -75,22 +75,26 @@ public class Conta implements Serializable {
     }
     
     public SituacaoConta getSituacao(){
-        boolean paga=false;
-        if(parcelas==null){
+        
+        int contPg =0;
+        int contNpg = 0;
+        if(parcelas==null || parcelas.isEmpty()){
             return SituacaoConta.PENDENTE;
         } else {
             for (Parcela p: parcelas){
                 if(p.getPagamento()!=null){
-                    paga=true;
+                    contPg++;
                 }
-                else if(p.getPagamento()==null && paga){
-                    return SituacaoConta.PAGA_PARCIAL;
+                else {
+                    contNpg++;
                 }
             }
-            if(paga){
+            if(contPg == parcelas.size()){
                 return SituacaoConta.PAGA;
-            } else {
+            } else if (contNpg == parcelas.size()){
                 return SituacaoConta.PENDENTE;
+            } else {
+                return SituacaoConta.PAGA_PARCIAL;
             }
         }
     }
@@ -120,7 +124,7 @@ public class Conta implements Serializable {
 
     @Override
     public String toString() {
-        return "Conta{" + "id=" + id + ", valor=" + valor + ", descricao=" + descricao + ", situacao=" + situacao + ", cliente=" + cliente + ", turma=" + turma + ", papel=" + papel + ", tipoConta=" + tipoConta + ", formaPagamento=" + formaPagamento + ", parcelas=" + parcelas + '}';
+        return "Conta{" + "id=" + id + ", valor=" + valor + ", descricao=" + descricao + ", situacao=" + getSituacao() + ", cliente=" + cliente + ", turma=" + turma + ", papel=" + papel + ", tipoConta=" + tipoConta + ", formaPagamento=" + formaPagamento + ", parcelas=" + parcelas + '}';
     }
 
     public String getTipoConta() {

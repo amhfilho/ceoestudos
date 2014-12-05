@@ -27,7 +27,7 @@
     }
     
     function editarParcela(id,vencimento,pagamento,valor,obs){
-        alert(id+","+vencimento+","+pagamento+","+valor+","+obs);
+        
         document.getElementById("idParcela").value=id;
         document.getElementById("vencimentoParcela").value=vencimento;
         document.getElementById("pagamentoParcela").value=pagamento;
@@ -254,7 +254,7 @@
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-primary" >Salvar</button>
-            <button type="button" class="btn btn-default" onclick="location.href = 'contas.html'">Voltar</button>
+            <button type="button" class="btn btn-default" onclick="location.href = 'pesquisarContas.html'">Voltar</button>
             <c:if test="${not empty conta.id}">
                 <button type="button" class="btn btn-default" 
                         onclick="if (confirm('Deseja realmente excluir a conta? ')) {

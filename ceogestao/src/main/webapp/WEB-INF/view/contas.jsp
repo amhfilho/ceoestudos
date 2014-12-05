@@ -21,9 +21,9 @@
 </script>
 
 <form class="form-horizontal" role="form" action="pesquisarContas.html">
-    <div class="form-group">
+    <div class="form-group form-group-sm">
         <label for="nome" class="col-sm-1 control-label">Nome</label>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <input type="text" class="form-control input-sm" id="nome" placeholder="Nome" name="nome">
         </div>
         <label for="cpf" class="col-sm-1 control-label">CPF</label>
@@ -40,19 +40,21 @@
             </select>
         </div>
         
+        <div class="col-sm-2">
+            <select class="form-control" name="situacao" id="situacao">
+                <option value="">Todas</option>
+                <option value="PENDENTE" <c:if test="${situacaoPesquisa eq 'PENDENTE'}"> selected </c:if>>Pendente</option>
+                <option value="PAGA_PARCIAL" <c:if test="${situacaoPesquisa eq 'PAGA_PARCIAL'}"> selected </c:if>>Paga parcial</option>
+                <option value="PAGA" <c:if test="${situacaoPesquisa eq 'PAGA'}"> selected </c:if>>Paga</option>
+            </select>
+        </div>
+        
         <div class="col-sm-1">
             <button type="submit" class="btn btn-primary">Pesquisar</button>
         </div>
 
     </div>
-    <div class="form-group">
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="pagasCanceladas" 
-                  <c:if test="${not empty pesquisarPagasCanceladas}">checked</c:if> id="pagasCanceladas"> Exibir contas pagas e canceladas
-            </label>
-        </div>
-    </div>
+    
 </form>
 <c:if test="${empty contas}">
     <div class="alert alert-warning alert-dismissable">

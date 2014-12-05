@@ -8,6 +8,7 @@ package br.com.ceoestudos.ceogestao.dao;
 import br.com.ceoestudos.ceogestao.model.Conta;
 import br.com.ceoestudos.ceogestao.model.Parcela;
 import br.com.ceoestudos.ceogestao.model.SituacaoConta;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,11 +34,7 @@ public class ContaDAO {
         return (Conta) q.getSingleResult();
     }
 
-    public List<Conta> listarTodos() {
-        return em.createQuery("select distinct c from Conta c left join fetch c.parcelas").getResultList();
-    }
-
-    public List<Conta> listarPorNomeCpfTurma(String nome, String cpf, String pagasCanceladas, String idTurma) {
+    public List<Conta> listarPorNomeCpfTurmaSituacao(String nome, String cpf, SituacaoConta situacao, String idTurma) {
 
         String query = "select distinct c from Conta c left join fetch c.parcelas WHERE 1 = 1 ";
         if (nome != null && !nome.trim().equals("")) {
@@ -46,41 +43,29 @@ public class ContaDAO {
         if (cpf != null && !cpf.trim().equals("")) {
             query += " AND c.cliente.cpf = '" + cpf + "'";
         }
-//        if(pagasCanceladas==null || pagasCanceladas.equals("")){
-//            query+= " AND c.situacao = 1";
-//        }
+
         if (idTurma != null && !idTurma.equals("")) {
             query += " AND c.turma.id = " + idTurma;
         }
 
         List<Conta> contasDB = em.createQuery(query).getResultList();
-        if (pagasCanceladas != null) {
-            Conta[] contas = (Conta[]) contasDB.toArray();
-            for (Conta c : contas) {
-                if (c.getSituacao().equals(SituacaoConta.PAGA)) {
-                    contasDB.remove(c);
+        
+        return filtrarPorSituacao(contasDB, situacao);
+    }
+    
+    public List<Conta> filtrarPorSituacao(List<Conta> contas,SituacaoConta situacao){
+        List<Conta> contasResult = new ArrayList<Conta>();
+        if(situacao!=null){
+            for(int i=0; i < contas.size(); i++){
+                Conta c = contas.get(i);
+                if(situacao.equals(c.getSituacao())){
+                    contasResult.add(c);
                 }
             }
+        } else {
+            return contas;
         }
-        
-        return contasDB;
-    }
-
-    public List<Conta> listarContasPorSituacao(SituacaoConta sc) {
-        List<Conta> contasDB = listarTodos();
-        Object[] contas = (Conta[])contasDB.toArray();
-        for (Object c : contas) {
-            c = (Conta)c;
-            if (!c.getSituacao().equals(sc)) {
-                contasDB.remove(c);
-            }
-        }
-        return contasDB;
-
-//        String query = "select distinct c from Conta c left join fetch c.parcelas WHERE c.situacao = :situacao";
-//        Query q = em.createQuery(query);
-//        q.setParameter("situacao", sc);
-//        return q.getResultList();
+        return contasResult;
     }
 
     public void adicionar(Conta c) {

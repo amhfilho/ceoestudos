@@ -54,7 +54,7 @@
                                 
                             </ul>
                         </li>
-                        <li><a href="contas.html">Financeiro</a></li>
+                        <li><a href="pesquisarContas.html">Financeiro</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastro <b class="caret"></b></a>
                             <ul class="dropdown-menu">

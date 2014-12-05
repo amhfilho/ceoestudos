@@ -55,12 +55,6 @@ public class ContaController {
     @ModelAttribute("todasAsTurmas")
     public List<Turma> todasAsTurmas(){
         return turmaDAO.listarTodos();
-    } 
-    
-    @RequestMapping("contas")
-    public String listarContasPendentes(Model model){
-        model.addAttribute("contas",contaDAO.listarContasPorSituacao(SituacaoConta.PENDENTE));
-        return "contas";
     }
     
     @RequestMapping("novaConta")
@@ -71,14 +65,17 @@ public class ContaController {
     
     @RequestMapping("pesquisarContas")
     public String pesquisarContas(Model model,
-            @RequestParam String nome, 
-            @RequestParam String cpf, 
-            @RequestParam(required=false, value="pagasCanceladas") String pagasCanceladas,
-            @RequestParam String idTurma){
-        LOG.info("pagasCanceladas: "+pagasCanceladas);
-        model.addAttribute("contas",contaDAO.listarPorNomeCpfTurma(nome, cpf,pagasCanceladas,idTurma));
+            @RequestParam (value = "nome", required = false) String nome, 
+            @RequestParam (value = "cpf", required = false) String cpf, 
+            @RequestParam (value = "situacao", required = false) String situacao,
+            @RequestParam (value = "idTurma", required = false) String idTurma){
+        SituacaoConta sc=null;
+        if(situacao!=null && !("").equals(situacao)){
+           sc = SituacaoConta.valueOf(situacao);
+        }
+        model.addAttribute("contas",contaDAO.listarPorNomeCpfTurmaSituacao(nome, cpf,sc,idTurma));
         model.addAttribute("idTurmaPesquisada",idTurma);
-        model.addAttribute("pesquisarPagasCanceladas",pagasCanceladas);
+        model.addAttribute("situacaoPesquisa",situacao);
         return "contas";
     }
     
