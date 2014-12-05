@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <input type="hidden" name="idParcela" id="idParcela" value="${parcela.id}"/>
                 <label for="vencimentoParcela">Vencimento:</label>
-                <input type="text" name="vencimentoParcela" id="vencimentoParcela" value="${}" class="form-control input-sm"/>
+                <input type="text" name="vencimentoParcela" id="vencimentoParcela" value="${parcela.vencimento}" class="form-control input-sm"/>
                 <label for="vencimentoParcela">Data do pagamento:</label>
                 <input type="text" name="pagamentoParcela" id="pagamentoParcela" class="form-control input-sm"/>
                 <label for="valorParcela">Valor:</label>
