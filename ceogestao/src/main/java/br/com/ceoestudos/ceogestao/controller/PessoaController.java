@@ -5,7 +5,6 @@ import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.model.Curso;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.TipoPessoa;
-import br.com.ceoestudos.ceogestao.util.Util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

@@ -127,16 +127,20 @@ public class PessoaDAO {
     }
 
     public void adicionar(Pessoa pessoa) {
-        if (cpfEncontrado(pessoa.getCpf())) {
-            throw new RuntimeException("Erro ao adicionar uma pessoa. CPF: " + pessoa.getCpf() + " já existente.");
+        if (pessoa.getCpf()!=null){
+            if (cpfEncontrado(pessoa.getCpf())) {
+                throw new RuntimeException("Erro ao adicionar uma pessoa. CPF: " + pessoa.getCpf() + " já existente.");
+            }
         }
         em.persist(pessoa);
     }
 
     public void atualizar(Pessoa pessoa) {
-        List<Pessoa> pessoas = listarPorCpf(pessoa.getCpf());
-        if (pessoas.contains(pessoa) && !pessoas.get(pessoas.indexOf(pessoa)).equals(pessoa)) {
-            throw new RuntimeException("Erro ao atualizar uma pessoa. CPF: " + pessoa.getCpf() + " já existente.");
+        if(pessoa.getCpf()!=null){
+            List<Pessoa> pessoas = listarPorCpf(pessoa.getCpf());
+            if (pessoas.contains(pessoa) && !pessoas.get(pessoas.indexOf(pessoa)).equals(pessoa)) {
+                throw new RuntimeException("Erro ao atualizar uma pessoa. CPF: " + pessoa.getCpf() + " já existente.");
+            }
         }
         em.merge(pessoa);
     }

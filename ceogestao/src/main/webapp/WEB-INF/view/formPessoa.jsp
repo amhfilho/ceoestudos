@@ -28,8 +28,8 @@
         else if(tipoPessoa === "PROFESSOR"){
             document.location = 'professores.html';
         }
-        else if(tipoPessoa === "PROFESSOR"){
-            document.location = 'lista.html';
+        else if(tipoPessoa === "LISTA_ESPERA"){
+            document.location = 'interessados.html';
         }
     }
     
@@ -74,9 +74,9 @@
     
     <c:if test="${tipoPessoa == 'LISTA_ESPERA'}">
         <div class="row">
-            <label for="curso" class="col-sm-2 control-label">Curso de interesse</label>
+            <label for="cursoInteresse" class="col-sm-2 control-label">Curso de interesse</label>
             <div class="col-sm-10">
-                <select id="curso" name="curso" class="form-control input-sm" >
+                <select id="cursoInteresse" name="cursoInteresse" class="form-control input-sm" >
                     <c:forEach items="${todosOsCursos}" var="curso">
                         <option value="${curso.id}" <c:if test="${pessoa.cursoInteresse.id == curso.id}"> selected </c:if>>${curso.nome}</option>
                     </c:forEach>

@@ -14,7 +14,7 @@
                 <input type="text" name="pagamentoParcela" id="pagamentoParcela"  class="form-control input-sm"/>
                 <label for="valorParcela">Valor:</label>
                 <input type="text" name="valorParcela" id="valorParcela"  class="form-control input-sm"/>
-                <label for="obsParcela">Observações:</label>
+                <label for="obsParcela">Forma de pagamento</label>
                 <input type="text" name="obsParcela" id="obsParcela"  class="form-control input-sm"/>
                 
             </div>
