@@ -39,11 +39,11 @@ public class Curso implements Serializable {
     @Size (max=3000, message = "Descrição não pode exceder 3000 caracteres")
     private String descricao;
     @NotNull(message = "Carga horária é obrigatória")
-    @Min(value = 1, message = "Valor mínimo da carga horária é 1")
+    @Min(value = 1, message = "Valor mínimo da carga horária deve ser 1")
     private Integer cargaHoraria;
     @Min(value = 0, message = "Investimento deve ser maior ou igual a zero")
-    @Digits(integer = 8, fraction = 2)
-    @NumberFormat(style = Style.NUMBER)
+//    @Digits(integer = 8, fraction = 2)
+//    @NumberFormat(style = Style.NUMBER)
     private BigDecimal investimento = new BigDecimal(0);
     @Size(max = 3000, message = "Os pré-requisitos não podem exceder 3000 caracteres")
     private String preRequisitos;
