@@ -15,9 +15,9 @@
             document.formCurso.submit();
         }
     }
-    $(document).ready(function(e) {
-        $('#investimento').mask("#.##0,00", {reverse: true});
-    });
+//    $(document).ready(function(e) {
+//        $('#investimento').mask("#.##0,00", {reverse: true});
+//    });
 </script>
 
 <form:form class="form-horizontal" role="form" method="POST" action="salvarCurso.html"  
