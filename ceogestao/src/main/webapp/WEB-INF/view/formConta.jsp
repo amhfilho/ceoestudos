@@ -92,6 +92,14 @@
         });
         
         $('#valorParcela').mask("#.##0,00", {reverse: true});
+        
+        $('#parcelas').dataTable({
+            "paging":   false,
+            "info":     false,
+            "bFilter":  false
+            
+            
+        });
     });
 </script>
 <jsp:include page="clienteModal.jsp" />
