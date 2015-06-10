@@ -71,7 +71,7 @@
             <th>Curso de interesse</th>
             <th>Contato efetuado</th>
         </c:if>      
-        <c:if test="${tipoPessoa == 'aluno' or tipoPessoa == 'paciente'}">
+        <c:if test="${tipoPessoa == 'aluno'}">
             <th>Turma</th>
         </c:if>
         <th>Cidade - Estado</th>
@@ -98,7 +98,7 @@
                 <td>${pessoa.cursoInteresse.nome}</td>
                 <td>${pessoa.contato}</td>
             </c:if>
-            <c:if test="${tipoPessoa == 'aluno' or tipoPessoa == 'paciente'}">
+            <c:if test="${tipoPessoa == 'aluno'}">
                 <td>${pessoa.nomeTurmas}</td>
             </c:if>
             <td>${pessoa.cidade} - ${pessoa.estado}</td>

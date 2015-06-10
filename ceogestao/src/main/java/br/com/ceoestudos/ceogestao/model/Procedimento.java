@@ -32,8 +32,9 @@ public class Procedimento implements Serializable {
     @Min(value = 0, message = "Preço deve ser maior ou igual a zero")
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = NumberFormat.Style.NUMBER)
+    @NotNull(message = "O preço deve ser informado")
     private BigDecimal preco;
-    @Size (max = 3000, message = "O campo observação não pode exceder 3000 caracteres")
+    @Size (max = 3000, message = "O campo observaçao não pode exceder 3000 caracteres")
     private String obs;
 
     @Override
