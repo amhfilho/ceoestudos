@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -38,8 +40,8 @@ public class Tratamento implements Serializable {
 
     private String obs;
 
-    @ElementCollection(targetClass = TratamentoDente.class, fetch = FetchType.EAGER)
-    private List<TratamentoDente> dentes;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tratamento", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private Set<TratamentoDente> dentes;
     
     @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
     @Digits(integer = 8, fraction = 2)
@@ -90,6 +92,8 @@ public class Tratamento implements Serializable {
         }
     }
     
+    
+    
     @Override
     public String toString() {
         return "Tratamento{" + "id=" + id + ", turma=" + turma + ", paciente=" + paciente + ", obs=" + obs + ", dentes=" + printDentes() + '}';
@@ -97,8 +101,8 @@ public class Tratamento implements Serializable {
     
     public BigDecimal getValorBruto(){
         BigDecimal valor = new BigDecimal(0);
-        if(dentes!=null){
-            for(TratamentoDente td:dentes){
+        if(getDentes()!=null){
+            for(TratamentoDente td:getDentes()){
                 valor = valor.add(td.getValor());
             }
         }
@@ -113,25 +117,33 @@ public class Tratamento implements Serializable {
     }
     
     public void addTratamentoDente(Integer dente, int qtd, Procedimento procedimento) {
-        if (dentes == null) {
-            dentes = new ArrayList<TratamentoDente>();
+        if (getDentes() == null) {
+            setDentes(new HashSet<TratamentoDente>());
         }
         TratamentoDente td = new TratamentoDente(dente, procedimento, qtd);
-        if (dentes.contains(td)) {
-            dentes.remove(td);
+        td.setTratamento(this);
+        if (getDentes().contains(td)) {
+            getDentes().remove(td);
         }
-        dentes.add(td);
+        getDentes().add(td);
     }
     
     public void removeTratamentoDente(Integer dente,Long idProcedimento) {
-        if (dentes != null) {
+        if (getDentes() != null) {
             TratamentoDente td = new TratamentoDente();
             td.setDente(dente);
             Procedimento p = new Procedimento();
             p.setId(idProcedimento);
             td.setProcedimento(p);
-            dentes.remove(td);
-            
+            getDentes().remove(td);
+            td.setTratamento(null);
+        }
+    }
+    
+    public void removerTratamentoDente(TratamentoDente td){
+        if(getDentes()!=null){
+            getDentes().remove(td);
+            td.setTratamento(null);
         }
     }
     
@@ -150,14 +162,14 @@ public class Tratamento implements Serializable {
     }
     
     public void removeTratamento(TratamentoDente t) {
-        if (dentes != null) {
-            dentes.remove(t);
+        if (getDentes() != null) {
+            getDentes().remove(t);
         }
     }
 
     public List<TratamentoDente> getTratamentosPorDente(Integer dente) {
         List<TratamentoDente> lista = new ArrayList<TratamentoDente>();
-        for (TratamentoDente td : dentes) {
+        for (TratamentoDente td : getDentes()) {
             if (td.getDente() == dente) {
                 lista.add(td);
             }
@@ -189,9 +201,9 @@ public class Tratamento implements Serializable {
     
     private String printDentes(){
         String retorno = "";
-        if(dentes!=null){
+        if(getDentes()!=null){
             retorno+="\t";
-            for(TratamentoDente td:dentes){
+            for(TratamentoDente td:getDentes()){
                 retorno+=td.getDente()+","+td.getProcedimento().getNome()+","+td.getQuantidade()+"\n";
             }
         }
@@ -230,11 +242,11 @@ public class Tratamento implements Serializable {
         this.obs = obs;
     }
 
-    public List<TratamentoDente> getDentes() {
+    public Set<TratamentoDente> getDentes() {
         return dentes;
     }
 
-    public void setDentes(List<TratamentoDente> dentes) {
+    public void setDentes(Set<TratamentoDente> dentes) {
         this.dentes = dentes;
     }
 

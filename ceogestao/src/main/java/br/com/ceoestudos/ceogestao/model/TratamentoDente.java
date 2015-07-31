@@ -3,12 +3,22 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Embeddable
+@Entity
+@Table(name="tratamento_dentes")
 public class TratamentoDente implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     public TratamentoDente(Integer dente, Procedimento procedimento, Integer quantidade) {
         this.dente = dente;
         this.procedimento = procedimento;
@@ -16,17 +26,16 @@ public class TratamentoDente implements Serializable {
     }
     
     public TratamentoDente(){}
+    
+    public TratamentoDente(Long id){
+        this.id = id;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 29 * hash + (this.dente != null ? this.dente.hashCode() : 0);
-        hash = 29 * hash + (this.procedimento != null ? this.procedimento.hashCode() : 0);
+        int hash = 3;
+        hash = 83 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
-    }
-    
-    public BigDecimal getValor(){
-        return  procedimento.getPreco().multiply(new BigDecimal(quantidade));
     }
 
     @Override
@@ -38,20 +47,24 @@ public class TratamentoDente implements Serializable {
             return false;
         }
         final TratamentoDente other = (TratamentoDente) obj;
-        if (this.dente != other.dente && (this.dente == null || !this.dente.equals(other.dente))) {
-            return false;
-        }
-        if (this.procedimento != other.procedimento && (this.procedimento == null || !this.procedimento.equals(other.procedimento))) {
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
             return false;
         }
         return true;
     }
     
+    public BigDecimal getValor(){
+        return  procedimento.getPreco().multiply(new BigDecimal(quantidade));
+    }
     
     private Integer dente;
     
     @ManyToOne
     private Procedimento procedimento;
+    
+    @ManyToOne
+    @JoinColumn(name="Tratamento_id")
+    private Tratamento tratamento;
     
     private Integer quantidade = 1;
 
@@ -78,8 +91,22 @@ public class TratamentoDente implements Serializable {
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
-    
-    
-    
-    
+
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @return the tratamento
+     */
+    public Tratamento getTratamento() {
+        return tratamento;
+    }
+
+    /**
+     * @param tratamento the tratamento to set
+     */
+    public void setTratamento(Tratamento tratamento) {
+        this.tratamento = tratamento;
+    }
 }

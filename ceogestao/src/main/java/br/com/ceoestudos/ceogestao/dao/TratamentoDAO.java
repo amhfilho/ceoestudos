@@ -1,6 +1,7 @@
 package br.com.ceoestudos.ceogestao.dao;
 
 import br.com.ceoestudos.ceogestao.model.Tratamento;
+import br.com.ceoestudos.ceogestao.model.TratamentoDente;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,6 +32,11 @@ public class TratamentoDAO {
     public void excluir(Tratamento t){
         t = em.merge(t);
         em.remove(t);
+    }
+    
+    public void excluirTratamentoDente(TratamentoDente td){
+        td = em.find(TratamentoDente.class, td.getId());
+        em.remove(td);
     }
     
 }

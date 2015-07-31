@@ -8,11 +8,13 @@ import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.Procedimento;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
+import br.com.ceoestudos.ceogestao.model.TratamentoDente;
 import br.com.ceoestudos.ceogestao.model.Turma;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,7 @@ public class TratamentoController {
     @Autowired
     private TratamentoDAO tDAO;
     
-    private Logger LOG = Logger.getLogger(getClass());
+    private final Logger LOG = Logger.getLogger(getClass());
     
     @RequestMapping("tratamentos")
     public String tratamentos(Model model){
@@ -127,18 +129,16 @@ public class TratamentoController {
                                         Tratamento tratamento, 
                                         Long idProcedimento,
                                         Integer qtdProcedimento,
-                                        Integer idDente
-                                        //BindingResult result
-    ) {
+                                        Integer idDente) {
 
-        Procedimento procedimento = procedimentoDAO.getById(new Long(idProcedimento));
+        Procedimento procedimento = procedimentoDAO.getById(idProcedimento);
         
         if(tratamento.getId()==null){
-            tratamento.addTratamentoDente(idDente, new Integer(qtdProcedimento), procedimento);
+            tratamento.addTratamentoDente(idDente, qtdProcedimento, procedimento);
             tDAO.adicionar(tratamento);
         } else {
             tratamento.setDentes(tDAO.getById(tratamento.getId()).getDentes());
-            tratamento.addTratamentoDente(idDente, new Integer(qtdProcedimento), procedimento);
+            tratamento.addTratamentoDente(idDente, qtdProcedimento, procedimento);
             tDAO.atualizar(tratamento);
         }
              
@@ -150,12 +150,11 @@ public class TratamentoController {
     @RequestMapping(value = "removerProcedimento", method = RequestMethod.POST)
     public String removerProcedimento(Model model,
                                       Tratamento tratamento,
-                                      Integer idDente,
-                                      Long idProcedimento){
-        
-        tratamento.setDentes(tDAO.getById(tratamento.getId()).getDentes());
-        tratamento.removeTratamentoDente(idDente,idProcedimento);
-        tDAO.atualizar(tratamento);
+                                      Long idTratamentoDente){
+        TratamentoDente td = new TratamentoDente(idTratamentoDente);
+        tratamento = tDAO.getById(tratamento.getId());
+        tratamento.removeTratamento(td);
+        tDAO.excluirTratamentoDente(td);
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
     }

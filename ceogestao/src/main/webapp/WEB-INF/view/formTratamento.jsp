@@ -86,11 +86,10 @@
         document.formTratamento.submit();
     }
 
-    function removerProcedimento(idDente, idProcedimento) {
+    function removerProcedimento(idTratamentoDente) {
         if (confirm('Deseja remover o procedimento?')) {
             document.formTratamento.action = "removerProcedimento.html";
-            document.getElementById("idDente").value = idDente;
-            document.getElementById("idProcedimento").value = idProcedimento;
+            document.getElementById("idTratamentoDente").value = idTratamentoDente;
             document.formTratamento.submit();
         }
     }
@@ -131,6 +130,7 @@
     <input type="hidden" id="qtdProcedimento" name="qtdProcedimento"/>
     <input type="hidden" id="adicionarPessoaAction" name="adicionarPessoaAction" />
     <input type="hidden" id="idResponsavel" name="idResponsavel" />
+    <input type="hidden" id="idTratamentoDente" name="idTratamentoDente" />
     <form:hidden path="id" />
 
     <div class="form-group">
@@ -279,7 +279,7 @@
                                       minFractionDigits="2" maxFractionDigits="2"/>
                 </td>
                 <td style="text-align: center">
-                    <a href="javascript:removerProcedimento(${dente.dente},${dente.procedimento.id})">
+                    <a href="javascript:removerProcedimento(${dente.id})">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </td>
