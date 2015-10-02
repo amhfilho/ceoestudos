@@ -26,10 +26,13 @@ import org.joda.time.Minutes;
 import org.joda.time.Weeks;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import br.com.ceoestudos.ceogestao.model.novo.SituacaoTurma;
+
 /**
  *
  * @author amhfilho
  */
+@SuppressWarnings("serial")
 @Entity
 public class Turma implements Serializable {
 
@@ -39,6 +42,7 @@ public class Turma implements Serializable {
 
     @NotNull(message = "Deve haver um curso associado a esta turma")
     @ManyToOne
+    @JoinColumn(name="curso_id")
     private Curso curso;
 
     @Temporal(TemporalType.DATE)
@@ -151,9 +155,6 @@ public class Turma implements Serializable {
     }
 
     public double getCargaHorariaTurma() {
-        Calendar inicio = getCalendarInicioAulas();
-        Calendar fim = getCalendarFimAulas();
-        //inicio.
         return 0;
     }
 

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package br.com.ceoestudos.ceogestao.model;
+package br.com.ceoestudos.ceogestao.model.novo;
 
 /**
  *

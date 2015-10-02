@@ -4,14 +4,12 @@
  * and open the template in the editor.
  */
 
-package br.com.ceoestudos.ceogestao.model;
+package br.com.ceoestudos.ceogestao.model.novo;
 
 /**
  *
- * @author amhfilho
+ * @author afilho
  */
-public enum Sexo {
-    
-    MASCULINO,FEMININO;
+public enum PapelPessoa {
     
 }

@@ -2,8 +2,8 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,13 +11,20 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import br.com.ceoestudos.ceogestao.model.novo.Sexo;
+import br.com.ceoestudos.ceogestao.model.novo.TipoPessoa;
 
 /**
  *
@@ -43,7 +50,7 @@ public class Pessoa implements Serializable {
     private String estado;
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dataNascimento;
+    private Date datanascimento;
     private String rg;
     //@NotNull(message="CPF é obrigatório")
     
@@ -73,14 +80,16 @@ public class Pessoa implements Serializable {
         return "Nenhum curso associado";
     }
     
-    @OneToOne (fetch = FetchType.EAGER)
-    private Curso cursoInteresse;
+    @OneToOne(optional=true)
+    @NotFound(action=NotFoundAction.IGNORE)
+    @JoinColumn(name="cursointeresse_id",nullable = true)
+    private Curso cursointeresse;
     
     private String contato;
     
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dataInclusao;
+    private Date datainclusao;
 
     public Set<Turma> getTurmas() {
         return turmas;
@@ -114,7 +123,7 @@ public class Pessoa implements Serializable {
     }
     
     public Pessoa(){
-        dataInclusao = new Date();
+        datainclusao = new Date();
     }
 
     @Override
@@ -122,7 +131,7 @@ public class Pessoa implements Serializable {
         return "Pessoa{" + "id=" + identificador + 
                 ", nome=" + nome + ", email=" + email + ", endereco=" + endereco + 
                 ", numero=" + numero + ", cep=" + cep + ", cidade=" + cidade + 
-                ", estado=" + estado + ", dataNascimento=" + dataNascimento + 
+                ", estado=" + estado + ", dataNascimento=" + datanascimento + 
                 ", rg=" + rg + ", cpf=" + cpf + ", telefoneCelular=" + telefoneCelular + 
                 ", telefoneResidencial=" + telefoneResidencial + 
                 ", telefoneComercial=" + telefoneComercial + 
@@ -260,14 +269,14 @@ public class Pessoa implements Serializable {
      * @return the dataNascimento
      */
     public Date getDataNascimento() {
-        return dataNascimento;
+        return datanascimento;
     }
 
     /**
      * @param dataNascimento the dataNascimento to set
      */
     public void setDataNascimento(Date dataNascimento) {
-        this.dataNascimento = dataNascimento;
+        this.datanascimento = dataNascimento;
     }
 
     /**
@@ -384,14 +393,14 @@ public class Pessoa implements Serializable {
      * @return the cursoInteresse
      */
     public Curso getCursoInteresse() {
-        return cursoInteresse;
+        return cursointeresse;
     }
 
     /**
      * @param cursoInteresse the cursoInteresse to set
      */
     public void setCursoInteresse(Curso cursoInteresse) {
-        this.cursoInteresse = cursoInteresse;
+        this.cursointeresse = cursoInteresse;
     }
 
     /**
@@ -412,14 +421,14 @@ public class Pessoa implements Serializable {
      * @return the dataInclusao
      */
     public Date getDataInclusao() {
-        return dataInclusao;
+        return datainclusao;
     }
 
     /**
      * @param dataInclusao the dataInclusao to set
      */
     public void setDataInclusao(Date dataInclusao) {
-        this.dataInclusao = dataInclusao;
+        this.datainclusao = dataInclusao;
     }
     
 }

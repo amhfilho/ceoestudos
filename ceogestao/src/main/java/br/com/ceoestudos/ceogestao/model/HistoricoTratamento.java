@@ -3,13 +3,19 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.joda.time.DateTime;
+
+@SuppressWarnings("serial")
 @Embeddable
+@Table(name="tratamento_historico")
 public class HistoricoTratamento implements Serializable, Comparable<HistoricoTratamento> {
 
     public HistoricoTratamento() {
@@ -27,7 +33,7 @@ public class HistoricoTratamento implements Serializable, Comparable<HistoricoTr
     }
 
     @Temporal(TemporalType.DATE)
-    private Date data;
+    private DateTime data;
 
     @Size(max = 255, message = "A descrição não pode exceder 255 caracteres")
     private String descricao;

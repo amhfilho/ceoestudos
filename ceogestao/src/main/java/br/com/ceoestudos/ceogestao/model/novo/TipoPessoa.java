@@ -1,4 +1,4 @@
-package br.com.ceoestudos.ceogestao.model;
+package br.com.ceoestudos.ceogestao.model.novo;
 
 /**
  *
