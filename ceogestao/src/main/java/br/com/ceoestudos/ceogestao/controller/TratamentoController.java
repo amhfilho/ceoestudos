@@ -2,12 +2,14 @@ package br.com.ceoestudos.ceogestao.controller;
 
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.ProcedimentoDAO;
+import br.com.ceoestudos.ceogestao.dao.ProcedimentoAvulsoDAO;
 import br.com.ceoestudos.ceogestao.dao.TratamentoDAO;
 import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
 import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.Procedimento;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
+import br.com.ceoestudos.ceogestao.model.ProcedimentoAvulso;
 import br.com.ceoestudos.ceogestao.model.TratamentoDente;
 import br.com.ceoestudos.ceogestao.model.Turma;
 import java.text.ParseException;
@@ -45,6 +47,9 @@ public class TratamentoController {
     @Autowired
     private TratamentoDAO tDAO;
     
+    @Autowired
+    private ProcedimentoAvulsoDAO tADAO;
+    
     private final Logger LOG = Logger.getLogger(getClass());
     
     @RequestMapping("tratamentos")
@@ -76,6 +81,7 @@ public class TratamentoController {
         Tratamento t = tDAO.getById(idTratamento);
         LOG.debug(idTratamento+","+t);
         model.addAttribute("tratamento",t);
+        findProcedimentosAvulsosByTratamento(model, t);
         return "formTratamento";
     }
     
@@ -95,6 +101,7 @@ public class TratamentoController {
         Pessoa responsavel = pessoaDAO.getById(idResponsavel);
         tratamento.addResponsavel(responsavel);
         tDAO.atualizar(tratamento);
+        findProcedimentosAvulsosByTratamento(model, tratamento);
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
@@ -111,7 +118,7 @@ public class TratamentoController {
             }
             model.addAttribute("SUCCESS_MESSAGE","Tratamento salvo com sucesso");
         }
-        
+        findProcedimentosAvulsosByTratamento(model, tratamento);
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
     }
@@ -141,9 +148,37 @@ public class TratamentoController {
             tratamento.addTratamentoDente(idDente, qtdProcedimento, procedimento);
             tDAO.atualizar(tratamento);
         }
-             
+        findProcedimentosAvulsosByTratamento(model, tratamento);
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
+    }
+    @Transactional
+    @RequestMapping(value = "adicionarProcedimentoAvulso", method = RequestMethod.POST)
+    public String adicionarProcedimentoAvulso(Model model, 
+                                        Tratamento tratamento, 
+                                        Long idProcedimento,
+                                        Integer qtdProcedimento){
+        
+        Procedimento procedimento = procedimentoDAO.getById(idProcedimento);
+        
+        if(tratamento.getId()==null){
+            tDAO.adicionar(tratamento);
+        }
+        Set<ProcedimentoAvulso> avulsos = tratamento.getProcedimentosAvulsos();
+        ProcedimentoAvulso tratamentoAvulso = null;
+        
+        tratamentoAvulso = new ProcedimentoAvulso();
+        tratamentoAvulso.setProcedimento(procedimento);
+        tratamentoAvulso.setQtd(qtdProcedimento);
+        tratamentoAvulso.setTratamento(tratamento);
+        tADAO.adicionar(tratamentoAvulso);
+        findProcedimentosAvulsosByTratamento(model, tratamento);
+        return "formTratamento";
+    }
+    
+    private void findProcedimentosAvulsosByTratamento(Model model,Tratamento tratamento){
+        List<ProcedimentoAvulso> avulsos = tADAO.findByTratamento(tratamento.getId());
+        model.addAttribute("procedimentosAvulsos",avulsos);
     }
     
     @Transactional

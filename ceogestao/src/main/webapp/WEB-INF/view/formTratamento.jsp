@@ -70,6 +70,7 @@
 
     function configurarModalProcedimento(dente) {
         idPaciente = document.getElementById("idPaciente").value;
+        document.getElementById("tipoProcedimento").value = "procedimentoDente";
         if (idPaciente === "") {
             alert('Deve haver um paciente associado a este tratamento');
         } else {
@@ -77,12 +78,27 @@
             document.getElementById("idDente").value = dente;
         }
     }
+    
+    function configurarModalProcedimentoAvulso() {
+        idPaciente = document.getElementById("idPaciente").value;
+        document.getElementById("tipoProcedimento").value = "procedimentoAvulso";
+        if (idPaciente === "") {
+            alert('Deve haver um paciente associado a este tratamento');
+        } else {
+            $('#procedimentoModal').modal('show');
+        }
+    }
 
     function adicionarProcedimento(id, qtd_id) {
         qtd = document.getElementById(qtd_id).value;
         document.getElementById("idProcedimento").value = id;
         document.getElementById("qtdProcedimento").value = qtd;
-        document.formTratamento.action = "adicionarProcedimento.html";
+        tipoProcedimento = document.getElementById("tipoProcedimento").value;
+        if(tipoProcedimento === 'procedimentoDente'){
+            document.formTratamento.action = "adicionarProcedimento.html";
+        } else {
+            document.formTratamento.action = "adicionarProcedimentoAvulso.html";
+        }
         document.formTratamento.submit();
     }
 
@@ -131,6 +147,7 @@
     <input type="hidden" id="adicionarPessoaAction" name="adicionarPessoaAction" />
     <input type="hidden" id="idResponsavel" name="idResponsavel" />
     <input type="hidden" id="idTratamentoDente" name="idTratamentoDente" />
+    <input type="hidden" id="tipoProcedimento" name="tipoProcedimento" />
     <form:hidden path="id" />
 
     <div class="form-group">
@@ -177,7 +194,47 @@
                 </c:forEach>
             </table>
         </c:if>
-        <p><button type="button" class="btn btn-default btn-xs" onclick="configurarModalAluno('responsavel')">Adicionar</button></p>
+        <p><button type="button" class="btn btn-default btn-xs" onclick="configurarModalAluno('responsavel')">Adicionar aluno</button></p>
+    </div>
+                
+    <div class="form-group">
+        <label for="" >Procedimentos avulsos</label>
+        <c:if test="${fn:length(procedimentosAvulsos) > 0}">
+            <table class="table table-striped" id="responsaveis">
+                <thead>
+                    <th>Procedimento</th>
+                    <th style="text-align: center">Qtd</th>
+                    <th style="text-align: right">Valor unitário</th>
+                    <th style="text-align: right">Sub-total</th>
+                </thead>
+                <tbody>
+                    <c:set var="sum" value="${0}"/>
+                    <c:forEach items="${procedimentosAvulsos}" var="avulso">
+                        <tr>
+                            <td>${avulso.procedimento.nome}</td>
+                            <td style="text-align: center">${avulso.qtd}</td>
+                            <td style="text-align: right">
+                                <fmt:formatNumber value="${avulso.procedimento.preco}" 
+                                                  type="number" groupingUsed='true' minFractionDigits="2" maxFractionDigits="2"/>
+                            </td>
+                            <td style="text-align: right">
+                                <fmt:formatNumber value="${avulso.total}" 
+                                                  type="number" groupingUsed='true' minFractionDigits="2" maxFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <c:set var="sum" value="${sum + avulso.total}"/> 
+                    </c:forEach>
+                        <tr>
+                            <td style="text-align: right" colspan="3"><b>Total:</b></td>
+                            <td style="text-align: right">
+                                <fmt:formatNumber value="${sum}" 
+                                                  type="number" groupingUsed='true' minFractionDigits="2" maxFractionDigits="2"/>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </c:if>
+        <p><button type="button" class="btn btn-default btn-xs" onclick="configurarModalProcedimentoAvulso()">Adicionar procedimento</button></p>
     </div>
 
     <p>Clique no dente para inserir um procedimento</p>

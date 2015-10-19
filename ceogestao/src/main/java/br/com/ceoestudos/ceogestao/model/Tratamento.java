@@ -60,6 +60,45 @@ public class Tratamento implements Serializable {
     @Min(value = 0, message = "Taxa deve ser maior ou igual a zero")
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private Double taxa = 0d;
+    
+    @OneToMany(mappedBy = "tratamento", cascade = {CascadeType.ALL})
+    private Set<ProcedimentoAvulso> procedimentosAvulsos;
+    
+    public void addProcedimentoAvulso(Procedimento procedimento,Integer qtd,Tratamento tratamento){
+        if(procedimentosAvulsos==null){
+            procedimentosAvulsos = new HashSet<ProcedimentoAvulso>();
+        }
+        ProcedimentoAvulso avulso = getProcedimentoAvulsoPorProcedimento(procedimento);
+        if(avulso == null){
+            avulso = new ProcedimentoAvulso();
+            avulso.setProcedimento(procedimento);
+            avulso.setQtd(qtd);
+            avulso.setTratamento(tratamento);
+            procedimentosAvulsos.add(avulso);
+        } else {
+            avulso.setQtd(avulso.getQtd()+1);
+        }    
+        
+    }
+    
+    public ProcedimentoAvulso getProcedimentoAvulsoPorProcedimento(Procedimento p){
+        if(getProcedimentosAvulsos()!=null){
+            for(ProcedimentoAvulso avulso:getProcedimentosAvulsos()){
+                if(avulso.getProcedimento().equals(p)){
+                    return avulso;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Set<ProcedimentoAvulso> getProcedimentosAvulsos() {
+        return procedimentosAvulsos;
+    }
+
+    public void setProcedimentosAvulsos(Set<ProcedimentoAvulso> procedimentosAvulsos) {
+        this.procedimentosAvulsos = procedimentosAvulsos;
+    }
 
     public Double getTaxa() {
         if(taxa==null){
@@ -126,6 +165,10 @@ public class Tratamento implements Serializable {
             getDentes().remove(td);
         }
         getDentes().add(td);
+    }
+    
+    public void addProcedimentoAvulso(int qtd, Procedimento procedimento){
+        
     }
     
     public void removeTratamentoDente(Integer dente,Long idProcedimento) {
