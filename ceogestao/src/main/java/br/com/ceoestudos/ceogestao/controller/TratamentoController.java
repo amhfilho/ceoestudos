@@ -103,6 +103,7 @@ public class TratamentoController {
         
         tratamento.addResponsavel(responsavel);
         tDAO.atualizar(tratamento);
+        model.addAttribute("SUCCESS_MESSAGE","Aluno adicionado com sucesso");
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
@@ -167,6 +168,7 @@ public class TratamentoController {
         }
         tratamento.addProcedimentoAvulso(procedimento, qtdProcedimento, tratamento);
         tDAO.atualizar(tratamento);
+        model.addAttribute("SUCCESS_MESSAGE","Procedimento adicionado com sucesso");
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
     }

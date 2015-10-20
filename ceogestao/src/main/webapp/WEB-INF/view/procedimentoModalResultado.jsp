@@ -8,10 +8,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-<c:if test="${empty procedimentos}">
+<c:if test="${fn:length(procedimentos)==0}">
     <p><small>Nenhum procedimento encontrado<small></p>
 </c:if>
-
+<c:if test="${fn:length(procedimentos)>0}">
 <table class="table-striped" style="width: 100%">
 <c:forEach items="${procedimentos}" var="procedimento">
     <tr>
@@ -40,4 +40,5 @@
     <tr><td></td></tr>
 </c:forEach>
 </table>
+</c:if>
 <input type="hidden" id="procedimentoId" name="procedimentoId" value=""/>

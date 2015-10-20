@@ -182,10 +182,10 @@
 
     <div class="form-group">
         <label for="">Alunos responsáveis pelo atendimento</label>
-        <c:if test="${empty tratamento.responsaveis}">
+        <c:if test="${fn:length(tratamento.responsaveis) == 0}">
             <p>Não há aluno responsável por este tratamento</p>
         </c:if>
-        <c:if test="${not empty tratamento.responsaveis}">
+        <c:if test="${fn:length(tratamento.responsaveis) > 0}">
             <table class="table table-striped" id="responsaveis">
                 <c:forEach items="${tratamento.responsaveis}" var="responsavel">
                     <tr>
@@ -373,7 +373,7 @@
 
 <div class="form-group">
     <label for="historico" >Histórico de atendimento</label>
-    <c:if test="${empty tratamento.historico}">
+    <c:if test="${fn:length(tratamento.historico)==0}">
         <p>Não há histórico de atendimento</p>
     </c:if>
     <c:if test="${not empty tratamento.historico}">
