@@ -199,7 +199,7 @@
                 
     <div class="form-group">
         <label for="" >Procedimentos avulsos</label>
-        <c:if test="${fn:length(procedimentosAvulsos) > 0}">
+        <c:if test="${fn:length(tratamento.procedimentosAvulsos) > 0}">
             <table class="table table-striped" id="responsaveis">
                 <thead>
                     <th>Procedimento</th>
@@ -209,7 +209,7 @@
                 </thead>
                 <tbody>
                     <c:set var="sum" value="${0}"/>
-                    <c:forEach items="${procedimentosAvulsos}" var="avulso">
+                    <c:forEach items="${tratamento.procedimentosAvulsos}" var="avulso">
                         <tr>
                             <td>${avulso.procedimento.nome}</td>
                             <td style="text-align: center">${avulso.qtd}</td>
@@ -234,7 +234,7 @@
                 </tbody>
             </table>
         </c:if>
-        <p><button type="button" class="btn btn-default btn-xs" onclick="configurarModalProcedimentoAvulso()">Adicionar procedimento</button></p>
+        <button type="button" class="btn btn-default btn-xs" onclick="configurarModalProcedimentoAvulso()">Adicionar procedimento</button>
     </div>
 
     <p>Clique no dente para inserir um procedimento</p>

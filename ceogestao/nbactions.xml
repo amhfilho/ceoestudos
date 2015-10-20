@@ -9,4 +9,12 @@
                 <goal>tomcat7:redeploy</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-mvnDebug</actionName>
+            <displayName>mvnDebug</displayName>
+            <goals>
+                <goal>tomcat7:redeploy</goal>
+                
+            </goals>
+        </action>
     </actions>

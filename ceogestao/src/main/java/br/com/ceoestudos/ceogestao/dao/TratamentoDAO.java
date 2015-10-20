@@ -5,6 +5,7 @@ import br.com.ceoestudos.ceogestao.model.TratamentoDente;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,8 +18,18 @@ public class TratamentoDAO {
         return em.find(Tratamento.class, id);
     }
     
+    public Tratamento getFullById(Long id){
+        TypedQuery<Tratamento> query = em.createQuery(
+                "select t from Tratamento t "
+              + "left join fetch t.dentes "
+              + "left join fetch t.procedimentosAvulsos "
+              + "where t.id = :id",Tratamento.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+    
     public List<Tratamento> listarTodos(){
-        return em.createQuery("select t from Tratamento t").getResultList();
+        return em.createQuery("select t from Tratamento t left join fetch t.dentes").getResultList();
     }
     
     public void adicionar(Tratamento t){

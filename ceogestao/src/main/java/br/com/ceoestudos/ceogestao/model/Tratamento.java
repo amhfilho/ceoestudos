@@ -40,7 +40,7 @@ public class Tratamento implements Serializable {
 
     private String obs;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tratamento", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "tratamento", cascade = {CascadeType.ALL})
     private Set<TratamentoDente> dentes;
     
     @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
@@ -76,7 +76,7 @@ public class Tratamento implements Serializable {
             avulso.setTratamento(tratamento);
             procedimentosAvulsos.add(avulso);
         } else {
-            avulso.setQtd(avulso.getQtd()+1);
+            avulso.setQtd(avulso.getQtd()+qtd);
         }    
         
     }
@@ -165,10 +165,6 @@ public class Tratamento implements Serializable {
             getDentes().remove(td);
         }
         getDentes().add(td);
-    }
-    
-    public void addProcedimentoAvulso(int qtd, Procedimento procedimento){
-        
     }
     
     public void removeTratamentoDente(Integer dente,Long idProcedimento) {

@@ -9,14 +9,12 @@ import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.Procedimento;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
-import br.com.ceoestudos.ceogestao.model.ProcedimentoAvulso;
 import br.com.ceoestudos.ceogestao.model.TratamentoDente;
 import br.com.ceoestudos.ceogestao.model.Turma;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,12 +74,10 @@ public class TratamentoController {
     }
     
     @RequestMapping("editarTratamento")
-    public String editarTratamento(Model model,
-                                   @RequestParam Long idTratamento){
-        Tratamento t = tDAO.getById(idTratamento);
+    public String editarTratamento(Model model,@RequestParam Long idTratamento){
+        Tratamento t = tDAO.getFullById(idTratamento);
         LOG.debug(idTratamento+","+t);
         model.addAttribute("tratamento",t);
-        findProcedimentosAvulsosByTratamento(model, t);
         return "formTratamento";
     }
     
@@ -91,17 +87,22 @@ public class TratamentoController {
                                        Long idResponsavel,
                                        Tratamento tratamento) {
         LOG.debug(idResponsavel);
+        Pessoa responsavel = pessoaDAO.getById(idResponsavel);
         if(tratamento.getId()!=null){
-            Tratamento tratamentoBD = tDAO.getById(tratamento.getId());
-            tratamento.setDentes(tratamentoBD.getDentes());
-            tratamento.setResponsaveis(tratamentoBD.getResponsaveis());
+            Tratamento tratamentoBD = tDAO.getFullById(tratamento.getId());
+            if(tratamentoBD.getResponsaveis().contains(responsavel)){
+                model.addAttribute("ERROR_MESSAGE",String.format("Aluno %s já adicionado",responsavel.getNome()));
+                tratamento.setDentes(tratamentoBD.getDentes());
+                tratamento.setResponsaveis(tratamentoBD.getResponsaveis());
+                tratamento.setProcedimentosAvulsos(tratamentoBD.getProcedimentosAvulsos());
+                return "formTratamento";
+            }
         } else{
             tDAO.adicionar(tratamento);
         }
-        Pessoa responsavel = pessoaDAO.getById(idResponsavel);
+        
         tratamento.addResponsavel(responsavel);
         tDAO.atualizar(tratamento);
-        findProcedimentosAvulsosByTratamento(model, tratamento);
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
@@ -118,7 +119,6 @@ public class TratamentoController {
             }
             model.addAttribute("SUCCESS_MESSAGE","Tratamento salvo com sucesso");
         }
-        findProcedimentosAvulsosByTratamento(model, tratamento);
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
     }
@@ -148,7 +148,6 @@ public class TratamentoController {
             tratamento.addTratamentoDente(idDente, qtdProcedimento, procedimento);
             tDAO.atualizar(tratamento);
         }
-        findProcedimentosAvulsosByTratamento(model, tratamento);
         model.addAttribute("tratamento",tratamento);
         return "formTratamento";
     }
@@ -163,22 +162,13 @@ public class TratamentoController {
         
         if(tratamento.getId()==null){
             tDAO.adicionar(tratamento);
+        } else {
+            tratamento = tDAO.getFullById(tratamento.getId());
         }
-        Set<ProcedimentoAvulso> avulsos = tratamento.getProcedimentosAvulsos();
-        ProcedimentoAvulso tratamentoAvulso = null;
-        
-        tratamentoAvulso = new ProcedimentoAvulso();
-        tratamentoAvulso.setProcedimento(procedimento);
-        tratamentoAvulso.setQtd(qtdProcedimento);
-        tratamentoAvulso.setTratamento(tratamento);
-        tADAO.adicionar(tratamentoAvulso);
-        findProcedimentosAvulsosByTratamento(model, tratamento);
+        tratamento.addProcedimentoAvulso(procedimento, qtdProcedimento, tratamento);
+        tDAO.atualizar(tratamento);
+        model.addAttribute("tratamento",tratamento);
         return "formTratamento";
-    }
-    
-    private void findProcedimentosAvulsosByTratamento(Model model,Tratamento tratamento){
-        List<ProcedimentoAvulso> avulsos = tADAO.findByTratamento(tratamento.getId());
-        model.addAttribute("procedimentosAvulsos",avulsos);
     }
     
     @Transactional
@@ -207,7 +197,7 @@ public class TratamentoController {
             dt = new SimpleDateFormat("dd/MM/yyyy").parse(dataHistorico);
         } catch (ParseException ex) {
             
-            model.addAttribute("ERROR_MESSAGE","Formato de data inválida");
+            model.addAttribute("ERROR_MESSAGE","Formato de data invÃ¡lida");
             model.addAttribute("tratamento", tratamento);
             return "formTratamento";
         }
