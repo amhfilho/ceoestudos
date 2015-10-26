@@ -70,18 +70,18 @@ public class Turma implements Serializable {
 
     private SituacaoTurma situacao = SituacaoTurma.NAO_CONFIRMADA;
     
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
+    @OneToMany(mappedBy = "turma")
     private Set<Conta> contas;
     
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
+    @OneToMany(mappedBy = "turma")
     private Set<Tratamento> tratamentos;
     
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "turma")
+    @OneToMany(mappedBy = "turma")
     private Set<Cirurgia> cirurgias;
 
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    private Pessoa professor;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "TURMA_ALUNO",
             joinColumns = @JoinColumn(name = "TURMA_ID"),
             inverseJoinColumns = @JoinColumn(name = "ALUNO_ID"))

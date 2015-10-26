@@ -2,12 +2,10 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,7 +57,7 @@ public class Pessoa implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipo;
         
-    @ManyToMany(mappedBy = "alunos", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "alunos")
     private Set<Turma> turmas;
     
     public String getNomeTurmas(){
@@ -73,7 +71,7 @@ public class Pessoa implements Serializable {
         return "Nenhum curso associado";
     }
     
-    @OneToOne (fetch = FetchType.EAGER)
+    @OneToOne
     private Curso cursoInteresse;
     
     private String contato;

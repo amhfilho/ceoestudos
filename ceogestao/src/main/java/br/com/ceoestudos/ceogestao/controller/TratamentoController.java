@@ -2,12 +2,13 @@ package br.com.ceoestudos.ceogestao.controller;
 
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.ProcedimentoDAO;
-import br.com.ceoestudos.ceogestao.dao.ProcedimentoAvulsoDAO;
 import br.com.ceoestudos.ceogestao.dao.TratamentoDAO;
 import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
 import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.Procedimento;
+import br.com.ceoestudos.ceogestao.model.StatusTratamento;
+import br.com.ceoestudos.ceogestao.model.TipoPessoa;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
 import br.com.ceoestudos.ceogestao.model.TratamentoDente;
 import br.com.ceoestudos.ceogestao.model.Turma;
@@ -45,9 +46,6 @@ public class TratamentoController {
     @Autowired
     private TratamentoDAO tDAO;
     
-    @Autowired
-    private ProcedimentoAvulsoDAO tADAO;
-    
     private final Logger LOG = Logger.getLogger(getClass());
     
     @RequestMapping("tratamentos")
@@ -58,8 +56,17 @@ public class TratamentoController {
     
     @RequestMapping("novoTratamento")
     public String novoTratamento(Model model){
+        if(!existeProfessor()){
+            model.addAttribute("ERROR_MESSAGE","Não há professores cadastrados no sistema. Não é possível criar um tratamento");
+            model.addAttribute("tratamentos", tDAO.listarTodos());
+            return "tratamentos";
+        }
         model.addAttribute("tratamento",new Tratamento());
         return "formTratamento";
+    }
+    
+    private boolean existeProfessor(){
+        return pessoaDAO.listarPorCriteria(null, TipoPessoa.PROFESSOR).size()>0;
     }
     
     @ModelAttribute("todasAsTurmas")
@@ -89,12 +96,13 @@ public class TratamentoController {
         LOG.debug(idResponsavel);
         Pessoa responsavel = pessoaDAO.getById(idResponsavel);
         if(tratamento.getId()!=null){
-            Tratamento tratamentoBD = tDAO.getFullById(tratamento.getId());
-            if(tratamentoBD.getResponsaveis().contains(responsavel)){
-                model.addAttribute("ERROR_MESSAGE",String.format("Aluno %s já adicionado",responsavel.getNome()));
-                tratamento.setDentes(tratamentoBD.getDentes());
-                tratamento.setResponsaveis(tratamentoBD.getResponsaveis());
-                tratamento.setProcedimentosAvulsos(tratamentoBD.getProcedimentosAvulsos());
+            loadTratamentoFromBD(tratamento);
+            if(tratamento.getResponsaveis().contains(responsavel)){
+                model.addAttribute("ERROR_MESSAGE",String.format("Aluno %s jÃ¡ adicionado",responsavel.getNome()));
+                tratamento.setDentes(tratamento.getDentes());
+                tratamento.setResponsaveis(tratamento.getResponsaveis());
+                tratamento.setProcedimentosAvulsos(tratamento.getProcedimentosAvulsos());
+                tratamento.setHistorico(tratamento.getHistorico());
                 return "formTratamento";
             }
         } else{
@@ -104,6 +112,7 @@ public class TratamentoController {
         tratamento.addResponsavel(responsavel);
         tDAO.atualizar(tratamento);
         model.addAttribute("SUCCESS_MESSAGE","Aluno adicionado com sucesso");
+        loadTratamentoFromBD(tratamento);
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
@@ -115,7 +124,7 @@ public class TratamentoController {
             if(tratamento.getId()==null){
                 tDAO.adicionar(tratamento);
             } else {
-                tratamento = getTratamentoBD(tratamento);
+                loadTratamentoFromBD(tratamento);
                 tDAO.atualizar(tratamento);
             }
             model.addAttribute("SUCCESS_MESSAGE","Tratamento salvo com sucesso");
@@ -145,7 +154,7 @@ public class TratamentoController {
             tratamento.addTratamentoDente(idDente, qtdProcedimento, procedimento);
             tDAO.adicionar(tratamento);
         } else {
-            tratamento.setDentes(tDAO.getById(tratamento.getId()).getDentes());
+            loadTratamentoFromBD(tratamento);
             tratamento.addTratamentoDente(idDente, qtdProcedimento, procedimento);
             tDAO.atualizar(tratamento);
         }
@@ -164,9 +173,9 @@ public class TratamentoController {
         if(tratamento.getId()==null){
             tDAO.adicionar(tratamento);
         } else {
-            tratamento = tDAO.getFullById(tratamento.getId());
+            loadTratamentoFromBD(tratamento);
         }
-        tratamento.addProcedimentoAvulso(procedimento, qtdProcedimento, tratamento);
+        tratamento.addProcedimentoAvulso(procedimento, qtdProcedimento);
         tDAO.atualizar(tratamento);
         model.addAttribute("SUCCESS_MESSAGE","Procedimento adicionado com sucesso");
         model.addAttribute("tratamento",tratamento);
@@ -179,10 +188,21 @@ public class TratamentoController {
                                       Tratamento tratamento,
                                       Long idTratamentoDente){
         TratamentoDente td = new TratamentoDente(idTratamentoDente);
-        tratamento = tDAO.getById(tratamento.getId());
+        loadTratamentoFromBD(tratamento);
         tratamento.removeTratamento(td);
         tDAO.excluirTratamentoDente(td);
         model.addAttribute("tratamento",tratamento);
+        return "formTratamento";
+    }
+    
+    @Transactional
+    @RequestMapping(value = "removerResponsavel", method = RequestMethod.POST)
+    public String removerResponsavel(Model model,Tratamento tratamento, Long idResponsavel){
+        loadTratamentoFromBD(tratamento);
+        tratamento.removeResponsavel(pessoaDAO.getById(idResponsavel));
+        tDAO.atualizar(tratamento);
+        model.addAttribute("SUCCESS_MESSAGE", "Responsável removido com sucesso");
+        model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
     
@@ -192,44 +212,87 @@ public class TratamentoController {
             Tratamento tratamento, String dataHistorico, String descricaoHistorico,
             Long idProfessor){
         
-        tratamento = getTratamentoBD(tratamento);
+        if(tratamento.getId()==null){
+            tDAO.adicionar(tratamento);
+        } else {
+            loadTratamentoFromBD(tratamento);
+        }
         Pessoa professor = pessoaDAO.getById(idProfessor);
         Date dt;
         try {
             dt = new SimpleDateFormat("dd/MM/yyyy").parse(dataHistorico);
-        } catch (ParseException ex) {
-            
-            model.addAttribute("ERROR_MESSAGE","Formato de data invÃ¡lida");
+        } catch (ParseException ex) {          
+            model.addAttribute("ERROR_MESSAGE","Formato de data inválida");
             model.addAttribute("tratamento", tratamento);
             return "formTratamento";
         }
         
-        tratamento.adicionarHistorico(new HistoricoTratamento(dt, dataHistorico, professor));
+        tratamento.adicionarHistorico(new HistoricoTratamento(dt, descricaoHistorico, professor));
         tDAO.atualizar(tratamento);
+        model.addAttribute("SUCCESS_MESSAGE", "Histórico adicionado com sucesso");
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
     
-    private Tratamento getTratamentoBD(Tratamento tratamento){
+    @RequestMapping(value="removerTratamentoHistorico", method=RequestMethod.POST)
+    @Transactional
+    public String removerHistorico(Model model, Long idTratamentoHistorico, Tratamento tratamento){
+        tDAO.excluirHistoricoTratamento(idTratamentoHistorico);
+        model.addAttribute("SUCCESS_MESSAGE", "Linha de histórico removida com sucesso");
+        model.addAttribute("tratamento", tDAO.getFullById(tratamento.getId()));
+        return "formTratamento";
+    }
+    
+    private void loadTratamentoFromBD(Tratamento tratamento){
        if(tratamento.getId()!=null){
-            Tratamento tratamentoBD = tDAO.getById(tratamento.getId());
+            Tratamento tratamentoBD = tDAO.getFullById(tratamento.getId());
             tratamento.setDentes(tratamentoBD.getDentes());
             tratamento.setHistorico(tratamentoBD.getHistorico());
             tratamento.setResponsaveis(tratamentoBD.getResponsaveis());
+            tratamento.setProcedimentosAvulsos(tratamentoBD.getProcedimentosAvulsos());
         } else {
             tDAO.adicionar(tratamento);
         }
-       return tratamento;
     }
     
+    @Transactional
     @RequestMapping(value = "aplicarTaxa", method=RequestMethod.POST)
     public String aplicarTaxa(Model model, Tratamento tratamento){
-        
-        tratamento = getTratamentoBD(tratamento);
-        
+        loadTratamentoFromBD(tratamento);
+        tDAO.atualizar(tratamento);
         model.addAttribute("SUCCESS_MESSAGE","Taxa aplicada com sucesso");
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
+    }
+    
+    @Transactional
+    @RequestMapping(value = "aprovarOrcamento", method=RequestMethod.POST)
+    public String aprovarOrcamento(Model model, Tratamento tratamento){
+        loadTratamentoFromBD(tratamento);
+        tratamento.setStatus(StatusTratamento.APROVADO);
+        adicionarHistoricoAprovacao(tratamento);
+        tDAO.atualizar(tratamento);
+        model.addAttribute("SUCCESS_MESSAGE","Orçamento aprovado com sucesso");
+        model.addAttribute("tratamento", tratamento);
+        return "formTratamento";
+    }
+    
+    @Transactional
+    @RequestMapping(value = "cancelarOrcamento", method=RequestMethod.POST)
+    public String cancelarOrcamento(Model model, Tratamento tratamento){
+        loadTratamentoFromBD(tratamento);
+        tratamento.setStatus(StatusTratamento.CANCELADO);
+        adicionarHistoricoAprovacao(tratamento);
+        tDAO.atualizar(tratamento);
+        model.addAttribute("SUCCESS_MESSAGE","Orçamento cancelado com sucesso");
+        model.addAttribute("tratamento", tratamento);
+        return "formTratamento";
+    }
+    
+    private void adicionarHistoricoAprovacao(Tratamento tratamento){
+        String descricao = String.format("Orçamento %s", tratamento.getStatus().toString());
+        HistoricoTratamento ht = new HistoricoTratamento(new Date(), descricao);
+        tratamento.adicionarHistorico(ht);
     }
     
     @InitBinder

@@ -36,6 +36,12 @@
                 </div>
             </div>
         </td>
+        <td>
+            <small>
+                <fmt:formatNumber value="${procedimento.preco}" 
+                          maxFractionDigits="2" minFractionDigits="2" groupingUsed="true"/>
+            </small>
+        </td>
     </tr>
     <tr><td></td></tr>
 </c:forEach>

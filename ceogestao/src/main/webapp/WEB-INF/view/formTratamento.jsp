@@ -100,6 +100,7 @@
             document.formTratamento.action = "adicionarProcedimentoAvulso.html";
         }
         document.formTratamento.submit();
+        $('#procedimentoModal').modal('hide');
     }
 
     function removerProcedimento(idTratamentoDente) {
@@ -122,16 +123,44 @@
         document.formTratamento.action = "aplicarTaxa.html";
         document.formTratamento.submit();
     }
-
-
+    
+    function removerResponsavel(idAluno){
+        document.formTratamento.action = "removerResponsavel.html";
+        document.getElementById("idResponsavel").value = idAluno;
+        document.formTratamento.submit();
+    }
+    
+    function removerHistorico(id){
+        if(confirm('Deseja realmente remover esta linha de histórico?')){
+            document.formTratamento.action = "removerTratamentoHistorico.html";
+            document.getElementById("idTratamentoHistorico").value = id ;
+            document.formTratamento.submit();
+        }
+    }
+    
+    function aprovarOrcamento(status){
+        var action;
+        if(status==='APROVADO'){
+            action = "cancelar";
+            document.formTratamento.action = "cancelarOrcamento.html";
+        }
+        else if(status==='NAO_APROVADO'){
+            action="aprovar";
+            document.formTratamento.action = "aprovarOrcamento.html";
+        }
+        if(confirm('Deseja realmente '+action+' o orcamento?')){
+            document.formTratamento.submit();
+        }
+    }
 </script>
 
-<jsp:include page="pacienteModal.jsp" />
-<jsp:include page="alunoModal.jsp" />
-<jsp:include page="procedimentoModal.jsp" />
+
 
 <form:form class="form-horizontal" role="form" modelAttribute="tratamento" method="POST" action="salvarTratamento.html"
            name="formTratamento">
+    <jsp:include page="pacienteModal.jsp" />
+<jsp:include page="alunoModal.jsp" />
+<jsp:include page="procedimentoModal.jsp" />
     <jsp:include page="historicoModal.jsp" />
 
     <form:errors path="*">
@@ -148,7 +177,32 @@
     <input type="hidden" id="idResponsavel" name="idResponsavel" />
     <input type="hidden" id="idTratamentoDente" name="idTratamentoDente" />
     <input type="hidden" id="tipoProcedimento" name="tipoProcedimento" />
+    <input type="hidden" id="idTratamentoHistorico" name="idTratamentoHistorico" />
+    <input type="hidden" id="idTratamento" name="idTratamento" />
+    
     <form:hidden path="id" />
+    <c:if test="${tratamento.status == 'NAO_APROVADO'}">
+        <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Warning:</span>
+            Orçamento não aprovado
+          </div>
+    </c:if>
+    <c:if test="${tratamento.status == 'APROVADO'}">
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            <span class="sr-only">OK:</span>
+            Orçamento aprovado
+          </div>
+    </c:if>
+    <c:if test="${tratamento.status == 'CANCELADO'}">
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Orçamento cancelado
+          </div>
+    </c:if>
+    
 
     <div class="form-group">
         <label for="turma" class="col-sm-2 control-label">Turma</label>
@@ -190,6 +244,14 @@
                 <c:forEach items="${tratamento.responsaveis}" var="responsavel">
                     <tr>
                         <td>${responsavel.nome}</td>
+                        <td>
+                            <button type="button" class="btn btn-default btn-xs" 
+                                    onclick="if (confirm('Deseja realmente excluir o aluno? ')) {
+                                    location.href = 'javascript:removerResponsavel(${responsavel.identificador})';
+                                }">
+                            <span class="glyphicon glyphicon-trash"></span>  Excluir
+                            </button>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>
@@ -200,12 +262,13 @@
     <div class="form-group">
         <label for="" >Procedimentos avulsos</label>
         <c:if test="${fn:length(tratamento.procedimentosAvulsos) > 0}">
-            <table class="table table-striped" id="responsaveis">
+            <table class="table table-condensed table-bordered" id="responsaveis">
                 <thead>
                     <th>Procedimento</th>
                     <th style="text-align: center">Qtd</th>
                     <th style="text-align: right">Valor unitário</th>
                     <th style="text-align: right">Sub-total</th>
+                    <th style="text-align: center">Remover</th>
                 </thead>
                 <tbody>
                     <c:set var="sum" value="${0}"/>
@@ -221,6 +284,11 @@
                                 <fmt:formatNumber value="${avulso.total}" 
                                                   type="number" groupingUsed='true' minFractionDigits="2" maxFractionDigits="2"/>
                             </td>
+                            <td style="text-align: center">
+                                <a href="javascript:removerProcedimentoAvulso(${avulso.id})">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </td>
                         </tr>
                         <c:set var="sum" value="${sum + avulso.total}"/> 
                     </c:forEach>
@@ -230,6 +298,7 @@
                                 <fmt:formatNumber value="${sum}" 
                                                   type="number" groupingUsed='true' minFractionDigits="2" maxFractionDigits="2"/>
                             </td>
+                            <td>&nbsp;</td>
                         </tr>
                 </tbody>
             </table>
@@ -342,29 +411,43 @@
                 </td>
             </tr>
         </c:forEach>
-        <tr>
-            <td td colspan="4" style="text-align: right">
-
-            </td>
-            <td style="text-align: right">
-                <button type="button" class="btn btn-default btn-xs" onclick="aplicarTaxa();">
-                    Aplicar taxa %
-                </button>
-                <form:input path="taxa" cssClass="form-control input-sm" id="taxa"/></td>
-            <td style="text-align: center">
-
-            </td>
-        </tr>
-        <tr>
-            <td colspan="4" style="text-align: right"><strong>Total</strong></td>
-            <td style="text-align: right">
-                <fmt:formatNumber value="${tratamento.valorComTaxa}" type="number"
-                                  minFractionDigits="2" maxFractionDigits="2"/>
-            </td>
-            <td></td>
-        </tr>
-    </table>
-</c:if>
+            
+            <tr>
+                <td colspan="4" style="text-align: right"><strong>Total</strong></td>
+                <td style="text-align: right">
+                    <fmt:formatNumber value="${tratamento.valorBruto}" type="number"
+                                      minFractionDigits="2" maxFractionDigits="2"/>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </c:if>
+        <table class="table table-condensed table-bordered" style="width: auto">
+            <tr>
+                <td style="text-align: right"><b>Total tratamento:</b></td>
+                <td style="text-align: right"><fmt:formatNumber value="${tratamento.totalTratamento}" 
+                                  type="number" minFractionDigits="2" maxFractionDigits="2" groupingUsed="true"/> 
+                </td>
+            </tr>
+            <tr> 
+                <td><form:input path="taxa" cssClass="form-control input-sm" id="taxa"/></td>
+                <td style="text-align: right">
+                    <button type="button" class="btn btn-default btn-xs" onclick="aplicarTaxa();">
+                        Aplicar taxa %
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><b>Taxa (%):</b></td>
+                <td style="text-align: right">${tratamento.taxa}</td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><b>Total com taxa</b></td>
+                <td style="text-align: right"><fmt:formatNumber value="${tratamento.valorComTaxa}" 
+                                  type="number" minFractionDigits="2" maxFractionDigits="2" groupingUsed="true"/> 
+                </td>
+            </tr>
+        </table>
 
 <div class="form-group">
     <label for="obs" >Observações</label>
@@ -376,8 +459,15 @@
     <c:if test="${fn:length(tratamento.historico)==0}">
         <p>Não há histórico de atendimento</p>
     </c:if>
-    <c:if test="${not empty tratamento.historico}">
+    <c:if test="${fn:length(tratamento.historico)>0}">
         <table class="table table-striped" id="historicoTable">
+            <thead>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Professor</th>
+            <th>&nbsp;</th>
+            </thead>
+            <tbody>
             <c:forEach items="${tratamento.historico}" var="historico">
                 <tr>
                     <td>
@@ -386,8 +476,15 @@
                     </td>
                     <td>${historico.descricao}</td>
                     <td>${historico.professor.nome}</td>
+                    <td style="text-align: center">
+                        <button type="button" class="btn btn-default btn-xs" 
+                                    onclick='removerHistorico(${historico.id})'>
+                            <span class="glyphicon glyphicon-trash"></span>  Excluir
+                         </button>
+                    </td>
                 </tr>
-            </c:forEach>           
+            </c:forEach>
+            </tbody>
         </table>
 
     </c:if>
@@ -408,6 +505,14 @@
                 <span class="glyphicon glyphicon-trash"></span>  Excluir
             </button>
             <button type="button" class="btn btn-default" onclick="location.href = 'novoTratamento.html'">Novo</button>
+            <c:if test="${tratamento.status == 'NAO_APROVADO'}">
+                <button type="button" class="btn btn-success" 
+                        onclick="aprovarOrcamento('${tratamento.status}')">Aprovar orçamento</button>
+            </c:if>
+            <c:if test="${tratamento.status == 'APROVADO' or tratamento.status == 'NAO_APROVADO'}">
+                <button type="button" class="btn btn-danger" 
+                        onclick="aprovarOrcamento('${tratamento.status}')">Cancelar orçamento</button>
+            </c:if>
         </c:if>
     </div>
 </div>

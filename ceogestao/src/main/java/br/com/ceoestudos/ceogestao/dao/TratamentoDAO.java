@@ -1,5 +1,6 @@
 package br.com.ceoestudos.ceogestao.dao;
 
+import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
 import br.com.ceoestudos.ceogestao.model.Tratamento;
 import br.com.ceoestudos.ceogestao.model.TratamentoDente;
 import java.util.List;
@@ -23,13 +24,17 @@ public class TratamentoDAO {
                 "select t from Tratamento t "
               + "left join fetch t.dentes "
               + "left join fetch t.procedimentosAvulsos "
+              + "left join fetch t.historico "
+              + "left join fetch t.responsaveis "
               + "where t.id = :id",Tratamento.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
     
     public List<Tratamento> listarTodos(){
-        return em.createQuery("select t from Tratamento t left join fetch t.dentes").getResultList();
+        return em.createQuery("select t from Tratamento t "
+                + "left join fetch t.dentes "
+                + "left join fetch t.procedimentosAvulsos").getResultList();
     }
     
     public void adicionar(Tratamento t){
@@ -48,6 +53,11 @@ public class TratamentoDAO {
     public void excluirTratamentoDente(TratamentoDente td){
         td = em.find(TratamentoDente.class, td.getId());
         em.remove(td);
+    }
+    
+    public void excluirHistoricoTratamento(Long id){
+        HistoricoTratamento ht = em.find(HistoricoTratamento.class, id);
+        em.remove(ht);
     }
     
 }

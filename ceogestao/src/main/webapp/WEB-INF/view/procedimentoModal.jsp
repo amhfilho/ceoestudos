@@ -2,10 +2,8 @@
     $(function() {
 
         $("#procurarProcedimentoBtn").click(function() {
-
-            //var a = $("input[name=procurarProcedimentoText]").val();
-            var a = document.getElementById('procurarProcedimentoText').value;
-            
+            var a = $("input[name=procurarProcedimentoText]").val();
+           // var a = document.getElementById("procurarProcedimentoText").value;
             if (a !== "") {
 
                 $.get("procedimentos.html", {pesquisa: a, resultado: "procedimentoModalResultado"}, function(resposta) {

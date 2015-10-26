@@ -8,9 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Digits;
+import javax.persistence.OrderBy;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.NumberFormat;
@@ -43,18 +44,20 @@ public class Tratamento implements Serializable {
     @OneToMany(mappedBy = "tratamento", cascade = {CascadeType.ALL})
     private Set<TratamentoDente> dentes;
     
-    @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
-    @Digits(integer = 8, fraction = 2)
-    @NumberFormat(style = NumberFormat.Style.NUMBER)
-    private BigDecimal valor = new BigDecimal(0);
+//    @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
+//    @Digits(integer = 8, fraction = 2)
+//    @NumberFormat(style = NumberFormat.Style.NUMBER)
+//    private BigDecimal valor = BigDecimal.ZERO;
     
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "TRATAMENTO_RESPONSAVEL",
             joinColumns = @JoinColumn(name = "TRATAMENTO_ID"),
             inverseJoinColumns = @JoinColumn(name = "RESPONSAVEL_ID"))
     private Set<Pessoa> responsaveis;
     
-    @ElementCollection(targetClass = HistoricoTratamento.class, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "Tratamento_id")
+    @OrderBy("dataHistorico DESC")
     private Set<HistoricoTratamento> historico;
     
     @Min(value = 0, message = "Taxa deve ser maior ou igual a zero")
@@ -64,7 +67,23 @@ public class Tratamento implements Serializable {
     @OneToMany(mappedBy = "tratamento", cascade = {CascadeType.ALL})
     private Set<ProcedimentoAvulso> procedimentosAvulsos;
     
-    public void addProcedimentoAvulso(Procedimento procedimento,Integer qtd,Tratamento tratamento){
+    @Column(name="status")
+    @Enumerated(EnumType.STRING)
+    private StatusTratamento status = StatusTratamento.NAO_APROVADO;
+    
+    public BigDecimal getTotalTratamento(){
+        BigDecimal total = BigDecimal.ZERO;
+        if(procedimentosAvulsos!=null){
+            for(ProcedimentoAvulso avulso:procedimentosAvulsos){
+                total = total.add(avulso.getTotal());
+            }
+        }
+        total = total.add(getValorBruto());
+        return total;
+    }
+    
+    
+    public void addProcedimentoAvulso(Procedimento procedimento,Integer qtd){
         if(procedimentosAvulsos==null){
             procedimentosAvulsos = new HashSet<ProcedimentoAvulso>();
         }
@@ -73,12 +92,17 @@ public class Tratamento implements Serializable {
             avulso = new ProcedimentoAvulso();
             avulso.setProcedimento(procedimento);
             avulso.setQtd(qtd);
-            avulso.setTratamento(tratamento);
+            avulso.setTratamento(this);
             procedimentosAvulsos.add(avulso);
         } else {
             avulso.setQtd(avulso.getQtd()+qtd);
-        }    
-        
+        }       
+    }
+    
+    public void removeProcedimentoAvulso(ProcedimentoAvulso procedimentoAvulso){
+        if(procedimentosAvulsos!=null){
+            procedimentosAvulsos.remove(procedimentoAvulso);
+        }
     }
     
     public ProcedimentoAvulso getProcedimentoAvulsoPorProcedimento(Procedimento p){
@@ -115,14 +139,8 @@ public class Tratamento implements Serializable {
         if(historico==null){
             historico = new HashSet<HistoricoTratamento>();
         }
+        ht.setTratamento(this);
         historico.add(ht);
-    }
-    
-    public void addAdicionarHistorico(Date data,String descricao){
-        if(historico==null){
-            historico = new HashSet<HistoricoTratamento>();
-        }
-        historico.add(new HistoricoTratamento(data, descricao));
     }
     
     public void removerHistorico(Date data,String descricao){
@@ -139,7 +157,7 @@ public class Tratamento implements Serializable {
     }
     
     public BigDecimal getValorBruto(){
-        BigDecimal valor = new BigDecimal(0);
+        BigDecimal valor = BigDecimal.ZERO;
         if(getDentes()!=null){
             for(TratamentoDente td:getDentes()){
                 valor = valor.add(td.getValor());
@@ -151,7 +169,7 @@ public class Tratamento implements Serializable {
     
     public BigDecimal getValorComTaxa(){
         double fator = 1 + getTaxa()/100;
-        return valor = getValorBruto().multiply(new BigDecimal(fator));
+        return getTotalTratamento().multiply(new BigDecimal(fator));
         
     }
     
@@ -297,13 +315,15 @@ public class Tratamento implements Serializable {
         this.paciente = paciente;
     }
 
-    public BigDecimal getValor() {
-        return valor;
+    public StatusTratamento getStatus() {
+        return status;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
+    public void setStatus(StatusTratamento status) {
+        this.status = status;
     }
+
+
 
     public Set<HistoricoTratamento> getHistorico() {
         return historico;

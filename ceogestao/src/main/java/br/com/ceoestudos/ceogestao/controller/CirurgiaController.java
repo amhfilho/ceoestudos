@@ -108,7 +108,7 @@ public class CirurgiaController {
                 cirurgia.removerHistorico(data, descricaoHistorico, pessoaDAO.getById(idProfessor));
                 successMessage = "Cirurgia atualizada e histórico removido";
             } else{
-                cirurgia.adicionarHistorico(data, descricaoHistorico, pessoaDAO.getById(idProfessor));
+                cirurgia.adicionarHistorico(data, descricaoHistorico);
                 successMessage = "Cirurgia atualizada e histórico adicionado";
             }
             

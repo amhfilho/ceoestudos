@@ -3,44 +3,59 @@ package br.com.ceoestudos.ceogestao.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import javax.persistence.Embeddable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-@Embeddable
+@Entity
+@Table(name="tratamento_historico")
 public class HistoricoTratamento implements Serializable, Comparable<HistoricoTratamento> {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     public HistoricoTratamento() {
     }
 
     public HistoricoTratamento(Date data, String descricao) {
-        this.data = data;
+        this.dataHistorico = data;
         this.descricao = descricao;
     }
 
     public HistoricoTratamento(Date data, String descricao, Pessoa professor) {
-        this.data = data;
+        this.dataHistorico = data;
         this.descricao = descricao;
         this.professor = professor;
     }
 
     @Temporal(TemporalType.DATE)
-    private Date data;
+    @Column(name="data")
+    private Date dataHistorico;
 
     @Size(max = 255, message = "A descrição não pode exceder 255 caracteres")
     private String descricao;
 
     @ManyToOne
+    @JoinColumn(name="professor_identificador")
     private Pessoa professor;
+    
+    @ManyToOne
+    private Tratamento tratamento;
+    
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 73 * hash + (this.data != null ? this.data.hashCode() : 0);
-        hash = 73 * hash + (this.descricao != null ? this.descricao.hashCode() : 0);
-        hash = 73 * hash + (this.professor != null ? this.professor.hashCode() : 0);
+        int hash = 3;
+        hash = 61 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
 
@@ -53,24 +68,36 @@ public class HistoricoTratamento implements Serializable, Comparable<HistoricoTr
             return false;
         }
         final HistoricoTratamento other = (HistoricoTratamento) obj;
-        if (this.data != other.data && (this.data == null || !this.data.equals(other.data))) {
-            return false;
-        }
-        if ((this.descricao == null) ? (other.descricao != null) : !this.descricao.equals(other.descricao)) {
-            return false;
-        }
-        if (this.professor != other.professor && (this.professor == null || !this.professor.equals(other.professor))) {
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
             return false;
         }
         return true;
     }
 
+    public Tratamento getTratamento() {
+        return tratamento;
+    }
+
+    public void setTratamento(Tratamento tratamento) {
+        this.tratamento = tratamento;
+    }
+    
+    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Date getData() {
-        return data;
+        return dataHistorico;
     }
 
     public void setData(Date data) {
-        this.data = data;
+        this.dataHistorico = data;
     }
 
     public String getDescricao() {
@@ -95,7 +122,7 @@ public class HistoricoTratamento implements Serializable, Comparable<HistoricoTr
         final int EQUAL = 0;
         final int AFTER = 1;
         Calendar thisDate = Calendar.getInstance();
-        thisDate.setTime(data);
+        thisDate.setTime(dataHistorico);
         thisDate.set(Calendar.HOUR, 0);
         thisDate.set(Calendar.MINUTE, 0);
         thisDate.set(Calendar.SECOND, 0);

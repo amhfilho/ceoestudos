@@ -50,7 +50,7 @@ public class Curso implements Serializable {
     @Size(max = 255, message = "O código do curso não pode exceder 255 caracteres")
     private String codigo;
     
-    @OneToMany(mappedBy = "curso",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "curso")
     private Set<Turma> turmas;
 
     public int getTurmasNaoConfirmadas(){
