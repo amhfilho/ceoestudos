@@ -180,6 +180,18 @@
             </div>
         </div>
     </div>
+    
+    <div class="form-group">
+        <div class="row">
+        	<label for="opcoesParcelamento" class="col-sm-2 control-label">Parcelamento</label>
+            <div class="col-sm-6" id="opcoesParcelamento">
+                <select id="parcelamento" name="parcelamento" class="form-control input-sm">
+                    <option value="">1 x de ${conta.getValor('TOTAL')}</option>
+                    
+                </select>
+            </div>
+        </div>
+    </div>
           
     <div class="form-group">
         <div class="row">

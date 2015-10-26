@@ -5,25 +5,17 @@
  */
 package br.com.ceoestudos.ceogestao.controller;
 
-import br.com.ceoestudos.ceogestao.dao.ContaDAO;
-import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
-import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
-import br.com.ceoestudos.ceogestao.model.Conta;
-import br.com.ceoestudos.ceogestao.model.Parcela;
-import br.com.ceoestudos.ceogestao.model.Pessoa;
-import br.com.ceoestudos.ceogestao.model.SituacaoConta;
-import br.com.ceoestudos.ceogestao.model.Turma;
-import br.com.ceoestudos.ceogestao.util.Util;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import javax.validation.Valid;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -38,6 +30,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import br.com.ceoestudos.ceogestao.dao.ContaDAO;
+import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
+import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
+import br.com.ceoestudos.ceogestao.model.Conta;
+import br.com.ceoestudos.ceogestao.model.Parcela;
+import br.com.ceoestudos.ceogestao.model.Pessoa;
+import br.com.ceoestudos.ceogestao.model.SituacaoConta;
+import br.com.ceoestudos.ceogestao.model.Turma;
+import br.com.ceoestudos.ceogestao.util.Util;
 
 @Controller
 public class ContaController {

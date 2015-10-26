@@ -21,7 +21,7 @@ public class TratamentoDAO {
     
     public Tratamento getFullById(Long id){
         TypedQuery<Tratamento> query = em.createQuery(
-                "select t from Tratamento t "
+                "select distinct t from Tratamento t "
               + "left join fetch t.dentes "
               + "left join fetch t.procedimentosAvulsos "
               + "left join fetch t.historico "
@@ -32,9 +32,9 @@ public class TratamentoDAO {
     }
     
     public List<Tratamento> listarTodos(){
-        return em.createQuery("select t from Tratamento t "
+        return em.createQuery("select distinct t from Tratamento t "
                 + "left join fetch t.dentes "
-                + "left join fetch t.procedimentosAvulsos").getResultList();
+                + "left join fetch t.procedimentosAvulsos",Tratamento.class).getResultList();
     }
     
     public void adicionar(Tratamento t){

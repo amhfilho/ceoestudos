@@ -18,8 +18,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name="procedimento_avulso")
 public class ProcedimentoAvulso implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

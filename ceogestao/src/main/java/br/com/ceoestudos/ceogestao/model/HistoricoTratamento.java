@@ -19,8 +19,13 @@ import javax.validation.constraints.Size;
 @Table(name="tratamento_historico")
 public class HistoricoTratamento implements Serializable, Comparable<HistoricoTratamento> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     public HistoricoTratamento() {
@@ -49,6 +54,7 @@ public class HistoricoTratamento implements Serializable, Comparable<HistoricoTr
     private Pessoa professor;
     
     @ManyToOne
+    @JoinColumn(name="Tratamento_id")
     private Tratamento tratamento;
     
 

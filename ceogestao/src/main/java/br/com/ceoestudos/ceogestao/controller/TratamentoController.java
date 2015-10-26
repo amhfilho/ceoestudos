@@ -1,22 +1,12 @@
 package br.com.ceoestudos.ceogestao.controller;
 
-import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
-import br.com.ceoestudos.ceogestao.dao.ProcedimentoDAO;
-import br.com.ceoestudos.ceogestao.dao.TratamentoDAO;
-import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
-import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
-import br.com.ceoestudos.ceogestao.model.Pessoa;
-import br.com.ceoestudos.ceogestao.model.Procedimento;
-import br.com.ceoestudos.ceogestao.model.StatusTratamento;
-import br.com.ceoestudos.ceogestao.model.TipoPessoa;
-import br.com.ceoestudos.ceogestao.model.Tratamento;
-import br.com.ceoestudos.ceogestao.model.TratamentoDente;
-import br.com.ceoestudos.ceogestao.model.Turma;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -30,6 +20,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import br.com.ceoestudos.ceogestao.dao.ContaDAO;
+import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
+import br.com.ceoestudos.ceogestao.dao.ProcedimentoDAO;
+import br.com.ceoestudos.ceogestao.dao.TratamentoDAO;
+import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
+import br.com.ceoestudos.ceogestao.model.Conta;
+import br.com.ceoestudos.ceogestao.model.HistoricoTratamento;
+import br.com.ceoestudos.ceogestao.model.Pessoa;
+import br.com.ceoestudos.ceogestao.model.Procedimento;
+import br.com.ceoestudos.ceogestao.model.StatusTratamento;
+import br.com.ceoestudos.ceogestao.model.TipoPessoa;
+import br.com.ceoestudos.ceogestao.model.Tratamento;
+import br.com.ceoestudos.ceogestao.model.TratamentoDente;
+import br.com.ceoestudos.ceogestao.model.Turma;
 
 @Controller
 public class TratamentoController {
@@ -45,6 +50,9 @@ public class TratamentoController {
     
     @Autowired
     private TratamentoDAO tDAO;
+    
+    @Autowired
+    private ContaDAO contaDAO;
     
     private final Logger LOG = Logger.getLogger(getClass());
     
@@ -134,9 +142,10 @@ public class TratamentoController {
     }
     
     @Transactional
-    @RequestMapping("excluirTratamento")
-    public String excluirTratamento(Model model, Long id){
-        tDAO.excluir(tDAO.getById(id));
+    @RequestMapping(name="excluirTratamento", method=RequestMethod.POST)
+    public String excluirTratamento(Model model, Long idTratamento){
+        tDAO.excluir(tDAO.getById(idTratamento));
+        model.addAttribute("SUCCESS_MESSAGE", "Tratamento excluido com sucesso.");
         return "redirect:tratamentos.html";
     }
     
@@ -272,10 +281,13 @@ public class TratamentoController {
         tratamento.setStatus(StatusTratamento.APROVADO);
         adicionarHistoricoAprovacao(tratamento);
         tDAO.atualizar(tratamento);
+        Conta conta = Conta.createContaFromTratamento(tratamento);
+        contaDAO.adicionar(conta);
         model.addAttribute("SUCCESS_MESSAGE","Orçamento aprovado com sucesso");
         model.addAttribute("tratamento", tratamento);
         return "formTratamento";
     }
+    
     
     @Transactional
     @RequestMapping(value = "cancelarOrcamento", method=RequestMethod.POST)

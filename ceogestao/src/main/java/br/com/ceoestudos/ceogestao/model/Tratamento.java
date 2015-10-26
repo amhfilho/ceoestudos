@@ -28,8 +28,13 @@ import org.springframework.format.annotation.NumberFormat;
 @Entity
 public class Tratamento implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -44,19 +49,14 @@ public class Tratamento implements Serializable {
     @OneToMany(mappedBy = "tratamento", cascade = {CascadeType.ALL})
     private Set<TratamentoDente> dentes;
     
-//    @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
-//    @Digits(integer = 8, fraction = 2)
-//    @NumberFormat(style = NumberFormat.Style.NUMBER)
-//    private BigDecimal valor = BigDecimal.ZERO;
-    
+   
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "TRATAMENTO_RESPONSAVEL",
             joinColumns = @JoinColumn(name = "TRATAMENTO_ID"),
             inverseJoinColumns = @JoinColumn(name = "RESPONSAVEL_ID"))
     private Set<Pessoa> responsaveis;
     
-    @OneToMany(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "Tratamento_id")
+    @OneToMany(mappedBy = "tratamento", cascade = {CascadeType.ALL})
     @OrderBy("dataHistorico DESC")
     private Set<HistoricoTratamento> historico;
     

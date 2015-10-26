@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class TratamentoDente implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     public TratamentoDente(Integer dente, Procedimento procedimento, Integer quantidade) {

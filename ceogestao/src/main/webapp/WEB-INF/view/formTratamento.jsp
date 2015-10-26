@@ -38,6 +38,14 @@
         
         
     });
+    
+    function excluirTratamento(id){
+    	if(confirm('Só será possível excluir o tratamento se não houver nenhum registro financeiro associado.Deseja continuar?')){
+    		document.getElementById("idTratamento").value = id;
+        	document.formTratamento.action = "excluirTratamento.html";
+        	document.formTratamento.submit();
+    	}
+    }
    
        
     function configurarModalPaciente(action) {
@@ -207,7 +215,7 @@
     <div class="form-group">
         <label for="turma" class="col-sm-2 control-label">Turma</label>
         <div class="col-sm-6">
-            <select id="turma" name="turma" class="form-control">
+            <select id="turma" name="turma" class="form-control input-sm">
                 <option value="">Sem turma associada</option>
                 <c:forEach items="${todasAsTurmas}" var="turma">
                     <option value="${turma.id}" <c:if test="${tratamento.turma.id == turma.id}"> selected </c:if>>${turma}</option>
@@ -498,10 +506,7 @@
         <button type="button" class="btn btn-default" onclick="location.href = 'tratamentos.html'">Voltar</button>
         <c:if test="${not empty tratamento.id}">
             <button type="button" class="btn btn-default" 
-                    onclick="if (confirm('Deseja realmente excluir o tratamento? ')) {
-                                location.href = 'excluirTratamento.html?id=${tratamento.id}';
-
-                            }">
+                    onclick="excluirTratamento(${tratamento.id})">
                 <span class="glyphicon glyphicon-trash"></span>  Excluir
             </button>
             <button type="button" class="btn btn-default" onclick="location.href = 'novoTratamento.html'">Novo</button>

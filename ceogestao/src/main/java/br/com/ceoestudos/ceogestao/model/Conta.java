@@ -2,8 +2,10 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,13 +18,19 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.springframework.format.annotation.NumberFormat;
 
 @Entity
 public class Conta implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
@@ -48,18 +56,19 @@ public class Conta implements Serializable {
 
     private String formaPagamento;
 
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
     private Set<Parcela> parcelas;
 
     public void addParcela(Parcela parcela) {
         if (parcelas == null) {
             parcelas = new HashSet<Parcela>();
         }
+        parcela.setConta(this);
         parcelas.add(parcela);
     }
 
     public BigDecimal getValor(String tipo) {
-        BigDecimal total = new BigDecimal(0);
+        BigDecimal total = BigDecimal.ZERO;
         if (parcelas == null) {
             return total;
         }
@@ -97,6 +106,17 @@ public class Conta implements Serializable {
                 return SituacaoConta.PAGA_PARCIAL;
             }
         }
+    }
+    
+    public static Conta createContaFromTratamento(Tratamento tratamento){
+    	Conta conta = new Conta();
+    	conta.setCliente(tratamento.getPaciente());
+    	conta.setDescricao("Orçamento aprovado");
+    	conta.setTipoConta("A_RECEBER");
+    	conta.setTurma(tratamento.getTurma());
+    	conta.setValor(tratamento.getValorComTaxa());
+    	conta.addParcela(new Parcela(new Date(),tratamento.getValorComTaxa()));
+    	return conta;
     }
 
 
