@@ -185,10 +185,21 @@
         <div class="row">
         	<label for="opcoesParcelamento" class="col-sm-2 control-label">Parcelamento</label>
             <div class="col-sm-6" id="opcoesParcelamento">
-                <select id="parcelamento" name="parcelamento" class="form-control input-sm">
-                    <option value="">1 x de ${conta.getValor('TOTAL')}</option>
-                    
-                </select>
+            	<table>
+            		<tr>
+            			<td><input type="number" class="form-control input-sm col-sm-1" 
+            					style="text-align: center; width: 50px;" id="numParcelas" name="numParcelas"
+            					value="${fn:length(conta.parcelas)}"/>
+            			</td>
+            			<td style="text-align: left">Parcelas</td>
+            			<td>Taxa de juros</td>
+            			<td><input type="text" class="form-control input-sm col-sm-1" 
+            					style="text-align: center; width: 50px" id="juros" name="juros"
+            					value=""/>
+            			</td>
+            			
+            		</tr>
+            	</table>
             </div>
         </div>
     </div>
