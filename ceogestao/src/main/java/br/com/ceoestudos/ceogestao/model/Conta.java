@@ -8,7 +8,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,6 +57,27 @@ public class Conta implements Serializable {
 
     @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
     private Set<Parcela> parcelas;
+    
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
+    private Set<Pagamento> pagamentos;
+    
+    public Set<Pagamento> getPagamentos(){
+    	return this.pagamentos;
+    }
+    
+    public void addPagamento(Pagamento p){
+    	if(pagamentos==null){
+    		pagamentos = new HashSet<Pagamento>();
+    	}
+    	p.setConta(this);
+    	pagamentos.add(p);
+    }
+    
+    public void removePagamentos(Pagamento p){
+    	if(pagamentos!=null){
+    		pagamentos.remove(p);
+    	}
+    }
 
     public void addParcela(Parcela parcela) {
         if (parcelas == null) {
@@ -221,5 +241,11 @@ public class Conta implements Serializable {
     public void setParcelas(Set<Parcela> parcelas) {
         this.parcelas = parcelas;
     }
+
+	public void setPagamentos(Set<Pagamento> pagamentos) {
+		this.pagamentos = pagamentos;
+	}
+    
+    
 
 }

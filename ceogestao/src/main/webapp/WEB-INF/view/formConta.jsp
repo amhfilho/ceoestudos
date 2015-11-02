@@ -101,13 +101,31 @@
             
         });
     });
+    
+    function adicionarPagamento(){
+    	    	
+    	$('#pagamentoModal').modal('show');
+    	
+    }
+    
+    function salvarPagamento(){
+    	document.formConta.action = "salvarPagamento.html";
+    	
+    	document.formConta.submit();
+    }
+    
+    function editarPagamento(id){
+    	
+    	$('#pagamentoModal').modal('show');
+    	
+    }
 </script>
 <jsp:include page="clienteModal.jsp" />
 
 
 <form:form cssClass="form-horizontal" role="form" method="POST" action="salvarConta.html" id="formConta" 
-           modelAttribute="conta" >
-    
+           modelAttribute="conta" name="formConta">
+    <jsp:include page="pagamentoModal.jsp" />
     <jsp:include page="parcelaModal.jsp" />
     
     <input type="hidden" id="idParcelaExcluir" name="idParcelaExcluir" />
@@ -187,15 +205,21 @@
             <div class="col-sm-6" id="opcoesParcelamento">
             	<table>
             		<tr>
+            		    <td style="text-align: left">Parcelas</td>
             			<td><input type="number" class="form-control input-sm col-sm-1" 
             					style="text-align: center; width: 50px;" id="numParcelas" name="numParcelas"
             					value="${fn:length(conta.parcelas)}"/>
             			</td>
-            			<td style="text-align: left">Parcelas</td>
+            			
             			<td>Taxa de juros</td>
             			<td><input type="text" class="form-control input-sm col-sm-1" 
             					style="text-align: center; width: 50px" id="juros" name="juros"
             					value=""/>
+            			</td>
+            			<td>
+            				<button type="button" class="btn btn-default btn-xs" onclick="">
+                            	<span class="glyphicon glyphicon-ok"></span>  Aplicar
+                            </button>
             			</td>
             			
             		</tr>
@@ -203,26 +227,26 @@
             </div>
         </div>
     </div>
+    
+    
           
     <div class="form-group">
         <div class="row">
             <label for="parcelas" class="col-sm-2 control-label">Parcelas</label>
             <div class="col-sm-6">
-                <c:if test="${not empty conta.parcelas}">
+                <c:if test="${fn:length(conta.parcelas) > 0}">
                     <table class="table table-bordered" style="font-size: 11px" id="parcelas">
                         <thead><th>Valor</th><th>Vencimento</th><th>Data Pagto</th><th>Forma pagto</th><th></th></thead>
                         <tbody>    
                             <c:forEach items="${conta.parcelas}" var="parcela">
                                 <tr>
-                                    <td>
-                                        <span style="text-align: right">
-                                            <fmt:formatNumber value="${parcela.valor}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </span>
+                                    <td style="text-align: right">
+                                        <fmt:formatNumber value="${parcela.valor}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
                                     </td>
-                                    <td><span style="text-align: center"><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.vencimento}"/></span></td>
-                                    <td><span style="text-align: center"><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.pagamento}"/></span></td>
+                                    <td style="text-align: center"><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.vencimento}"/></td>
+                                    <td style="text-align: center"><fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.pagamento}"/></td>
                                     <td>${parcela.obs}</td>
-                                    <td><span style="text-align: center">
+                                    <td style="text-align: center">
                                         <c:if test="${not empty parcela.id}">
                                             <button type="button" class="btn btn-default btn-xs" 
                                                     onclick="editarParcela('${parcela.id}',
@@ -230,13 +254,13 @@
                                                                            '<fmt:formatDate pattern="dd/MM/yyyy" value="${parcela.pagamento}"/>',
                                                                            '<fmt:formatNumber value="${parcela.valor}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>',
                                                                            '${parcela.obs}')">
-                                                <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>
+                                                <span class="glyphicon glyphicon-pencil"></span>  Detalhes
                                             </button>
                                         </c:if>
                                         <button type="button" class="btn btn-default btn-xs" onclick="excluirParcela(${parcela.id})">
-                                                <span class="glyphicon glyphicon-trash"></span>  Excluir</a>
+                                                <span class="glyphicon glyphicon-trash"></span>  Excluir
                                         </button>
-                                        </span>
+                                       
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -250,7 +274,42 @@
             </div>
         </div>
     </div>
+    
+    <div class="form-group">
+        <div class="row">
+            <label for="parcelas" class="col-sm-2 control-label">Pagamentos</label>
+            <div class="col-sm-6">
             
+	            <table class="table table-bordered" style="font-size: 11px" id="pagamentos">
+	            <thead><th style="text-align:right">Valor</th><th style="text-align:center">Data</th><th>Forma de pagto</th><th></th></thead>
+	            <tbody>
+	            <c:forEach items="${conta.pagamentos}" var="pagamento">
+	            	<tr>
+	            		<td style="text-align:right"><fmt:formatNumber value="${pagamento.valor }" 
+	            			type="number"  minFractionDigits="2" maxFractionDigits="2"/>
+	            		</td>
+	            		<td style="text-align:center"><fmt:formatDate pattern="dd/MM/yyyy" value="${pagamento.dataPagamento.time}"/></td>
+	            		<td style="text-align:left">${pagamento.formaPagamento}</td>
+	            		<td>
+	            			<button type="button" class="btn btn-default btn-xs" onclick="editarPagamento(${pagamento.id})">
+                                 <span class="glyphicon glyphicon-pencil"></span>  Detalhes
+                            </button>
+	            			<button type="button" class="btn btn-default btn-xs" onclick="excluirPagamento(${pagamento.id})">
+                                 <span class="glyphicon glyphicon-trash"></span>  Excluir
+                            </button>
+	            		</td>
+	            	</tr>
+	            	
+	            </c:forEach>
+	            </tbody>
+	            
+	            </table>
+            
+            <button type="button" class="btn btn-default btn-xs" 
+	            	      onclick="adicionarPagamento()" >Adicionar</button>
+            </div>
+        </div>
+    </div>        
             <div class="form-group">
         <div class="row">
             <label for="valorNaoPago" class="col-sm-2 control-label">Valor não pago</label>

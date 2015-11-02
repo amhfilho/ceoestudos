@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -32,9 +33,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.ceoestudos.ceogestao.dao.ContaDAO;
+import br.com.ceoestudos.ceogestao.dao.PagamentoDAO;
 import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
 import br.com.ceoestudos.ceogestao.dao.TurmaDAO;
 import br.com.ceoestudos.ceogestao.model.Conta;
+import br.com.ceoestudos.ceogestao.model.FormaPagamento;
+import br.com.ceoestudos.ceogestao.model.Pagamento;
 import br.com.ceoestudos.ceogestao.model.Parcela;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.SituacaoConta;
@@ -44,7 +48,9 @@ import br.com.ceoestudos.ceogestao.util.Util;
 @Controller
 public class ContaController {
 
-    @Autowired
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
+	@Autowired
     private ContaDAO contaDAO;
 
     @Autowired
@@ -52,6 +58,9 @@ public class ContaController {
 
     @Autowired
     private PessoaDAO pessoaDAO;
+    
+    @Autowired
+    private PagamentoDAO pagamentoDAO;
 
     private Logger LOG = Logger.getLogger(getClass());
 
@@ -101,8 +110,59 @@ public class ContaController {
 
     @RequestMapping("editarConta")
     public String editarConta(Model model, @RequestParam Long id) {
-        model.addAttribute("conta", contaDAO.getById(id));
+    	
+        Conta conta = contaDAO.getById(id);
+		model.addAttribute("conta", conta);
         return "formConta";
+    }
+    
+    @Transactional
+    @RequestMapping(value="salvarPagamento", method = RequestMethod.POST)
+    public String adicionarPagamento(Model model, Conta conta,
+    								 Long idPagamento,
+    								 String dataPagamento, 
+    								 String valorPagamento, 
+    								 String obsPagamento,
+    								 String numCheque,
+    								 String banco,
+    								 String formaPagamento){
+    	
+    	try {
+    		Pagamento pagamento;
+    		if(idPagamento==null){
+    			pagamento = new Pagamento();
+    		} else {
+    			pagamento = pagamentoDAO.findById(idPagamento);
+    		}
+			Date data = SIMPLE_DATE_FORMAT.parse(dataPagamento);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(data);
+			NumberFormat nf = NumberFormat.getInstance();
+			BigDecimal valor = new BigDecimal(nf.parse(valorPagamento).doubleValue());
+			FormaPagamento forma = FormaPagamento.valueOf(formaPagamento);
+			
+			pagamento.setBanco(banco);
+			pagamento.setConta(conta);
+			pagamento.setDataPagamento(cal);
+			pagamento.setFormaPagamento(forma);
+			pagamento.setNumeroCheque(numCheque);
+			pagamento.setObs(obsPagamento);
+			pagamento.setValor(valor);
+			
+			pagamentoDAO.save(pagamento);
+			
+			conta = contaDAO.getById(conta.getId());
+			
+			model.addAttribute("SUCCESS_MESSAGE","Pagamento incluido com sucesso");
+			
+		} catch (ParseException e) {
+			model.addAttribute("ERROR_MESSAGE", "Valores inválidos: "+e.getMessage());
+			
+		} finally {
+			model.addAttribute("conta",conta);
+		}
+    	   	
+    	return "formConta";
     }
 
     @Transactional
@@ -129,10 +189,10 @@ public class ContaController {
             if (vencimentoParcela == null) {
                 throw new RuntimeException("A data de vencimento deve estar preenchida");
             }
-            Date vencimento = new SimpleDateFormat("dd/MM/yyyy").parse(vencimentoParcela);
+            Date vencimento = SIMPLE_DATE_FORMAT.parse(vencimentoParcela);
             Date pagamento = null;
             if (pagamentoParcela != null) {
-                pagamento = new SimpleDateFormat("dd/MM/yyyy").parse(pagamentoParcela);
+                pagamento = SIMPLE_DATE_FORMAT.parse(pagamentoParcela);
             }
             if (valorParcela == null) {
                 throw new RuntimeException("O valor deve ser preenchido");
@@ -203,7 +263,7 @@ public class ContaController {
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         binder.registerCustomEditor(Pessoa.class, "cliente", new PessoaPropertyEditor(pessoaDAO));
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = SIMPLE_DATE_FORMAT;
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }

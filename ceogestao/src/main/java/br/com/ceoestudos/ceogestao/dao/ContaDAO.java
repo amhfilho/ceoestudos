@@ -5,16 +5,18 @@
  */
 package br.com.ceoestudos.ceogestao.dao;
 
-import br.com.ceoestudos.ceogestao.model.Conta;
-import br.com.ceoestudos.ceogestao.model.Parcela;
-import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.apache.log4j.Logger;
+
 import org.springframework.stereotype.Component;
+
+import br.com.ceoestudos.ceogestao.model.Conta;
+import br.com.ceoestudos.ceogestao.model.Parcela;
+import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 
 /**
  *
@@ -25,10 +27,12 @@ public class ContaDAO {
 
     @PersistenceContext
     private EntityManager em;
-    private Logger LOG = Logger.getLogger(getClass());
 
     public Conta getById(Long id) {
-        String query = "select c from Conta c left join fetch c.parcelas where c.id =:id";
+        String query = "select distinct c from Conta c "
+        		+ "left join fetch c.parcelas "
+        		+ "left join fetch c.pagamentos "
+        		+ "where c.id =:id";
         Query q = em.createQuery(query);
         q.setParameter("id", id);
         return (Conta) q.getSingleResult();
@@ -36,7 +40,10 @@ public class ContaDAO {
 
     public List<Conta> listarPorNomeCpfTurmaSituacao(String nome, String cpf, SituacaoConta situacao, String idTurma) {
 
-        String query = "select distinct c from Conta c left join fetch c.parcelas WHERE 1 = 1 ";
+        String query = "select distinct c from Conta c "
+        		+ "left join fetch c.parcelas "
+        		+ "left join fetch c.pagamentos "
+        		+ "WHERE 1 = 1 ";
         if (nome != null && !nome.trim().equals("")) {
             query += " AND UPPER(c.cliente.nome) like '%" + nome.toUpperCase() + "%' ";
         }
@@ -48,7 +55,7 @@ public class ContaDAO {
             query += " AND c.turma.id = " + idTurma;
         }
 
-        List<Conta> contasDB = em.createQuery(query).getResultList();
+        List<Conta> contasDB = em.createQuery(query,Conta.class).getResultList();
         
         return filtrarPorSituacao(contasDB, situacao);
     }
