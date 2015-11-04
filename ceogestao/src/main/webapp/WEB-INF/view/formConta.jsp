@@ -91,33 +91,78 @@
             format: 'd/m/Y'
         });
         
+        $('#dataPagamento').datetimepicker({
+            lang: 'pt',
+            i18n: {
+                pt: {
+                    months: [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                        'Maio', 'Junho', 'Julho', 'Agosto',
+                        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ],
+                    dayOfWeek: [
+                        "Dom", "Seg", "Ter", "Qua",
+                        "Qui", "Sex", "Sab"
+                    ]
+                }
+            },
+            timepicker: false,
+            allowBlank: true,
+            format: 'd/m/Y'
+        });
+        
         $('#valorParcela').mask("#.##0,00", {reverse: true});
+        
+        $('#valorPagamento').mask("#.##0,00", {reverse: true});
+        
         
         $('#parcelas').dataTable({
             "paging":   false,
             "info":     false,
-            "bFilter":  false
-            
-            
+            "bFilter":  false      
+        });
+        
+        $('#pagamentos').dataTable({
+            "paging":   false,
+            "info":     false,
+            "bFilter":  false      
         });
     });
     
     function adicionarPagamento(){
-    	    	
-    	$('#pagamentoModal').modal('show');
-    	
+    	document.getElementById('idPagamento').value = "";
+    	document.getElementById('dataPagamento').value = "";
+    	document.getElementById('valorPagamento').value = "";
+    	document.getElementById('formaPagamento').value = "";
+    	document.getElementById('numCheque').value = "";
+    	document.getElementById('banco').value = ""; 
+    	document.getElementById('obsPagamento').value = ""; 
+    	$('#pagamentoModal').modal('show');  	
     }
     
     function salvarPagamento(){
-    	document.formConta.action = "salvarPagamento.html";
-    	
+    	document.formConta.action = "salvarPagamento.html";  	
     	document.formConta.submit();
     }
     
-    function editarPagamento(id){
-    	
-    	$('#pagamentoModal').modal('show');
-    	
+    function editarPagamento(id,data,valor,forma,cheque, banco,obs){
+    	document.getElementById('idPagamento').value = id;
+    	document.getElementById('dataPagamento').value = data;
+    	document.getElementById('valorPagamento').value = valor;
+    	document.getElementById('formaPagamento').value = forma;
+    	document.getElementById('numCheque').value = cheque;
+    	document.getElementById('banco').value = banco;
+    	document.getElementById('obsPagamento').value = obs; 
+    	$('#pagamentoModal').modal('show');	
+    }
+    
+    function excluirPagamento(id){
+    	if(confirm('Deseja realmente excluir este pagamento?')){
+    		document.formConta.action = "excluirPagamento.html";
+    		document.getElementById('idPagamento').value = id;
+    		document.formConta.submit();
+    		$('#pagamentoModal').modal('hide');	
+    	}
     }
 </script>
 <jsp:include page="clienteModal.jsp" />
@@ -281,7 +326,14 @@
             <div class="col-sm-6">
             
 	            <table class="table table-bordered" style="font-size: 11px" id="pagamentos">
-	            <thead><th style="text-align:right">Valor</th><th style="text-align:center">Data</th><th>Forma de pagto</th><th></th></thead>
+	            <thead>
+	            	<th style="text-align:right">Valor</th>
+	            	<th style="text-align:center">Data</th>
+	            	<th>Forma pagto</th>
+	            	<th>Núm cheque</th>
+	            	<th>Banco</th>
+	            	<th></th>
+	            </thead>
 	            <tbody>
 	            <c:forEach items="${conta.pagamentos}" var="pagamento">
 	            	<tr>
@@ -290,8 +342,18 @@
 	            		</td>
 	            		<td style="text-align:center"><fmt:formatDate pattern="dd/MM/yyyy" value="${pagamento.dataPagamento.time}"/></td>
 	            		<td style="text-align:left">${pagamento.formaPagamento}</td>
-	            		<td>
-	            			<button type="button" class="btn btn-default btn-xs" onclick="editarPagamento(${pagamento.id})">
+	            		<td style="text-align:left">${pagamento.numeroCheque}</td>
+	            		<td style="text-align:left">${pagamento.banco}</td>
+	            		<td style="text-align:center">
+	            			<button type="button" class="btn btn-default btn-xs" 
+	            				onclick="editarPagamento(${pagamento.id},
+	            				                         '<fmt:formatDate pattern="dd/MM/yyyy" value="${pagamento.dataPagamento.time}"/>',
+	            				                         '<fmt:formatNumber value="${pagamento.valor }" type="number"  minFractionDigits="2" maxFractionDigits="2"/>',
+	            				                         '${pagamento.formaPagamento}',
+	            				                         '${pagamento.numeroCheque}',
+	            				                         '${pagamento.banco}',
+	            				                         '${pagamento.obs}')">
+	            			
                                  <span class="glyphicon glyphicon-pencil"></span>  Detalhes
                             </button>
 	            			<button type="button" class="btn btn-default btn-xs" onclick="excluirPagamento(${pagamento.id})">

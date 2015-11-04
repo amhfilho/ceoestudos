@@ -129,9 +129,11 @@ public class ContaController {
     	
     	try {
     		Pagamento pagamento;
+    		String acao = "incluido";
     		if(idPagamento==null){
     			pagamento = new Pagamento();
     		} else {
+    			acao = "atualizado";
     			pagamento = pagamentoDAO.findById(idPagamento);
     		}
 			Date data = SIMPLE_DATE_FORMAT.parse(dataPagamento);
@@ -153,7 +155,7 @@ public class ContaController {
 			
 			conta = contaDAO.getById(conta.getId());
 			
-			model.addAttribute("SUCCESS_MESSAGE","Pagamento incluido com sucesso");
+			model.addAttribute("SUCCESS_MESSAGE",String.format("Pagamento %s com sucesso",acao));
 			
 		} catch (ParseException e) {
 			model.addAttribute("ERROR_MESSAGE", "Valores inválidos: "+e.getMessage());
@@ -164,6 +166,18 @@ public class ContaController {
     	   	
     	return "formConta";
     }
+    
+    @Transactional
+    @RequestMapping(value="excluirPagamento", method=RequestMethod.POST)
+    public String excluirPagamento(Model model, Conta conta, Long idPagamento){
+    	pagamentoDAO.delete(idPagamento);
+    	conta = contaDAO.getById(conta.getId());
+    	model.addAttribute("conta",conta);
+    	model.addAttribute("SUCCESS_MESSAGE","Parcela excluída com sucesso");
+    	return "formConta";
+    }
+    
+    
 
     @Transactional
     @RequestMapping("excluirConta")
