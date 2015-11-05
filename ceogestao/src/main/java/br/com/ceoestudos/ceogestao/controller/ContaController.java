@@ -79,13 +79,10 @@ public class ContaController {
     public String pesquisarContas(Model model,
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "cpf", required = false) String cpf,
-            @RequestParam(value = "situacao", required = false) String situacao,
+            @RequestParam(value = "situacao", required = false) Integer situacao,
             @RequestParam(value = "idTurma", required = false) String idTurma) {
-        SituacaoConta sc = null;
-        if (situacao != null && !("").equals(situacao)) {
-            sc = SituacaoConta.valueOf(situacao);
-        }
-        model.addAttribute("contas", contaDAO.listarPorNomeCpfTurmaSituacao(nome, cpf, sc, idTurma));
+        
+        model.addAttribute("contas", contaDAO.listarPorNomeCpfTurmaSituacao(nome, cpf, situacao, idTurma));
         model.addAttribute("idTurmaPesquisada", idTurma);
         model.addAttribute("situacaoPesquisa", situacao);
         model.addAttribute("nomePesquisa", nome);

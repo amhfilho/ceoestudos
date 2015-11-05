@@ -32,7 +32,7 @@
         </div>
         
         <div class="col-sm-3">
-            <select class="form-control" name="idTurma" id="turma">
+            <select class="form-control input-sm" name="idTurma" id="turma">
                 <option value="">Qualquer turma</option>
                 <c:forEach items="${todasAsTurmas}" var="turma">
                     <option value="${turma.id}" <c:if test="${turma.id == idTurmaPesquisada}"> selected </c:if>>${turma}</option>
@@ -41,11 +41,10 @@
         </div>
         
         <div class="col-sm-2">
-            <select class="form-control" name="situacao" id="situacao">
-                <option value="">Todas</option>
-                <option value="PENDENTE" <c:if test="${situacaoPesquisa eq 'PENDENTE'}"> selected </c:if>>Pendente</option>
-                <option value="PAGA_PARCIAL" <c:if test="${situacaoPesquisa eq 'PAGA_PARCIAL'}"> selected </c:if>>Paga parcial</option>
-                <option value="PAGA" <c:if test="${situacaoPesquisa eq 'PAGA'}"> selected </c:if>>Paga</option>
+            <select class="form-control input-sm" name="situacao" id="situacao">
+                <option value="-1" <c:if test="${situacaoPesquisa == -1}"> selected </c:if>>Todas as contas</option>
+                <option value="0" <c:if test="${situacaoPesquisa == 0}"> selected </c:if>>Somente contas quitadas</option>
+                <option value="1" <c:if test="${situacaoPesquisa == 1}"> selected </c:if>>Somente contas com saldo devedor</option>
             </select>
         </div>
         
@@ -69,10 +68,8 @@
         <th>Turma</th>
         <th>Cliente</th>
         <th>Valor Total</th>
-        <th>Valor Não Pago</th>
+        <th>Saldo devedor</th>
         <th>Num. de Parcelas</th>
-        
-        <th>Situação</th>
         <th></th>
         
     </thead>
@@ -81,10 +78,10 @@
             <td>${conta.turma}</td>
             <td>${conta.cliente.nome}</td>
             
-            <td><fmt:formatNumber value="${conta.getValor('TOTAL')}" type="number"
+            <td><fmt:formatNumber value="${conta.total}" type="number"
                               minFractionDigits="2" maxFractionDigits="2"/>
             </td>
-            <td><fmt:formatNumber value="${conta.getValor('NAO_PAGA')}" type="number"
+            <td><fmt:formatNumber value="${conta.saldoDevedor}" type="number"
                               minFractionDigits="2" maxFractionDigits="2"/>
             </td>
             <td>
@@ -93,7 +90,7 @@
                 </c:if>
             </td>
             
-            <td>${conta.situacao}</td>
+            
             <td>
                 <button type="button" class="btn btn-default btn-xs" onclick="document.location = 'editarConta.html?id=${conta.id}'">
                    <span class="glyphicon glyphicon-pencil"></span>  Detalhes</a>

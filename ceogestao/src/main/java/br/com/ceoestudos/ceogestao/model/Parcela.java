@@ -1,9 +1,9 @@
 package br.com.ceoestudos.ceogestao.model;
 
-import br.com.ceoestudos.ceogestao.util.Util;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -60,48 +61,31 @@ public class Parcela implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + (this.vencimento != null ? this.vencimento.hashCode() : 0);
-        hash = 79 * hash + (this.pagamento != null ? this.pagamento.hashCode() : 0);
-        hash = 79 * hash + (this.valor != null ? this.valor.hashCode() : 0);
-        hash = 79 * hash + (this.obs != null ? this.obs.hashCode() : 0);
-        return hash;
-    }
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        Util util = new Util();
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Parcela other = (Parcela) obj;
-        if (!util.sameDate(vencimento, other.vencimento)) {
-            return false;
-        }
-        if (!util.sameDate(pagamento, other.pagamento)) {
-            return false;
-        }
-        if (this.valor != other.valor && (this.valor == null || !this.valor.equals(other.valor))) {
-            return false;
-        }
-        if ((this.obs == null) ? (other.obs != null) : !this.obs.equals(other.obs)) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Parcela other = (Parcela) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
-    @Override
-    public String toString() {
-        return "Parcela{" + "id=" + id + ", vencimento=" + vencimento + ", pagamento=" + pagamento + ", valor=" + valor + ", obs=" + obs + '}';
-    }
-    
-    
-
-    /**
+	/**
      * @return the vencimento
      */
     public Date getVencimento() {

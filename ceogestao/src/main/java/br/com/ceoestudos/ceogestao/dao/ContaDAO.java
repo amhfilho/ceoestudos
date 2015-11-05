@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import br.com.ceoestudos.ceogestao.model.Conta;
 import br.com.ceoestudos.ceogestao.model.Parcela;
-import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 
 /**
  *
@@ -38,7 +37,7 @@ public class ContaDAO {
         return (Conta) q.getSingleResult();
     }
 
-    public List<Conta> listarPorNomeCpfTurmaSituacao(String nome, String cpf, SituacaoConta situacao, String idTurma) {
+    public List<Conta> listarPorNomeCpfTurmaSituacao(String nome, String cpf, Integer situacao, String idTurma) {
 
         String query = "select distinct c from Conta c "
         		+ "left join fetch c.parcelas "
@@ -56,22 +55,35 @@ public class ContaDAO {
         }
 
         List<Conta> contasDB = em.createQuery(query,Conta.class).getResultList();
-        
-        return filtrarPorSituacao(contasDB, situacao);
+        if(situacao!=null){
+        	return filtrarPorSituacao(contasDB, situacao);
+        } else {
+        	return contasDB;
+        }
     }
     
-    public List<Conta> filtrarPorSituacao(List<Conta> contas,SituacaoConta situacao){
+    public List<Conta> filtrarPorSituacao(List<Conta> contas,Integer situacao){
         List<Conta> contasResult = new ArrayList<Conta>();
-        if(situacao!=null){
+        
             for(int i=0; i < contas.size(); i++){
                 Conta c = contas.get(i);
-                if(situacao.equals(c.getSituacao())){
-                    contasResult.add(c);
+                switch(situacao){
+                case Conta.QUITADAS:
+                	if(c.getSaldoDevedor().intValue() <= 0){
+                		contasResult.add(c);
+                	}
+                	break;
+                case Conta.SALDO_DEVEDOR:
+                	if(c.getSaldoDevedor().intValue() > 0){
+                		contasResult.add(c);
+                	}
+                	break;
+                default: 
+                	contasResult.add(c);
+                	break;
                 }
             }
-        } else {
-            return contas;
-        }
+        
         return contasResult;
     }
 

@@ -217,20 +217,13 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="row">
-            <label for="situacao" class="col-sm-2 control-label">Situação</label>
-            <div class="col-sm-6" id="situacao">
-                ${conta.situacao}
-            </div>
-        </div>
-    </div>
+    
 
     <div class="form-group">
         <div class="row">
             <label for="valor" class="col-sm-2 control-label">Valor total</label>
             <div class="col-sm-2" id="valor">
-                <fmt:formatNumber value="${conta.getValor('TOTAL')}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
+                <fmt:formatNumber value="${conta.total}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
             </div>
         </div>
     </div>
@@ -239,7 +232,16 @@
         <div class="row">
             <label for="valorPago" class="col-sm-2 control-label">Valor pago</label>
             <div class="col-sm-2" id="valorPago">
-                <fmt:formatNumber value="${conta.getValor('PAGA')}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
+                <fmt:formatNumber value="${conta.valorPago}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <div class="row">
+            <label for="saldoDevedor" class="col-sm-2 control-label">Saldo devedor</label>
+            <div class="col-sm-2" id="saldoDevedor">
+                <fmt:formatNumber value="${conta.saldoDevedor}" type="number"  minFractionDigits="2" maxFractionDigits="2"/>
             </div>
         </div>
     </div>
@@ -323,7 +325,7 @@
     <div class="form-group">
         <div class="row">
             <label for="parcelas" class="col-sm-2 control-label">Pagamentos</label>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
             
 	            <table class="table table-bordered" style="font-size: 11px" id="pagamentos">
 	            <thead>

@@ -27,6 +27,8 @@ public class Conta implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final int QUITADAS = 0;
+	public static final int SALDO_DEVEDOR = 1;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +41,6 @@ public class Conta implements Serializable {
 
     @Size(max = 255, message = "A descrição não pode conter mais que 255 caracteres")
     private String descricao;
-
-    private SituacaoConta situacao;
 
     @ManyToOne
     @NotNull(message = "O Cliente deve ser informado")
@@ -87,6 +87,7 @@ public class Conta implements Serializable {
         parcelas.add(parcela);
     }
 
+    @Deprecated
     public BigDecimal getValor(String tipo) {
         BigDecimal total = BigDecimal.ZERO;
         if (parcelas == null) {
@@ -103,6 +104,31 @@ public class Conta implements Serializable {
         return total;
     }
     
+    public BigDecimal getTotal(){
+    	BigDecimal total = BigDecimal.ZERO;
+    	if(parcelas!=null){
+    		for(Parcela p:parcelas){
+    			total = total.add(p.getValor());
+    		}
+    	}
+    	return total;
+    }
+    
+    public BigDecimal getValorPago(){
+    	BigDecimal total = BigDecimal.ZERO;
+    	if(pagamentos!=null){
+    		for(Pagamento p:pagamentos){
+    			total = total.add(p.getValor());
+    		}
+    	}
+    	return total;
+    }
+    
+    public BigDecimal getSaldoDevedor(){
+    	return getTotal().subtract(getValorPago());
+    }
+    
+    @Deprecated
     public SituacaoConta getSituacao(){
         
         int contPg =0;
