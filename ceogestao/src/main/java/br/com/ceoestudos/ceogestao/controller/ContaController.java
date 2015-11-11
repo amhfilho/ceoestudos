@@ -6,14 +6,11 @@
 package br.com.ceoestudos.ceogestao.controller;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.validation.Valid;
 
@@ -21,6 +18,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -41,7 +40,6 @@ import br.com.ceoestudos.ceogestao.model.FormaPagamento;
 import br.com.ceoestudos.ceogestao.model.Pagamento;
 import br.com.ceoestudos.ceogestao.model.Parcela;
 import br.com.ceoestudos.ceogestao.model.Pessoa;
-import br.com.ceoestudos.ceogestao.model.SituacaoConta;
 import br.com.ceoestudos.ceogestao.model.Turma;
 import br.com.ceoestudos.ceogestao.util.Util;
 
@@ -93,17 +91,34 @@ public class ContaController {
     @Transactional
     @RequestMapping(value = "salvarConta", method = RequestMethod.POST)
     public String salvarConta(Model model, @Valid Conta conta, BindingResult result) {
-        if (!result.hasErrors()) {
+        
+    	if (!result.hasErrors()) {
             if (conta.getId() == null) {
-                contaDAO.adicionar(conta);
+            	Parcela parcela = new Parcela();
+            	parcela.setValor(conta.getValor());
+            	parcela.setVencimento(new Date());
+            	conta.addParcela(parcela);
+            	contaDAO.adicionar(conta);
             } else {
-                contaDAO.atualizar(conta);
+            	Conta contaDB = refreshContaFromDb(conta);
+            	contaDB.atualizarValor(conta.getValor());
+                contaDAO.atualizar(contaDB);
+                conta = contaDB;
             }
             model.addAttribute("SUCCESS_MESSAGE", "Conta salva com sucesso");
         }
         model.addAttribute("conta", conta);
         return "formConta";
     }
+
+	private Conta refreshContaFromDb(Conta conta) {
+		Conta contaDB = contaDAO.getById(conta.getId());
+		contaDB.setCliente(conta.getCliente());
+		contaDB.setDescricao(conta.getDescricao());
+		contaDB.setTipoConta(conta.getTipoConta());
+		
+		return contaDB;
+	}
 
     @RequestMapping("editarConta")
     public String editarConta(Model model, @RequestParam Long id) {
@@ -118,7 +133,7 @@ public class ContaController {
     public String adicionarPagamento(Model model, Conta conta,
     								 Long idPagamento,
     								 String dataPagamento, 
-    								 String valorPagamento, 
+    								 @NumberFormat(style=NumberFormat.Style.CURRENCY) BigDecimal valorPagamento, 
     								 String obsPagamento,
     								 String numCheque,
     								 String banco,
@@ -136,8 +151,7 @@ public class ContaController {
 			Date data = SIMPLE_DATE_FORMAT.parse(dataPagamento);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(data);
-			NumberFormat nf = NumberFormat.getInstance();
-			BigDecimal valor = new BigDecimal(nf.parse(valorPagamento).doubleValue());
+			
 			FormaPagamento forma = FormaPagamento.valueOf(formaPagamento);
 			
 			pagamento.setBanco(banco);
@@ -146,7 +160,7 @@ public class ContaController {
 			pagamento.setFormaPagamento(forma);
 			pagamento.setNumeroCheque(numCheque);
 			pagamento.setObs(obsPagamento);
-			pagamento.setValor(valor);
+			pagamento.setValor(valorPagamento);
 			
 			pagamentoDAO.save(pagamento);
 			
@@ -177,43 +191,32 @@ public class ContaController {
     
 
     @Transactional
-    @RequestMapping("excluirConta")
-    public String excluirConta(@RequestParam Long id) {
+    @RequestMapping(value="excluirConta", method = RequestMethod.POST)
+    public String excluirConta(Long id) {
         contaDAO.excluir(id);
 
-        return "redirect:contas.html";
+        return "redirect:pesquisarContas.html";
     }
 
     @Transactional
     @RequestMapping(value = "salvarParcela", method = RequestMethod.POST)
     public String salvarParcela(@ModelAttribute Conta conta,
             Long idParcela,
-            String vencimentoParcela,
-            String pagamentoParcela,
-            String valorParcela,
+            @DateTimeFormat(pattern="dd/MM/yyyy") Date vencimentoParcela,
+            @NumberFormat(style=NumberFormat.Style.NUMBER) BigDecimal valorParcela,
             String obsParcela,
             Model model) {
 
-        LOG.info(conta + "\n" + idParcela + "," + vencimentoParcela + "," + pagamentoParcela + ","
-                + valorParcela + "," + obsParcela);
+        
         try {
             if (vencimentoParcela == null) {
-                throw new RuntimeException("A data de vencimento deve estar preenchida");
+                throw new IllegalArgumentException("A data de vencimento deve estar preenchida");
             }
-            Date vencimento = SIMPLE_DATE_FORMAT.parse(vencimentoParcela);
-            Date pagamento = null;
-            if (pagamentoParcela != null) {
-                pagamento = SIMPLE_DATE_FORMAT.parse(pagamentoParcela);
-            }
+            
             if (valorParcela == null) {
-                throw new RuntimeException("O valor deve ser preenchido");
+                throw new IllegalArgumentException("O valor deve ser preenchido");
             }
-            Locale ptBR = new Locale("pt", "BR");
-            NumberFormat numberFormat =  NumberFormat.getNumberInstance(ptBR);
-            DecimalFormat df = (DecimalFormat) numberFormat;
-            df.setParseBigDecimal(true);           
-            BigDecimal valor = (BigDecimal) df.parse(valorParcela);
-
+            
             Parcela parcela;
             if (idParcela == null) {
                 parcela = new Parcela();
@@ -222,9 +225,8 @@ public class ContaController {
             }
             parcela.setConta(conta);
             parcela.setObs(obsParcela);
-            parcela.setPagamento(pagamento);
-            parcela.setValor(valor);
-            parcela.setVencimento(vencimento);
+            parcela.setValor(valorParcela);
+            parcela.setVencimento(vencimentoParcela);
             contaDAO.adicionarParcela(parcela);
 
             Conta contaDB = contaDAO.getById(conta.getId());
@@ -232,21 +234,17 @@ public class ContaController {
             conta.setDescricao(contaDB.getDescricao());
             conta.setParcelas(contaDB.getParcelas());
             conta.setTipoConta(contaDB.getTipoConta());
-            LOG.info("parcelas: " + conta.getParcelas());
+            
             conta.addParcela(parcela);
-            conta = contaDAO.atualizar(conta);
+            conta.atualizarValor();
+            contaDAO.salvar(conta);
 
             model.addAttribute("conta", conta);
             model.addAttribute("SUCCESS_MESSAGE", "Parcela atualizada com sucesso");
 
-        } catch (ParseException ex) {
-            LOG.error(ex);
-            model.addAttribute("ERROR_MESSAGE", "Valores inválidos");
-            //model.addAttribute("conta",conta);
         } catch (RuntimeException rt) {
             LOG.error(new Util().toString(rt));
             model.addAttribute("ERROR_MESSAGE", "Erro ao salvar a parcela: " + rt.getMessage());
-            //model.addAttribute("conta",conta);
         }
 
         return "formConta";
@@ -256,11 +254,11 @@ public class ContaController {
     @RequestMapping(value = "excluirParcela", method = RequestMethod.POST)
     public String excluirParcela(Conta conta, Model model, Long idParcelaExcluir) {
         try {
-            LOG.info(idParcelaExcluir);
-            LOG.info(conta);
-
-            contaDAO.excluirParcela(idParcelaExcluir);
-            model.addAttribute("conta", contaDAO.getById(conta.getId()));
+            Conta contaDB = refreshContaFromDb(conta);
+            contaDB.removeParcela(new Parcela(idParcelaExcluir));
+            contaDB.atualizarValor();
+            contaDAO.salvar(contaDB);
+            model.addAttribute("conta", contaDB);
 
         } catch (RuntimeException e) {
             LOG.error(new Util().toString(e));
@@ -268,6 +266,28 @@ public class ContaController {
         }
 
         return "formConta";
+    }
+    
+    @Transactional
+    @RequestMapping(value = "aplicarTaxaJuros", method= RequestMethod.POST)
+    public String aplicarTaxaJuros(Integer numParcelas, 
+    		                       @DateTimeFormat(pattern="dd/MM/yyyy") Date dtPrimeiraParcela, 
+    		                       @NumberFormat Double taxaJuros,
+    		                       Conta conta,
+    		                       Model model){
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(dtPrimeiraParcela);
+    	conta = contaDAO.getById(conta.getId());
+    	conta.aplicarTaxaJuros(numParcelas, taxaJuros, cal);
+    	if(conta.getId()==null){
+    		contaDAO.adicionar(conta);
+    	} else {
+    		contaDAO.atualizar(conta);
+    	}
+    	
+    	model.addAttribute("conta",conta);
+    	model.addAttribute("SUCCESS_MESSAGE","Parcelas criadas com sucesso");   	
+    	return "formConta";
     }
 
     @InitBinder

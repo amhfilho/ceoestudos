@@ -26,10 +26,6 @@ public class ParcelaBuilder {
         return this;
     }
     
-    public ParcelaBuilder pagamento(Date pagamento){
-        parcela.setPagamento(pagamento);
-        return this;
-    }
     
     public ParcelaBuilder valor(BigDecimal valor){
         parcela.setValor(valor);

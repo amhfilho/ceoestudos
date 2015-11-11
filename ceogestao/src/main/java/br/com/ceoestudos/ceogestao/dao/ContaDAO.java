@@ -107,6 +107,14 @@ public class ContaDAO {
     public void adicionarParcela(Parcela p) {
         em.persist(p);
     }
+    
+    public void salvar(Conta p){
+    	if(p.getId()==null){
+    		adicionar(p);
+    	} else {
+    		atualizar(p);
+    	}
+    }
 
     public void atualizarParcela(Parcela p) {
         em.merge(p);

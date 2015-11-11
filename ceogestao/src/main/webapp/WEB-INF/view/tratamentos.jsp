@@ -42,7 +42,7 @@
                 <c:if test="${not empty tratamento.turma}">${tratamento.turma}</c:if>
             </td>
             <td>${tratamento.paciente.nome}</td>
-            <td><fmt:formatNumber value="${tratamento.valorComTaxa}" type="number"
+            <td style="text-align:right"><fmt:formatNumber value="${tratamento.valorComTaxa}" type="number"
                               minFractionDigits="2" maxFractionDigits="2"/>
              </td>
              <td style="text-align: left">

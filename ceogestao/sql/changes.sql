@@ -22,3 +22,5 @@ CREATE  TABLE `odontosys`.`pagamento` (
   `banco` VARCHAR(45) NULL ,
   `obs` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) );
+
+  ALTER TABLE `odontosys`.`conta` ADD COLUMN `taxa_juros` DECIMAL(4,2) NULL  AFTER `turma_id` ;

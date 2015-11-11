@@ -22,10 +22,8 @@ import org.springframework.format.annotation.NumberFormat;
  * @author amhfilho
  */
 @Entity
-public class Parcela implements Serializable {
-    /**
-	 * 
-	 */
+public class Parcela implements Serializable , Comparable<Parcela> {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -40,10 +38,7 @@ public class Parcela implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date vencimento;
     
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date pagamento;
-    
+        
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private BigDecimal valor;
@@ -58,6 +53,10 @@ public class Parcela implements Serializable {
     public Parcela(Date vencimento, BigDecimal valor) {
         this.vencimento = vencimento;
         this.valor = valor;
+    }
+    
+    public Parcela(Long id){
+    	this.id = id;
     }
 
     @Override
@@ -99,19 +98,7 @@ public class Parcela implements Serializable {
         this.vencimento = vencimento;
     }
 
-    /**
-     * @return the pagamento
-     */
-    public Date getPagamento() {
-        return pagamento;
-    }
-
-    /**
-     * @param pagamento the pagamento to set
-     */
-    public void setPagamento(Date pagamento) {
-        this.pagamento = pagamento;
-    }
+    
 
     /**
      * @return the valor
@@ -168,6 +155,18 @@ public class Parcela implements Serializable {
     public void setConta(Conta conta) {
         this.conta = conta;
     }
+
+
+	@Override
+	public int compareTo(Parcela o) {
+		if(this.getVencimento().before(o.getVencimento())){
+			return -1;
+		}
+		else if(this.getVencimento().after(o.getVencimento())){
+			return 1;
+		}
+		return 0;
+	}
     
     
     

@@ -2,11 +2,16 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +23,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.poi.ss.formula.functions.FinanceLib;
 import org.springframework.format.annotation.NumberFormat;
 
 @Entity
@@ -37,7 +43,7 @@ public class Conta implements Serializable {
     @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = NumberFormat.Style.NUMBER)
-    private BigDecimal valor = new BigDecimal(0);
+    private BigDecimal valor = BigDecimal.ZERO;
 
     @Size(max = 255, message = "A descrição não pode conter mais que 255 caracteres")
     private String descricao;
@@ -55,15 +61,18 @@ public class Conta implements Serializable {
 
     private String formaPagamento;
 
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Parcela> parcelas;
     
     @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
     private Set<Pagamento> pagamentos;
-    
+      
     public Set<Pagamento> getPagamentos(){
     	return this.pagamentos;
     }
+    
+    @Column(name="taxa_juros")
+    private Double taxaJuros = 0D;
     
     public void addPagamento(Pagamento p){
     	if(pagamentos==null){
@@ -81,27 +90,14 @@ public class Conta implements Serializable {
 
     public void addParcela(Parcela parcela) {
         if (parcelas == null) {
-            parcelas = new HashSet<Parcela>();
+            parcelas = new TreeSet<Parcela>();
         }
         parcela.setConta(this);
         parcelas.add(parcela);
     }
 
-    @Deprecated
-    public BigDecimal getValor(String tipo) {
-        BigDecimal total = BigDecimal.ZERO;
-        if (parcelas == null) {
-            return total;
-        }
-        for (Parcela p : parcelas) {
-            if ((tipo.equals(Parcela.PAGA) && p.getPagamento() != null)
-                    || (tipo.equals(Parcela.NAO_PAGA) && p.getPagamento() == null)
-                    || (tipo.equals("TOTAL"))) {
-
-                total = total.add(p.getValor());
-            }
-        }
-        return total;
+    public BigDecimal getValor() {
+        return this.valor;
     }
     
     public BigDecimal getTotal(){
@@ -128,32 +124,7 @@ public class Conta implements Serializable {
     	return getTotal().subtract(getValorPago());
     }
     
-    @Deprecated
-    public SituacaoConta getSituacao(){
-        
-        int contPg =0;
-        int contNpg = 0;
-        if(parcelas==null || parcelas.isEmpty()){
-            return SituacaoConta.PENDENTE;
-        } else {
-            for (Parcela p: parcelas){
-                if(p.getPagamento()!=null){
-                    contPg++;
-                }
-                else {
-                    contNpg++;
-                }
-            }
-            if(contPg == parcelas.size()){
-                return SituacaoConta.PAGA;
-            } else if (contNpg == parcelas.size()){
-                return SituacaoConta.PENDENTE;
-            } else {
-                return SituacaoConta.PAGA_PARCIAL;
-            }
-        }
-    }
-    
+      
     public static Conta createContaFromTratamento(Tratamento tratamento){
     	Conta conta = new Conta();
     	conta.setCliente(tratamento.getPaciente());
@@ -163,6 +134,53 @@ public class Conta implements Serializable {
     	conta.setValor(tratamento.getValorComTaxa());
     	conta.addParcela(new Parcela(new Date(),tratamento.getValorComTaxa()));
     	return conta;
+    }
+    
+    public void aplicarTaxaJuros(int numParcelas, Double taxa, Calendar dataPrimeiraParcela){
+    	this.taxaJuros = taxa;
+    	BigDecimal valorParcela = new BigDecimal(String.valueOf(FinanceLib.pmt(taxa/100, numParcelas, getValor().doubleValue(), 0.0, false)));
+    	valorParcela = valorParcela.setScale(2, RoundingMode.UP).abs();
+    	cleanParcelas();
+    	
+    	for(int i =0; i < numParcelas; i++){
+    		Parcela p = new Parcela();
+    		p.setConta(this);
+    		String strTaxa = new DecimalFormat("#.##").format(taxa);
+    		p.setObs(String.format("Valor obtido a partir de aplicação de taxa de juros de %s",strTaxa));
+    		p.setValor(valorParcela);
+    		Calendar cal = Calendar.getInstance();
+    		cal.setTime(dataPrimeiraParcela.getTime());
+    		cal.add(Calendar.MONTH, i);
+    		p.setVencimento(cal.getTime());
+    		parcelas.add(p);
+    	}
+    }
+
+	private void cleanParcelas() {
+		if(parcelas!=null){
+    		parcelas.removeAll(parcelas);
+    	}
+	}
+    
+	public void removeParcela(Parcela p){
+		if(parcelas!=null){
+			parcelas.remove(p);
+			p.setConta(null);
+		}
+	}
+	
+    public void atualizarValor(){
+    	setValor(this.getTotal());
+    }
+    
+    public void atualizarValor(BigDecimal valor){
+    	cleanParcelas();
+    	this.valor = valor;
+    	Parcela parcela = new Parcela();
+    	parcela.setValor(valor);
+    	parcela.setVencimento(new Date());
+    	parcela.setObs("Parcela única");
+    	addParcela(parcela);
     }
 
 
@@ -188,11 +206,7 @@ public class Conta implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "Conta{" + "id=" + id + ", valor=" + valor + ", descricao=" + descricao + ", situacao=" + getSituacao() + ", cliente=" + cliente + ", turma=" + turma + ", papel=" + papel + ", tipoConta=" + tipoConta + ", formaPagamento=" + formaPagamento + ", parcelas=" + parcelas + '}';
-    }
-
+   
     public String getTipoConta() {
         return tipoConta;
     }
@@ -210,7 +224,8 @@ public class Conta implements Serializable {
     }
 
     public void setValor(BigDecimal valor) {
-        this.valor = valor;
+    	this.valor = valor;
+        
     }
 
     public String getDescricao() {
@@ -271,7 +286,8 @@ public class Conta implements Serializable {
 	public void setPagamentos(Set<Pagamento> pagamentos) {
 		this.pagamentos = pagamentos;
 	}
-    
-    
 
+	public Double getTaxaJuros() {
+		return taxaJuros;
+	}
 }

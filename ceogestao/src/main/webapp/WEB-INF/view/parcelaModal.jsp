@@ -10,11 +10,10 @@
                 <input type="hidden" name="idParcela" id="idParcela" />
                 <label for="vencimentoParcela">Vencimento:</label>
                 <input type="text" name="vencimentoParcela" id="vencimentoParcela"  class="form-control input-sm"/>
-                <label for="vencimentoParcela">Data do pagamento:</label>
-                <input type="text" name="pagamentoParcela" id="pagamentoParcela"  class="form-control input-sm"/>
+                
                 <label for="valorParcela">Valor:</label>
                 <input type="text" name="valorParcela" id="valorParcela"  class="form-control input-sm"/>
-                <label for="obsParcela">Forma de pagamento</label>
+                <label for="obsParcela">Obs:</label>
                 <input type="text" name="obsParcela" id="obsParcela"  class="form-control input-sm"/>
                 
             </div>

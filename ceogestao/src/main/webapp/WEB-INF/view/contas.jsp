@@ -67,7 +67,8 @@
         <thead>
         <th>Turma</th>
         <th>Cliente</th>
-        <th>Valor Total</th>
+        <th>Valor orçamento</th>
+        <th>Valor Total Parcelas</th>
         <th>Saldo devedor</th>
         <th>Num. de Parcelas</th>
         <th></th>
@@ -77,6 +78,9 @@
         <tr>
             <td>${conta.turma}</td>
             <td>${conta.cliente.nome}</td>
+            <td><fmt:formatNumber value="${conta.valor}" type="number"
+                              minFractionDigits="2" maxFractionDigits="2"/>
+            </td>
             
             <td><fmt:formatNumber value="${conta.total}" type="number"
                               minFractionDigits="2" maxFractionDigits="2"/>
