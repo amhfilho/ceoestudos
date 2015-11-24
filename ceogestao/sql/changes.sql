@@ -24,3 +24,7 @@ CREATE  TABLE `odontosys`.`pagamento` (
   PRIMARY KEY (`id`) );
 
   ALTER TABLE `odontosys`.`conta` ADD COLUMN `taxa_juros` DECIMAL(4,2) NULL  AFTER `turma_id` ;
+
+  ALTER TABLE `odontosys`.`servicolaboratorio` 
+  	ADD COLUMN `previsao` DATE NULL  AFTER `profissional_identificador` , 
+  	ADD COLUMN `recebedor` VARCHAR(255) NULL  AFTER `previsao` ;

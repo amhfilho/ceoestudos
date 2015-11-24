@@ -146,4 +146,9 @@
         <put-attribute name="title" value="Cirurgia" />
         <put-attribute name="body" value="/WEB-INF/view/formCirurgia.jsp" />
     </definition>
+    
+    <definition name="contasPorAluno" extends="base.definition">
+        <put-attribute name="title" value="Relatório de contas por aluno" />
+        <put-attribute name="body" value="/WEB-INF/view/contasPorAluno.jsp" />
+    </definition>
 </tiles-definitions>

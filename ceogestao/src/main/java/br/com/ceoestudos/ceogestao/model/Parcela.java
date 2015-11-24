@@ -41,7 +41,7 @@ public class Parcela implements Serializable , Comparable<Parcela> {
         
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = NumberFormat.Style.NUMBER)
-    private BigDecimal valor;
+    private BigDecimal valor = BigDecimal.ZERO;
     
     private String obs;
     

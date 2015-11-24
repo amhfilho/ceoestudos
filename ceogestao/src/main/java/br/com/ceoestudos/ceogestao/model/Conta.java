@@ -18,8 +18,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -40,7 +40,7 @@ public class Conta implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Min(value = 0, message = "Valor deve ser maior ou igual a zero")
+	@DecimalMin(value = "1.0", message = "Valor deve ser maior ou igual a 1,00")
     @Digits(integer = 8, fraction = 2)
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private BigDecimal valor = BigDecimal.ZERO;
@@ -54,8 +54,6 @@ public class Conta implements Serializable {
 
     @ManyToOne
     private Turma turma;
-
-    private PapelPessoa papel;
 
     private String tipoConta;
 
@@ -152,7 +150,7 @@ public class Conta implements Serializable {
     		cal.setTime(dataPrimeiraParcela.getTime());
     		cal.add(Calendar.MONTH, i);
     		p.setVencimento(cal.getTime());
-    		parcelas.add(p);
+    		addParcela(p);
     	}
     }
 
@@ -163,6 +161,10 @@ public class Conta implements Serializable {
 	}
     
 	public void removeParcela(Parcela p){
+		BigDecimal subtract = getTotal().subtract(p.getValor());
+		if(subtract.compareTo(BigDecimal.ZERO)==0){
+    		throw new IllegalStateException("A soma das parcelas deve ser maior que 0");
+    	}
 		if(parcelas!=null){
 			parcelas.remove(p);
 			p.setConta(null);
@@ -251,14 +253,6 @@ public class Conta implements Serializable {
 
     public void setTurma(Turma turma) {
         this.turma = turma;
-    }
-
-    public PapelPessoa getPapel() {
-        return papel;
-    }
-
-    public void setPapel(PapelPessoa papel) {
-        this.papel = papel;
     }
 
     public String getFormaPagamento() {

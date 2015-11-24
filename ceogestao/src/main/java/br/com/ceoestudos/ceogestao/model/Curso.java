@@ -35,7 +35,7 @@ public class Curso implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "Nome é obrigatório")
     @Size(max = 255, message = "Nome do curso não pode exceder 255 caracteres")

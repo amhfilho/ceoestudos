@@ -2,6 +2,8 @@ package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -20,8 +23,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 public class ServicoLaboratorio implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(max = 255, message = "O nome do laboratório não pode exceder 255 caracteres")
@@ -48,6 +53,15 @@ public class ServicoLaboratorio implements Serializable {
     @NotNull(message = "Deve haver um procedimento associado a este serviço")
     private Procedimento procedimento;
 
+    @Column(name="previsao")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
+    @NotNull(message = "Deve haver uma previsão de entrega associada a este serviço")
+    private Date previsao;
+    
+    @Column(name="recebedor")
+    private String recebedor;
+    
     @Override
     public int hashCode() {
         int hash = 5;
@@ -70,12 +84,25 @@ public class ServicoLaboratorio implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "ServicoLaboratorio{" + "id=" + id + ", laboratorio=" + laboratorio + ", nome=" + paciente + ", profissional=" + profissional + ", envio=" + envio + ", entrega=" + entrega + ", procedimento=" + procedimento + '}';
-    }
+    
 
-    public Long getId() {
+    public String getRecebedor() {
+		return recebedor;
+	}
+
+	public void setRecebedor(String recebedor) {
+		this.recebedor = recebedor;
+	}
+
+	public Date getPrevisao() {
+		return previsao;
+	}
+
+	public void setPrevisao(Date previsao) {
+		this.previsao = previsao;
+	}
+
+	public Long getId() {
         return id;
     }
 

@@ -27,7 +27,9 @@ public class TurmaDAO {
     private PessoaDAO pessoaDAO;
     
     public List<Turma> listarTodos(){
-        return em.createQuery("select t from Turma t").getResultList();
+        return em.createQuery("select distinct t from Turma t "
+        					+ "left join fetch t.alunos",Turma.class)
+        		.getResultList();
     }
     
     public Turma getById(Long id){

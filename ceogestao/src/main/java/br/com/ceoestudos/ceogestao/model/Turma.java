@@ -6,8 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.joda.time.Weeks;
@@ -33,8 +34,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 public class Turma implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull(message = "Deve haver um curso associado a esta turma")
@@ -151,9 +154,7 @@ public class Turma implements Serializable {
     }
 
     public double getCargaHorariaTurma() {
-        Calendar inicio = getCalendarInicioAulas();
-        Calendar fim = getCalendarFimAulas();
-        //inicio.
+        
         return 0;
     }
 

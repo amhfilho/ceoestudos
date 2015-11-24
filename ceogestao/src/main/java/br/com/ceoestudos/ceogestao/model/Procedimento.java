@@ -19,8 +19,10 @@ import org.springframework.format.annotation.NumberFormat;
 @Entity
 public class Procedimento implements Serializable {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String tipo;

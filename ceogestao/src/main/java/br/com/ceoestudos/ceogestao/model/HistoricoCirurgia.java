@@ -17,8 +17,10 @@ import javax.persistence.TemporalType;
 @Table(name="cirurgia_historico")
 public class HistoricoCirurgia implements Serializable {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(name="data")

@@ -92,6 +92,31 @@
             allowBlank: true,
             format: 'd/m/Y'
         });
+        
+        $('#previsao').datetimepicker({
+            lang: 'pt',
+            onShow: function(ct) {
+                this.setOptions({
+                    maxDate: $('#entrega').val() ? $('#entrega').val() : false
+                })
+            },
+            i18n: {
+                pt: {
+                    months: [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                        'Maio', 'Junho', 'Julho', 'Agosto',
+                        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ],
+                    dayOfWeek: [
+                        "Dom", "Seg", "Ter", "Qua",
+                        "Qui", "Sex", "Sab"
+                    ]
+                }
+            },
+            timepicker: false,
+            allowBlank: true,
+            format: 'd/m/Y'
+        });
     });
 </script>
 <div class="row">
@@ -167,11 +192,29 @@
         </div>
     </div>
 
+	<div class="form-group">
+        <div class="row">
+        <label for="previsao" class="col-sm-2 control-label">Previsão de entrega*</label>
+        <div class="col-lg-2">
+            <form:input path="previsao" cssClass="form-control" id="previsao"/>
+        </div>
+        </div>
+    </div>
+    
     <div class="form-group">
         <div class="row">
         <label for="entrega" class="col-sm-2 control-label">Data de entrega</label>
         <div class="col-lg-2">
             <form:input path="entrega" cssClass="form-control" id="entrega"/>
+        </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <div class="row">
+        <label for="recebedor" class="col-sm-2 control-label">Recebido por</label>
+        <div class="col-lg-4">
+            <form:input path="recebedor" cssClass="form-control" id="recebedor"/>
         </div>
         </div>
     </div>

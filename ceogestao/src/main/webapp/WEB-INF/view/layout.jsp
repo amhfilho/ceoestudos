@@ -21,6 +21,7 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui-1.10.4.custom.css" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.datetimepicker.css"/>        
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/dataTables.bootstrap.css"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/ceo.css"/>
         <script src="${pageContext.request.contextPath}/resources/js/jquery-1.11.3.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.4.custom.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-1.10.4.custom.min.js"></script>      
@@ -54,7 +55,14 @@
                                 
                             </ul>
                         </li>
-                        <li><a href="pesquisarContas.html">Financeiro</a></li>
+                        <li class="dropdown">
+                        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Financeiro <b class="caret"></b></a>
+                        	<ul class="dropdown-menu">
+                                <li><a href="pesquisarContas.html">Controle de contas</a></li>
+                                <li><a href="contasPorAluno.html">Relatório de contas por aluno</a></li>
+                            </ul>
+                        
+                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cadastro <b class="caret"></b></a>
                             <ul class="dropdown-menu">

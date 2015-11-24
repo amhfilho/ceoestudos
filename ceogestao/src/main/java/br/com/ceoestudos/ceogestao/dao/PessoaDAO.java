@@ -1,12 +1,11 @@
 package br.com.ceoestudos.ceogestao.dao;
 
-import br.com.ceoestudos.ceogestao.model.Pessoa;
-import br.com.ceoestudos.ceogestao.model.TipoPessoa;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,10 +13,12 @@ import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
+
 import org.apache.log4j.Logger;
-
-
 import org.springframework.stereotype.Component;
+
+import br.com.ceoestudos.ceogestao.model.Pessoa;
+import br.com.ceoestudos.ceogestao.model.TipoPessoa;
 
 /**
  *
@@ -28,16 +29,18 @@ public class PessoaDAO {
 
     @PersistenceContext
     private EntityManager em;
-    private Logger LOGGER= Logger.getLogger(getClass());
-
+    private final Logger LOGGER= Logger.getLogger(getClass());
+    private final String SQL_BASE_PESSOA = "select distinct p from Pessoa p "
+    		+ "left join fetch p.turmas "
+    		+ "left join fetch p.contas ";
 
     public Pessoa getById(Long id) {
         return em.find(Pessoa.class, id);
     }
 
     public List<Pessoa> listarPorCpf(String cpf) {
-        String query = "select p from Pessoa p where p.cpf = :cpf";
-        return em.createQuery(query)
+        String query = SQL_BASE_PESSOA + " where p.cpf = :cpf";
+        return em.createQuery(query, Pessoa.class)
                 .setParameter("cpf", cpf)
                 .getResultList();
     }
@@ -52,9 +55,7 @@ public class PessoaDAO {
 
         List<Predicate> criteria = new ArrayList<Predicate>();
         if (nome != null) {
-            ParameterExpression<String> p
-                    = cb.parameter(String.class, "nome");
-            //criteria.add(cb.equal(emp.get("nome"), p));
+            
             cb.like(
             cb.lower(
                 emp.get(
@@ -62,7 +63,6 @@ public class PessoaDAO {
                 )
             ), "%" + nome.toLowerCase() + "%"
             );
-            //criteria.add(cb.like(emp.get("nome"), p));
         }
 
         ParameterExpression<TipoPessoa> p
@@ -77,10 +77,6 @@ public class PessoaDAO {
             c.where(cb.and(criteria.toArray(new Predicate[0])));
         }
         TypedQuery<Pessoa> q = em.createQuery(c);
-//        if (nome != null) {
-//            q.setParameter("nome", nome);
-//        }
-
         q.setParameter("tipo", tipo);
 
         return q.getResultList();
@@ -88,13 +84,13 @@ public class PessoaDAO {
 
     public List<Pessoa> listarPorNome(String pesquisa, TipoPessoa tipo) {
         
-        String query = "select p from Pessoa p where p.tipo = :tipo";
+        String query = SQL_BASE_PESSOA + " where p.tipo = :tipo";
         
         if(pesquisa != null && !("").equals(pesquisa)){
             query+=" AND p.nome like :pesquisa";
         }
         LOGGER.debug("listarPorNome: "+query);
-        Query q =em.createQuery(query).setParameter("tipo", tipo);
+        TypedQuery<Pessoa> q =em.createQuery(query,Pessoa.class).setParameter("tipo", tipo);
         
         if(pesquisa != null && !("").equals(pesquisa)){
             q.setParameter("pesquisa", "%" + pesquisa + "%");
@@ -104,24 +100,59 @@ public class PessoaDAO {
     }
 
     public List<Pessoa> listarProfessores() {
-        return em.createQuery("select p from Pessoa p where p.tipo = 'PROFESSOR'").getResultList();
+        return em.createQuery(SQL_BASE_PESSOA + " where p.tipo = 'PROFESSOR'",Pessoa.class).getResultList();
     }
 
     public List<Pessoa> listarAlunos() {
-        return em.createQuery("select p from Pessoa p where p.tipo = 'ALUNO'").getResultList();
+        return em.createQuery(SQL_BASE_PESSOA + " where p.tipo = 'ALUNO'",Pessoa.class).getResultList();
     }
+    
+    public List<Pessoa> listarAlunosComContas(String filtro){
+    	List<Pessoa> result = new ArrayList<Pessoa>();
+    	String query = " select distinct p from Pessoa p "
+    			+ "join fetch p.contas contas "
+    			+ "left join fetch contas.parcelas "
+    			+ "left join fetch contas.pagamentos "+
+    			" where p.tipo = 'ALUNO' ";
+    	List<Pessoa> pessoas= em.createQuery(query,Pessoa.class).getResultList();
+    	for(int i=0; i < pessoas.size(); i++){
+    		Pessoa p = pessoas.get(i);
+	    	if("DEVEDORES".equals(filtro)){
+	    		if(p.getSaldoDevedor().compareTo(BigDecimal.ZERO) > 0){
+	    			result.add(p);
+	    		}
+	    	}
+	    	else if ("EM_DIA".equals(filtro)){
+	    		if(p.getSaldoDevedor().compareTo(BigDecimal.ZERO) == 0){
+	    			result.add(p);
+	    		}
+	    	}
+	    	else {
+	    		result.add(p);
+	    	}
+    	}
+    	return result;
+    			
+    }
+    
+    public static void main(String[] args) {
+    	BigDecimal numero = new BigDecimal("4.00");  
+    	BigDecimal numero2 = new BigDecimal("5.00");          
+    	int i = numero.compareTo(numero2);        
+    	System.out.println(i);  
+	}
 
     public List<Pessoa> listarAlunosPorNome(String pesquisa) {
-        String query = "select p from Pessoa p where p.tipo = 'ALUNO' and p.nome like :pesquisa";
-        return em.createQuery(query)
+        String query = SQL_BASE_PESSOA + " where p.tipo = 'ALUNO' and p.nome like :pesquisa";
+        return em.createQuery(query,Pessoa.class)
                 .setParameter("pesquisa", "%" + pesquisa + "%")
                 .getResultList();
 
     }
     
     public List<Pessoa> listarAlunosEInteressadosPorNome(String pesquisa){
-        String query = "select p from Pessoa p where (p.tipo = 'ALUNO' or p.tipo='LISTA_ESPERA') and p.nome like :pesquisa";
-        return em.createQuery(query)
+        String query = SQL_BASE_PESSOA + " where (p.tipo = 'ALUNO' or p.tipo='LISTA_ESPERA') and p.nome like :pesquisa";
+        return em.createQuery(query, Pessoa.class)
                 .setParameter("pesquisa", "%" + pesquisa + "%")
                 .getResultList();
     }

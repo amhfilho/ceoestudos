@@ -26,23 +26,20 @@ public class ContaDAO {
 
     @PersistenceContext
     private EntityManager em;
+    
+    private final String SQL_BASE = "select distinct c from Conta c "
+    		+ "left join fetch c.parcelas "
+    		+ "left join fetch c.pagamentos ";
 
     public Conta getById(Long id) {
-        String query = "select distinct c from Conta c "
-        		+ "left join fetch c.parcelas "
-        		+ "left join fetch c.pagamentos "
-        		+ "where c.id =:id";
-        Query q = em.createQuery(query);
+        Query q = em.createQuery(SQL_BASE + "where c.id =:id");
         q.setParameter("id", id);
         return (Conta) q.getSingleResult();
     }
 
     public List<Conta> listarPorNomeCpfTurmaSituacao(String nome, String cpf, Integer situacao, String idTurma) {
 
-        String query = "select distinct c from Conta c "
-        		+ "left join fetch c.parcelas "
-        		+ "left join fetch c.pagamentos "
-        		+ "WHERE 1 = 1 ";
+        String query = SQL_BASE	+ "WHERE 1 = 1 ";
         if (nome != null && !nome.trim().equals("")) {
             query += " AND UPPER(c.cliente.nome) like '%" + nome.toUpperCase() + "%' ";
         }

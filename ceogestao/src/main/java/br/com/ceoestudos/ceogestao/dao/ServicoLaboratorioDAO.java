@@ -22,7 +22,7 @@ public class ServicoLaboratorioDAO {
     }
     
     public List<ServicoLaboratorio> listarTodos(){
-        return em.createQuery("select s from ServicoLaboratorio s").getResultList();
+        return em.createQuery("select s from ServicoLaboratorio s",ServicoLaboratorio.class).getResultList();
     }
     @Transactional
     public void adicionar(ServicoLaboratorio s){

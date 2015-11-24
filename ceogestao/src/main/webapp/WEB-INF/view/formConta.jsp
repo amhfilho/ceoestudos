@@ -264,7 +264,8 @@
             <label for="valorOrcamento" class="col-sm-2 control-label">Valor da conta/orçamento</label>
             <div class="col-sm-2" id="valorDiv">
             <input type="text" class="form-control input-sm col-sm-1" style="text-align:right" id="valor" name="valor" 
-                value=<fmt:formatNumber value="${conta.valor}" type="number"  minFractionDigits="2" maxFractionDigits="2"/> />
+                value=<c:if test="${not empty(conta.valor)}"><fmt:formatNumber value="${conta.valor}" type="number"  minFractionDigits="2" maxFractionDigits="2"/></c:if>
+                 />
             </div>
         </div>
     </div>
@@ -287,7 +288,7 @@
         </div>
     </div>
     
-    <c:if test="${conta.valor > 0}">
+    <c:if test="${conta.valor > 0 or fn:length(conta.parcelas) > 0 }">
     <div class="form-group">
         <div class="row">
         	<label for="opcoesParcelamento" class="col-sm-2 control-label">Parcelamento</label>

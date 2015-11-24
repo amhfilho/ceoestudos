@@ -1,8 +1,10 @@
 package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,10 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Email;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,7 +31,7 @@ public class Pessoa implements Serializable {
     private static final long serialVersionUID = 6884596062394504011L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long identificador;
     @NotNull(message="Nome é obrigatório")
     private String nome;
@@ -60,6 +64,13 @@ public class Pessoa implements Serializable {
     @ManyToMany(mappedBy = "alunos")
     private Set<Turma> turmas;
     
+    @OneToMany(mappedBy = "cliente")
+    private Set<Conta> contas;
+    
+    public Set<Conta> getContas(){
+    	return this.contas;
+    }
+    
     public String getNomeTurmas(){
         if(turmas!=null && turmas.size() > 0){
             String retorno = "";
@@ -70,6 +81,31 @@ public class Pessoa implements Serializable {
         }
         return "Nenhum curso associado";
     }
+    
+    public BigDecimal getSaldoDevedor(){
+    	return getValorTotalDevido().subtract(getValorPago());
+    }
+    
+    public BigDecimal getValorPago(){
+    	BigDecimal total = BigDecimal.ZERO;
+    	if(contas!=null){
+    		for(Conta c:contas){
+    			total = total.add(c.getValorPago());
+    		}
+    	}
+    	return total;
+    }
+    
+    public BigDecimal getValorTotalDevido(){
+    	BigDecimal total = BigDecimal.ZERO;
+    	if(contas!=null){
+    		for(Conta c:contas){
+    			total = total.add(c.getTotal());
+    		}
+    	}
+    	return total;
+    }
+    
     
     @OneToOne
     private Curso cursoInteresse;

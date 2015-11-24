@@ -6,7 +6,6 @@
 package br.com.ceoestudos.ceogestao.controller;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -87,6 +86,14 @@ public class ContaController {
         model.addAttribute("cpfPesquisa", cpf);
         return "contas";
     }
+    
+    @RequestMapping("contasPorAluno")
+    public String contasPorAluno(Model model, String filtro){
+    	List<Pessoa> alunos = pessoaDAO.listarAlunosComContas(filtro);
+    	model.addAttribute("alunos",alunos);
+    	model.addAttribute("filtro",filtro);
+    	return "contasPorAluno";
+    }
 
     @Transactional
     @RequestMapping(value = "salvarConta", method = RequestMethod.POST)
@@ -132,14 +139,15 @@ public class ContaController {
     @RequestMapping(value="salvarPagamento", method = RequestMethod.POST)
     public String adicionarPagamento(Model model, Conta conta,
     								 Long idPagamento,
-    								 String dataPagamento, 
-    								 @NumberFormat(style=NumberFormat.Style.CURRENCY) BigDecimal valorPagamento, 
-    								 String obsPagamento,
-    								 String numCheque,
-    								 String banco,
-    								 String formaPagamento){
+    								 @DateTimeFormat(pattern="dd/MM/yyyy") Date dataPagamento, 
+    								 @NumberFormat(style=NumberFormat.Style.NUMBER) BigDecimal valorPagamento, 
+    								 @RequestParam(value = "obsPagamento", defaultValue="", required=false)String obsPagamento,
+    								 @RequestParam(value = "numCheque", defaultValue="", required=false)String numCheque,
+    								 @RequestParam(value = "banco", defaultValue="", required=false)String banco,
+    								 @RequestParam(value = "formaPagamento", required=true)String formaPagamento
+    								 ){
     	
-    	try {
+    	
     		Pagamento pagamento;
     		String acao = "incluido";
     		if(idPagamento==null){
@@ -148,9 +156,9 @@ public class ContaController {
     			acao = "atualizado";
     			pagamento = pagamentoDAO.findById(idPagamento);
     		}
-			Date data = SIMPLE_DATE_FORMAT.parse(dataPagamento);
+			
 			Calendar cal = Calendar.getInstance();
-			cal.setTime(data);
+			cal.setTime(dataPagamento);
 			
 			FormaPagamento forma = FormaPagamento.valueOf(formaPagamento);
 			
@@ -168,12 +176,9 @@ public class ContaController {
 			
 			model.addAttribute("SUCCESS_MESSAGE",String.format("Pagamento %s com sucesso",acao));
 			
-		} catch (ParseException e) {
-			model.addAttribute("ERROR_MESSAGE", "Valores inválidos: "+e.getMessage());
-			
-		} finally {
+		
 			model.addAttribute("conta",conta);
-		}
+		
     	   	
     	return "formConta";
     }
@@ -253,15 +258,17 @@ public class ContaController {
     @Transactional
     @RequestMapping(value = "excluirParcela", method = RequestMethod.POST)
     public String excluirParcela(Conta conta, Model model, Long idParcelaExcluir) {
-        try {
-            Conta contaDB = refreshContaFromDb(conta);
-            contaDB.removeParcela(new Parcela(idParcelaExcluir));
+    	Conta contaDB = null;
+    	try {
+            contaDB = refreshContaFromDb(conta);
+            contaDB.removeParcela(contaDAO.getParcelaById(idParcelaExcluir));
             contaDB.atualizarValor();
             contaDAO.salvar(contaDB);
             model.addAttribute("conta", contaDB);
 
         } catch (RuntimeException e) {
             LOG.error(new Util().toString(e));
+            model.addAttribute("conta",contaDB);
             model.addAttribute("ERROR_MESSAGE", "Não foi possível excluir a parcela: " + e.getMessage());
         }
 
