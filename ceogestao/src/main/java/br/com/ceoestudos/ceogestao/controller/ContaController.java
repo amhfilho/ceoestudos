@@ -88,8 +88,8 @@ public class ContaController {
     }
     
     @RequestMapping("contasPorAluno")
-    public String contasPorAluno(Model model, String filtro){
-    	List<Pessoa> alunos = pessoaDAO.listarAlunosComContas(filtro);
+    public String contasPorAluno(Model model, String filtro, String orderBy){
+    	List<Pessoa> alunos = pessoaDAO.listarAlunosComContas(filtro,orderBy);
     	model.addAttribute("alunos",alunos);
     	model.addAttribute("filtro",filtro);
     	return "contasPorAluno";

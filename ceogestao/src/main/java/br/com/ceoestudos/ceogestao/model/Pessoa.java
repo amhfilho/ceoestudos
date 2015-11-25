@@ -71,6 +71,17 @@ public class Pessoa implements Serializable {
     	return this.contas;
     }
     
+    public BigDecimal getValorTotalContas(){
+    	BigDecimal total = BigDecimal.ZERO;
+    	if(contas!=null){
+    		for(Conta c:contas){
+    			total = total.add(c.getTotal());
+    		}
+    	}
+    	return total;
+    	
+    }
+    
     public String getNomeTurmas(){
         if(turmas!=null && turmas.size() > 0){
             String retorno = "";
@@ -83,7 +94,7 @@ public class Pessoa implements Serializable {
     }
     
     public BigDecimal getSaldoDevedor(){
-    	return getValorTotalDevido().subtract(getValorPago());
+    	return getValorTotalContas().subtract(getValorPago());
     }
     
     public BigDecimal getValorPago(){
@@ -91,16 +102,6 @@ public class Pessoa implements Serializable {
     	if(contas!=null){
     		for(Conta c:contas){
     			total = total.add(c.getValorPago());
-    		}
-    	}
-    	return total;
-    }
-    
-    public BigDecimal getValorTotalDevido(){
-    	BigDecimal total = BigDecimal.ZERO;
-    	if(contas!=null){
-    		for(Conta c:contas){
-    			total = total.add(c.getTotal());
     		}
     	}
     	return total;

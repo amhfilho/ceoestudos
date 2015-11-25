@@ -2,6 +2,7 @@ package br.com.ceoestudos.ceogestao.dao;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.ceoestudos.ceogestao.model.Pessoa;
 import br.com.ceoestudos.ceogestao.model.TipoPessoa;
+import br.com.ceoestudos.ceogestao.model.ValorComparator;
 
 /**
  *
@@ -107,13 +109,19 @@ public class PessoaDAO {
         return em.createQuery(SQL_BASE_PESSOA + " where p.tipo = 'ALUNO'",Pessoa.class).getResultList();
     }
     
-    public List<Pessoa> listarAlunosComContas(String filtro){
+    public List<Pessoa> listarAlunosComContas(String filtro, String orderBy){
     	List<Pessoa> result = new ArrayList<Pessoa>();
     	String query = " select distinct p from Pessoa p "
     			+ "join fetch p.contas contas "
     			+ "left join fetch contas.parcelas "
     			+ "left join fetch contas.pagamentos "+
     			" where p.tipo = 'ALUNO' ";
+    	if ("ORDER_CURSO".equals(orderBy)){
+    		query += " ORDER BY p.turma.curso.nome ";
+    	}
+    	if(orderBy==null || "ORDER_ALUNO".equals(orderBy)) {
+    		query += " ORDER BY p.nome asc ";
+    	}
     	List<Pessoa> pessoas= em.createQuery(query,Pessoa.class).getResultList();
     	for(int i=0; i < pessoas.size(); i++){
     		Pessoa p = pessoas.get(i);
@@ -130,6 +138,13 @@ public class PessoaDAO {
 	    	else {
 	    		result.add(p);
 	    	}
+    	}
+    	ValorComparator comparator = new ValorComparator();
+    	if("ORDER_MAIOR_VALOR".equals(orderBy)){
+    		Collections.sort(result,Collections.reverseOrder(comparator));
+    	}
+    	if("ORDER_MENOR_VALOR".equals(orderBy)){
+    		Collections.sort(result,comparator);
     	}
     	return result;
     			
