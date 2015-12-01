@@ -92,6 +92,7 @@ public class ContaController {
     	List<Pessoa> alunos = pessoaDAO.listarAlunosComContas(filtro,orderBy);
     	model.addAttribute("alunos",alunos);
     	model.addAttribute("filtro",filtro);
+    	model.addAttribute("orderBy",orderBy);
     	return "contasPorAluno";
     }
 
@@ -123,6 +124,7 @@ public class ContaController {
 		contaDB.setCliente(conta.getCliente());
 		contaDB.setDescricao(conta.getDescricao());
 		contaDB.setTipoConta(conta.getTipoConta());
+		contaDB.setTurma(conta.getTurma());
 		
 		return contaDB;
 	}

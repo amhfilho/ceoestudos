@@ -114,13 +114,15 @@ public class PessoaDAO {
     	String query = " select distinct p from Pessoa p "
     			+ "join fetch p.contas contas "
     			+ "left join fetch contas.parcelas "
-    			+ "left join fetch contas.pagamentos "+
-    			" where p.tipo = 'ALUNO' ";
-    	if ("ORDER_CURSO".equals(orderBy)){
-    		query += " ORDER BY p.turma.curso.nome ";
-    	}
+    			+ "left join fetch contas.pagamentos "
+    			+ "left join p.turmas AS turma "
+    			+ "where p.tipo = 'ALUNO' ";
+    	
     	if(orderBy==null || "ORDER_ALUNO".equals(orderBy)) {
     		query += " ORDER BY p.nome asc ";
+    	}
+    	if("ORDER_CURSO".equals(orderBy)){
+    		query += " ORDER BY turma.curso.nome asc ";
     	}
     	List<Pessoa> pessoas= em.createQuery(query,Pessoa.class).getResultList();
     	for(int i=0; i < pessoas.size(); i++){
