@@ -6,11 +6,15 @@
 
 package br.com.ceoestudos.ceogestao.dao;
 
-import br.com.ceoestudos.ceogestao.model.Curso;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Component;
+
+import br.com.ceoestudos.ceogestao.model.Curso;
 
 /**
  *
@@ -44,6 +48,13 @@ public class CursoDAO {
     }
     
     public List<Curso> listarTodos(){
-        return em.createQuery("select c from Curso c").getResultList();
+        return em.createQuery("select c from Curso c",Curso.class).getResultList();
     }
+    
+    public List<Curso> listarPorNome(String nome){
+    	TypedQuery<Curso> q =  em.createQuery("select c from Curso c where lower(c.nome) =:nome", Curso.class);
+    	q.setParameter("nome", nome.toLowerCase());
+    	return q.getResultList();
+    }
+    
 }

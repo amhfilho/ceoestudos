@@ -77,6 +77,13 @@
                                 
                             </ul>
                         </li>
+                         <li class="dropdown">
+                         	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Administração <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                            	<li><a href="backup.html">Backup</a></li>
+                            </ul>
+                            
+                         </li>
                     </ul>
                     <!--
                     <ul class="nav navbar-nav navbar-right">

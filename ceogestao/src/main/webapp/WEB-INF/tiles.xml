@@ -151,4 +151,9 @@
         <put-attribute name="title" value="Relatório de contas por aluno" />
         <put-attribute name="body" value="/WEB-INF/view/contasPorAluno.jsp" />
     </definition>
+    
+    <definition name="listaBackup" extends="base.definition">
+        <put-attribute name="title" value="Backup do Sistema" />
+        <put-attribute name="body" value="/WEB-INF/view/listaBackup.jsp" />
+    </definition>
 </tiles-definitions>

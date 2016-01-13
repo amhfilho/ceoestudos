@@ -1,19 +1,17 @@
 package br.com.ceoestudos.ceogestao.controller;
 
-import br.com.ceoestudos.ceogestao.dao.CursoDAO;
-import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
-import br.com.ceoestudos.ceogestao.model.Curso;
-import br.com.ceoestudos.ceogestao.model.Pessoa;
-import br.com.ceoestudos.ceogestao.model.TipoPessoa;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -21,8 +19,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import br.com.ceoestudos.ceogestao.dao.CursoDAO;
+import br.com.ceoestudos.ceogestao.dao.PessoaDAO;
+import br.com.ceoestudos.ceogestao.model.Curso;
+import br.com.ceoestudos.ceogestao.model.Pessoa;
+import br.com.ceoestudos.ceogestao.model.TipoPessoa;
 
 /**
  *
@@ -217,6 +222,56 @@ public class PessoaController {
         } else {
             return null;
         }
+    }
+    
+    @Transactional
+    @RequestMapping(value="cadastro/interessados", method=RequestMethod.POST)
+    public ResponseEntity<Void> cadastroInteressados(@RequestParam(name="your-name",required=true) String name,
+    		@RequestParam(name="your-email",required=true) String email,
+    		@RequestParam(name="cpf",required=true) String cpf,
+    		@RequestParam(name="cro",required=true) String cro,
+    		@RequestParam(name="menu-339",required=true) String curso,
+    		@RequestParam(name="telefone",required=false) String telefone,
+    		@RequestParam(name="celular",required=false) String celular,
+    		@RequestParam(name="endereco",required=false) String endereco,
+    		@RequestParam(name="cidade",required=false) String cidade,
+    		@RequestParam(name="bairro",required=false) String bairro,
+    		@RequestParam(name="estado",required=false) String estado,
+    		@RequestParam(name="cep",required=false) String cep){
+    	
+    	LOGGER.info(name+","+cpf+","+cro+","+curso+","+email+","+telefone+","+celular+","+endereco+","+cidade+","+bairro+","+estado+","+cep);
+    	
+    	Pessoa pessoa = new Pessoa();
+    	pessoa.setTipo(TipoPessoa.LISTA_ESPERA);
+    	pessoa.setNome(name);
+    	pessoa.setBairro(bairro);
+    	pessoa.setCidade(cidade);
+    	pessoa.setCpf(cpf);
+    	pessoa.setCro(cro);
+    	pessoa.setEmail(email);
+    	pessoa.setTelefoneCelular(celular);
+    	pessoa.setTelefoneComercial(telefone);
+    	pessoa.setTelefoneResidencial(telefone);
+    	pessoa.setEstado(estado);
+    	pessoa.setCep(cep);
+    	
+    	List<Curso> cursos = cursoDAO.listarPorNome(curso);
+    	if(cursos!=null && !cursos.isEmpty()){
+    		pessoa.setCursoInteresse(cursos.get(0));
+    	} else{
+    		LOGGER.warn("Curso "+curso+" não cadastrado!");
+    		pessoa.setContato(curso);
+    	}
+    	
+    	try{
+    		pessoaDAO.adicionar(pessoa);
+    		LOGGER.info("Cadastro realizado com sucesso");
+    	} catch (Exception e){
+    		LOGGER.error("Erro ao receber cadastro do site: "+e.getMessage());
+    		e.printStackTrace();
+    	}
+    	
+    	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @InitBinder
