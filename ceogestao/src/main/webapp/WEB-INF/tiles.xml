@@ -156,4 +156,9 @@
         <put-attribute name="title" value="Backup do Sistema" />
         <put-attribute name="body" value="/WEB-INF/view/listaBackup.jsp" />
     </definition>
+    
+    <definition name="resultadoRestauracao" extends="base.definition">
+        <put-attribute name="title" value="Resultado da restauração do backup" />
+        <put-attribute name="body" value="/WEB-INF/view/restoreResults.jsp" />
+    </definition>
 </tiles-definitions>

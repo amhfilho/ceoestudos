@@ -18,7 +18,7 @@ import org.apache.commons.net.ftp.FTPClient;
 /**
  * Servlet implementation class FtpDownloadServlet
  */
-@WebServlet("/backup")
+@WebServlet("/testebackup")
 public class FtpDownloadServlet extends HttpServlet {
 	final String SERVER = "191.252.18.38";
     final int PORT = 21;

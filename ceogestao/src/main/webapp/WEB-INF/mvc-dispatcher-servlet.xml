@@ -30,7 +30,6 @@
                 <ref bean="turmaFormatter"/>
             </set>
         </property>
-        
     </bean>
 
     <!-- adding view resolver to show jsp's on browser 
@@ -47,9 +46,15 @@
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
-            
-       
     </bean>
+    
+    <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+ 
+         <!-- setting maximum upload size -->
+        <property name="maxUploadSize" value="100000" />
+    </bean>
+    
     <bean id="tilesConfigurer"
           class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
         <property name="definitions">

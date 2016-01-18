@@ -10,14 +10,39 @@
 
 <script type="text/javascript">
 	function download(arquivo){
-	alert(arquivo);
 		document.getElementById('fileName').value = arquivo;
 		document.forms.downloadForm.submit();
 	}
+	function restoreBackup(){
+		if(document.getElementById('inputFile').value===''){
+			alert('Nenhum arquivo foi submetido');
+		} else {
+			if(confirm('Deseja realmente restaurar o backup? Esta operação não poderá ser desfeita')){
+				document.forms.downloadForm.action = "backup/upload.html";
+				document.forms.downloadForm.enctype="multipart/form-data";
+				document.forms.downloadForm.submit();
+			}
+		}
+	}
+	
+	function enableButton(){
+		document.getElementById('restoreButton').disabled = document.getElementById('inputFile').value==='';
+	}
 </script>
 
-<h3>Lista de arquivos de Backup</h3>
-
+<form name="downloadForm" action="backup/download.html" method="POST">
+	<input type="hidden" name="fileName" id="fileName" />
+	<div class="form-group">
+	    <label for="inputFile">Restaurar arquivo de backup</label>
+	    <input type="file" id="inputFile" onchange="enableButton()" name="inputFile">
+	    <p class="help-block">O arquivo de backup deve estar no mesmo formato em que foi feito o download.
+	    <br/><b>ATENÇÃO:</b>Ao restaurar um arquivo de backup TODOS os dados serão substituídos, e não há como desfazer esta operação.
+	    </p>
+	  </div>
+	  <button type="button" id="restoreButton" class="btn btn-default" onclick="restoreBackup()" disabled>Restaurar</button>	
+</form>
+<h3>Arquivos de backup disponíveis para download</h3>
+<p class="help-block">Os backups são gerados automaticamente pelo sistema todos os dias às 20 horas</p>
 <c:if test="${fn:length(arquivos) > 0}">
 	<table class="table table-striped">
 	
@@ -32,7 +57,5 @@
 	</tr>
 	</c:forEach>
 	</table>
-	<form name="downloadForm" action="backup/download.html" method="POST">
-		<input type="hidden" name="fileName" id="fileName" />
-	</form>
+	
 </c:if>
