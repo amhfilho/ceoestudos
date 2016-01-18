@@ -30,6 +30,15 @@
 	}
 </script>
 
+<c:if test="${fn:length(arquivos) == 0}">
+<div class="panel panel-default">
+  <div class="panel-body">
+    <a href="backup.html">Recarregar</a>
+  </div>
+</div>
+		
+</c:if>
+
 <form name="downloadForm" action="backup/download.html" method="POST">
 	<input type="hidden" name="fileName" id="fileName" />
 	<div class="form-group">
@@ -41,9 +50,10 @@
 	  </div>
 	  <button type="button" id="restoreButton" class="btn btn-default" onclick="restoreBackup()" disabled>Restaurar</button>	
 </form>
-<h3>Arquivos de backup disponíveis para download</h3>
-<p class="help-block">Os backups são gerados automaticamente pelo sistema todos os dias às 20 horas</p>
 <c:if test="${fn:length(arquivos) > 0}">
+	<h3>Arquivos de backup disponíveis para download</h3>
+	<p class="help-block">Os backups são gerados automaticamente pelo sistema todos os dias às 20 horas</p>
+
 	<table class="table table-striped">
 	
 	<c:forEach items="${arquivos}" var="arquivo">
@@ -56,6 +66,5 @@
 		</td>
 	</tr>
 	</c:forEach>
-	</table>
-	
+	</table>	
 </c:if>

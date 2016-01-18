@@ -1,8 +1,6 @@
 package br.com.ceoestudos.ceogestao.controller;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -35,8 +33,13 @@ public class BackupController {
 	
 	@RequestMapping(value="backup", method=RequestMethod.GET)
 	public String listaArquivosBackup(Model model) throws IOException{
+		try {
 		List<BackupFile> arquivos = ftpService.listAvailableBackupFiles();
-		model.addAttribute("arquivos",arquivos);	
+			model.addAttribute("arquivos",arquivos);	
+		} catch (Exception e){
+			model.addAttribute("ERROR_MESSAGE","Ocorreu um problema ao carregar os arquivos de backup. Tente novamente mais tarde");
+			LOG.severe(Util.stackTraceToString(e));
+		}
 		return "listaBackup";
 	}
 	
@@ -56,9 +59,8 @@ public class BackupController {
 		File convFile = new File(file.getOriginalFilename());
         file.transferTo(convFile);
 
-		Reader reader = new BufferedReader(new FileReader(convFile));
-
 		try{
+			Reader reader = RestoreService.getBufferedReaderForCompressedFile(convFile);
 			RestoreService restoreService = new RestoreService(reader);
 			restoreService.run();
 			String log = restoreService.getLog();
@@ -79,5 +81,7 @@ public class BackupController {
 		}
 		return "resultadoRestauracao";
 	}
+	
+	
 
 }
