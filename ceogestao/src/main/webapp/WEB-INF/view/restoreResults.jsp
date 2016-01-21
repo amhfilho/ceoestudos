@@ -8,8 +8,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-<div class="panel panel-default">
-  <div class="panel-body">
-    ${log}
-  </div>
-</div>
+
