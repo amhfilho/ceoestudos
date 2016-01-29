@@ -14,7 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="cirurgia_historico")
+@Table(name="Cirurgia_historico")
 public class HistoricoCirurgia implements Serializable {
     
 	private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class HistoricoCirurgia implements Serializable {
     private String descricao;
     
     @ManyToOne
-    @JoinColumn(name="cirurgia_id")
+    @JoinColumn(name="Cirurgia_id")
     private Cirurgia cirurgia;
 
     public HistoricoCirurgia(Date dataHistorico, String descricao, Cirurgia cirurgia) {

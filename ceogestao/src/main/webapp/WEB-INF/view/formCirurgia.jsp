@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-<script>
+<script	type="text/javascript">
     $(document).ready(function(e) {
         $('#dataHistorico').datetimepicker({
             lang: 'pt',
@@ -181,4 +181,5 @@
                 <button type="button" class="btn btn-default" onclick="location.href = 'novaCirurgia.html'">Novo</button>
             </c:if>
         </div>
+     </div>
     </form:form>

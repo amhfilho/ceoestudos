@@ -1,10 +1,10 @@
 package br.com.ceoestudos.ceogestao.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +19,12 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 public class Cirurgia implements Serializable {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @NotNull(message="Deve haver um paciente associado à cirurgia")
@@ -40,11 +45,11 @@ public class Cirurgia implements Serializable {
     private String ansiolitico;
     
     @OneToMany(mappedBy = "cirurgia")
-    private Set<HistoricoCirurgia> historico;
+    private List<HistoricoCirurgia> historico;
     
     public void adicionarHistorico(Date data, String descricao){
         if(historico==null){
-            historico = new HashSet<HistoricoCirurgia>();
+            historico = new ArrayList<HistoricoCirurgia>();
         }
         historico.add(new HistoricoCirurgia(data, descricao, this));
     }
@@ -58,8 +63,7 @@ public class Cirurgia implements Serializable {
     
     public Date getDataPrimeiroProcedimento(){
         if(historico!=null && historico.size() > 0){
-            Iterator i = historico.iterator();
-            return ((HistoricoTratamento)i.next()).getData();
+            historico.get(0);
         }
         return null;
     }
@@ -120,11 +124,11 @@ public class Cirurgia implements Serializable {
         this.ansiolitico = ansiolitico;
     }
 
-    public Set<HistoricoCirurgia> getHistorico() {
+    public List<HistoricoCirurgia> getHistorico() {
         return historico;
     }
 
-    public void setHistorico(Set<HistoricoCirurgia> historico) {
+    public void setHistorico(List<HistoricoCirurgia> historico) {
         this.historico = historico;
     }
 

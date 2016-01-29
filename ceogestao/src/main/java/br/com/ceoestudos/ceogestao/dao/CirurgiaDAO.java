@@ -1,23 +1,34 @@
 package br.com.ceoestudos.ceogestao.dao;
 
-import br.com.ceoestudos.ceogestao.model.Cirurgia;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Component;
+
+import br.com.ceoestudos.ceogestao.model.Cirurgia;
 
 @Component
 public class CirurgiaDAO {
     
-    @PersistenceContext
+    private static final String BASE_QUERY = "select c from Cirurgia c LEFT JOIN FETCH c.historico";
+	@PersistenceContext
     private EntityManager em;
     
     public List<Cirurgia> listarTodos(){
-        return em.createQuery("select c from Cirurgia c").getResultList();
+        return em.createQuery(BASE_QUERY,Cirurgia.class).getResultList();
     }
     
     public Cirurgia getById(Long id){
-        return em.find(Cirurgia.class, id);
+        TypedQuery<Cirurgia> query = em.createQuery(BASE_QUERY + " WHERE c.id = :id",Cirurgia.class);
+        query.setParameter("id", id);
+        List<Cirurgia> list = query.getResultList();
+        if(!list.isEmpty()){
+        	return list.get(0);
+        }
+		return null;
     }
     
     public void adicionar(Cirurgia c){

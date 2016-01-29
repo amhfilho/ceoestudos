@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="tratamento_historico")
+@Table(name="Tratamento_historico")
 public class HistoricoTratamento implements Serializable, Comparable<HistoricoTratamento> {
 
     /**
